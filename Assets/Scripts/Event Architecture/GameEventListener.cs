@@ -1,0 +1,62 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using Utilities.Events;
+using Utilities;
+
+namespace Utilities.Events
+{
+    public class GameEventListener : MonoBehaviour
+    {
+
+        #region Public Variables
+        [Tooltip("Event to register with.")]
+        public GameEvent Event;
+
+        [Tooltip("Response to invoke when Event is raised.")]
+        public UnityEvent Response;
+
+        [Tooltip("Response to invoke with required data when Event is raised.")]
+        public UnityEvent<object> ResponseWithData;
+
+        #endregion
+
+        #region Private Variables
+        #endregion
+
+        #region Events
+        #endregion
+
+        #region Unity Events
+        #endregion
+
+        #region Public Methods
+        public void OnEventRaised()
+        {
+            Response.Invoke();
+            //HelperFunctions.Log(Event.name + " was raised");
+        }
+
+        public void OnEventRaiseWithData(object eventData)
+        {
+            ResponseWithData.Invoke(eventData);
+        }
+        #endregion
+
+        #region Unity Methods
+        private void OnEnable()
+        {
+            Event.RegisterListener(this);
+        }
+
+        private void OnDisable()
+        {
+            Event.UnregisterListener(this);
+        }
+        #endregion
+
+        #region Private Methods
+        #endregion
+    }
+}
