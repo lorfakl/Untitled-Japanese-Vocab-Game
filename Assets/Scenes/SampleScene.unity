@@ -994,7 +994,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df4bcab26f784d84686b92c8940213da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useRandomAccounts: 1
+  useRandomAccounts: 0
 --- !u!4 &996133953
 Transform:
   m_ObjectHideFlags: 0

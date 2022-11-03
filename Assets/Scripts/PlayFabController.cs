@@ -205,7 +205,7 @@ public static event IsAuthenticatedNotification IsAuthedEvent;
         },
         (result) =>
         {
-            IsAuthedEvent.Invoke();
+            IsAuthedEvent?.Invoke();
         },
         OnPlayFabError); 
     }
