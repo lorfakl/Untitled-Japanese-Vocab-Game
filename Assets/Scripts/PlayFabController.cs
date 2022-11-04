@@ -172,7 +172,7 @@ public static event IsAuthenticatedNotification IsAuthedEvent;
         }
         else
         {
-            IsAuthedEvent.Invoke();
+            IsAuthedEvent?.Invoke();
         }
 
         
