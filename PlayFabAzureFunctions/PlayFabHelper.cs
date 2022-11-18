@@ -90,6 +90,19 @@ public static class PlayFabHelper
             return playfabHttpTask;
         }
 
+        public static Task<PlayFabResult<AddPlayerTagResult>> AddPlayerTag(string pfID, string tagName, ILogger log)
+        {
+            var addTagRq = new AddPlayerTagRequest 
+            {
+                PlayFabId = pfID,
+                TagName = tagName
+            };
+            var playfabHttpTask = PlayFabServerAPI.AddPlayerTagAsync(addTagRq);
+            log.LogInformation( "PlayFabID" + addTagRq.PlayFabId + "TagName" + addTagRq.TagName);
+            //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
+            return playfabHttpTask;
+        }
+
         public static Task<PlayFabResult<UpdateUserDataResult>> UpdateUserData(string id, Dictionary<string, string> dict)
         {
             AddNewWord.logger.LogInformation("Attempting to call GameServer/UpdateUserData on ID: " + id);

@@ -32,13 +32,13 @@ namespace Utilities.Events
         #endregion
 
         #region Public Methods
-        public void OnEventRaised()
+        public virtual void OnEventRaised()
         {
             Response.Invoke();
             //HelperFunctions.Log(Event.name + " was raised");
         }
 
-        public void OnEventRaiseWithData(object eventData)
+        public virtual void OnEventRaiseWithData(object eventData)
         {
             ResponseWithData.Invoke(eventData);
         }

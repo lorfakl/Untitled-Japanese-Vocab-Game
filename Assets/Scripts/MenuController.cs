@@ -81,6 +81,10 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         panels = new GameObject[] {profilePanel, settingsPanel, shopPanel, statsPanel};
+        foreach(GameObject p in panels)
+        {
+            p.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -106,4 +110,6 @@ public class MenuController : MonoBehaviour
         panel.GetComponent<RectTransform>().DOLocalMove(Vector3.zero, .25f);
 
     }
+
+
 }
