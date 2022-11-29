@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
-using Utilities.PlayFab;
+using Utilities.PlayFabHelper;
 using Utilities.Events;
 using Utilities;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class StudySystem : MonoBehaviour
 {
@@ -16,9 +17,7 @@ public class StudySystem : MonoBehaviour
     #region Private Variables
     List<JapaneseWord> sessionWords;
 
-    #endregion
-
-    #region Events
+    
     [SerializeField]
     GameEvent correctAnswerEvent;
 
@@ -27,6 +26,8 @@ public class StudySystem : MonoBehaviour
 
     [SerializeField]
     GameEvent removeWordFromSessionEvent;
+
+    
 
     Dictionary<ProficiencyLevels, List<JapaneseWord>> sessionWordLeitnerLevel = new Dictionary<ProficiencyLevels, List<JapaneseWord>>();
     Dictionary<ProficiencyLevels, List<JapaneseWord>> sessionWordPrestigeLevel = new Dictionary<ProficiencyLevels, List<JapaneseWord>>();
@@ -58,32 +59,41 @@ public class StudySystem : MonoBehaviour
         StudyObject studyObjSelected = (StudyObject)studyObjectClicked;
         if (studyObjSelected.Word.Kana == WordBankManager.NextWord.Kana)
         {
-            HelperFunctions.Log("Before Prof Mod: " + studyObjSelected.Word);
+            //HelperFunctions.Log("Before Prof Mod: " + studyObjSelected.Word);
             if (correctAnswerEvent != null)
             {
-                HelperFunctions.Log("That answer was correct");
+                //HelperFunctions.Log("That answer was correct");
                 correctAnswerEvent.Raise(studyObjectClicked);
                 correctAnswerEvent.Raise();
                 SetLeitnerLevel(true, studyObjSelected);
                 JapaneseWord wordTarget = JSONWordLibrary.WordsToStudy.Find(word => word.Kanji == studyObjSelected.Word.Kanji);
-                JSONWordLibrary.WordsToStudy.Remove(wordTarget);
-                removeWordFromSessionEvent.Raise(JSONWordLibrary.WordsToStudy.Count);
-                
+                bool wasRemoved = JSONWordLibrary.WordsToStudy.Remove(wordTarget);
+                if(wasRemoved)
+                {
+                    removeWordFromSessionEvent.Raise(JSONWordLibrary.WordsToStudy.Count);
+                }
+                else
+                {
+                    HelperFunctions.Warning(wordTarget + " was not successful removed");
+                }
+                HelperFunctions.Log("Words left to study: " + JSONWordLibrary.WordsToStudy.Count);
             }
         }
         else
         {
-            HelperFunctions.Log("Before Prof Mod: " + studyObjSelected.Word);
+            //HelperFunctions.Log("Before Prof Mod: " + studyObjSelected.Word);
             if (incorrectAnswerEvent != null)
             {
-                HelperFunctions.Log("That answer was incorrect");
+                //HelperFunctions.Log("That answer was incorrect");
                 incorrectAnswerEvent.Raise();
                 SetLeitnerLevel(false, studyObjSelected);
+                return; //return from here to avoid Adding 
+                //the word to the LeitnerDict
             }
         }
 
-        HelperFunctions.Log("After Prof Mod: " + studyObjSelected.Word);
-        AddWordToLeitnerDict(WordBankManager.NextWord);
+        //HelperFunctions.Log("After Prof Mod: " + studyObjSelected.Word);
+        AddWordToLeitnerDict(studyObjSelected.Word);
         if (JSONWordLibrary.WordsToStudy.Count == 0)
         {
             PlayFabController.UpdateUserData(new Dictionary<string, string>
@@ -96,6 +106,21 @@ public class StudySystem : MonoBehaviour
                 {
                     { "count", StudySettings.newWordsPerDay.ToString() }
                 }, Playfab.ArePlayStreamEventsGenerated);
+            
+            Dictionary<string, string> parameterDict = new Dictionary<string, string>();
+            parameterDict.Add("Id", Playfab.PlayFabID);
+            parameterDict.Add("TagName", PlayerTags.HasPlayedThisWeek.ToString());
+
+            PlayFabController.ExecutionCSFunction(CSFunctionNames.UpdateTag, parameterDict, true);
+
+            PlayFabController.ExecutionCSFunction<string, List<CloudScriptStatArgument>>(CSFunctionNames.Record, new Dictionary<string, List<CloudScriptStatArgument>>
+            {
+                {"Entries", new List<CloudScriptStatArgument>{ new CloudScriptStatArgument(StatisticName.LeagueSP, ScoreEventProcessors.Score),
+                                                               new CloudScriptStatArgument(StatisticName.TotalSP, ScoreEventProcessors.Score)} }
+            }, true);
+
+           
+            SceneManager.LoadScene("StatsScene", LoadSceneMode.Single);
         }
     }
     #endregion
@@ -104,6 +129,10 @@ public class StudySystem : MonoBehaviour
     private void Awake()
     {
         PlayFabController.IsAuthedEvent += PerformOneTimeWordSetUp;
+        if(PlayFabController.IsAuthenticated)
+        {
+            GetCurrentWordSetFromPlayFab();
+        }
     }
 
     void Start()
@@ -142,7 +171,7 @@ public class StudySystem : MonoBehaviour
 
     void NewlyCreatedParseReturnData(Dictionary<string, string> data)
     {
-        HelperFunctions.Log("Parsing return data");
+        //HelperFunctions.Log("Parsing return data");
         string leitnerJson = data[UserDataKey.SessionWords.ToString()];
 
 
@@ -151,7 +180,7 @@ public class StudySystem : MonoBehaviour
 
         HelperFunctions.Log("Printing return data: ");
         HelperFunctions.LogListContent(sessionWords);
-        JSONWordLibrary.WordsToStudy = sessionWords;
+        JSONWordLibrary.SetWordsToStudy(sessionWords);
     }
 
     void ParseReturnData(Dictionary<string, string> data)
@@ -191,7 +220,7 @@ public class StudySystem : MonoBehaviour
 
         HelperFunctions.Log("Printing return data: ");
         HelperFunctions.LogListContent(sessionWords);
-        JSONWordLibrary.WordsToStudy = sessionWords;
+        JSONWordLibrary.SetWordsToStudy(sessionWords);
     }
 
     void SetLeitnerLevel(bool wasCorrect, StudyObject word)

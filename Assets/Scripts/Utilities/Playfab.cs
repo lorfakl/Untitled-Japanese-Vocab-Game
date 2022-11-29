@@ -7,9 +7,208 @@ using PlayFab.ClientModels;
 using PlayFab.CloudScriptModels;
 using PlayFab.ProfilesModels;
 using PlayFab.GroupsModels;
+using Newtonsoft.Json;
+using Unity.VisualScripting;
 
-namespace Utilities.PlayFab
+namespace Utilities.PlayFabHelper
 {
+    public enum EntityTypes
+    {
+        title_player_account,
+        group,
+        character,
+        master_player_account,
+        title,
+    }
+
+    public class UniversalEntityKey
+    {
+        public string ID
+        {
+            get;
+            set;
+        }
+        public string Type
+        {
+            get;
+            set;
+        }
+
+        public UniversalEntityKey()
+        {
+
+        }
+
+        public UniversalEntityKey(string iD, string type)
+        {
+            ID = iD;
+            Type = type;
+        }
+
+        public static implicit operator PlayFab.AuthenticationModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.AuthenticationModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.ClientModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.ClientModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.CloudScriptModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.CloudScriptModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.DataModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.DataModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.GroupsModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.GroupsModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.EconomyModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.EconomyModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.EventsModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.EventsModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.ExperimentationModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.ExperimentationModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.MultiplayerModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.MultiplayerModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.ProfilesModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.ProfilesModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        
+        public static explicit operator UniversalEntityKey(PlayFab.AuthenticationModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.ClientModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.CloudScriptModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.DataModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.GroupsModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.EconomyModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.EventsModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.ExperimentationModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.MultiplayerModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.ProfilesModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+
+
+    }
     public class Playfab
     {
         #region PlayFab Custom Event Name Enums
@@ -35,8 +234,8 @@ namespace Utilities.PlayFab
 
         public static bool ArePlayStreamEventsGenerated
         {
-            get;
-            private set;
+            get { return true; }
+            private set { }
         }
 
         public static string TitleID
@@ -148,6 +347,7 @@ namespace Utilities.PlayFab
                 TitlePlayerID = result.EntityToken.Entity.Id;
                 SessionTicket = result.SessionTicket;
                 EntityToken = result.EntityToken.EntityToken;
+              
                 if(result.NewlyCreated)
                 {
                     WasUserJustCreated = true;
@@ -250,19 +450,50 @@ namespace Utilities.PlayFab
                 {
                     UniversalEntityKey grpEntityKey = new UniversalEntityKey
                     {
-                        id = result.Group.Id,
-                        type = result.Group.Type
+                        ID = result.Group.Id,
+                        Type = result.Group.Type
                     };
 
                     GroupName = result.GroupName;
+                    GroupEntityKey = (UniversalEntityKey)result.Group;
 
                     success(result);
                 }, error);
         }
-        //public static void ()
-        //public static void ()
-        //public static void ()
-        //public static void ()
+        public static void AddMembers(AddMembersRequest rq, Action<PlayFabError> error)
+        {
+            PlayFabGroupsAPI.AddMembers(rq, (result) => { }, error);
+        }
+        
+        public static void ListGroupMembers(ListGroupMembersRequest r, Action<ListGroupMembersResponse> success, Action<PlayFabError> error)
+        {
+            PlayFabGroupsAPI.ListGroupMembers(r, success, error);
+        }
+        public static void GetProfiles(GetEntityProfilesRequest r, Action<GetEntityProfilesResponse> suceess, Action<PlayFabError> error)
+        {
+            PlayFabProfilesAPI.GetProfiles(r, suceess, error);
+        }
+        public static void GetGroup(Action<GetGroupResponse> success, Action<PlayFabError> error, bool hasOptinalArgs, string grpName = "", UniversalEntityKey grpKey = null)
+        {
+            GetGroupRequest rq;
+
+            if (hasOptinalArgs)
+            {
+                rq = new GetGroupRequest
+                { 
+                    GroupName = grpName,
+                    Group = grpKey
+                };
+            }
+            else
+            {
+                rq = new GetGroupRequest { 
+                    GroupName = String.Empty
+                };
+            }
+
+            PlayFabGroupsAPI.GetGroup(rq, success, error);
+        }
         //public static void ()
         //public static void ()
         //public static void ()
@@ -303,6 +534,75 @@ namespace Utilities.PlayFab
                 "Error: " + error?.Error.ToString() + "\n" + "Error Message: " + error?.ErrorMessage
                 + "\n" + "Error Details: " + error?.ErrorDetails.ToString();
             return fullErrorDetails;
+        }
+    }
+
+    public class CloudScriptStatArgument
+    {
+        [JsonProperty("statName")]
+        public string statName { get; set; }
+
+        [JsonProperty("value")]
+        public string value { get; set; }
+
+        public CloudScriptStatArgument(StatisticName n, int val)
+        {
+            statName = n.ToString();
+            value = EncodeStatisticValue(val);
+        }
+
+        [JsonConstructor]
+        public CloudScriptStatArgument(string n, int val)
+        {
+            statName = n;
+            value = val.ToString();
+        }
+
+        private string EncodeStatisticValue(int value)
+        {
+
+            HelperFunctions.Log("Convert to Byte Array: ");
+            byte[] intBytes = BitConverter.GetBytes(value);
+            string byteString = "";
+            foreach (byte b in intBytes)
+            {
+                Console.Write(b.ToString() + ", ");
+                byteString += b.ToString() + ",";
+            }
+
+            return byteString;
+        }
+        private static int DecodeStringValue(string value)
+        {
+            List<byte> bytes = new List<byte>();
+
+            foreach (string b in value.Split(','))
+            {
+                if (!String.IsNullOrEmpty(b))
+                {
+                    bytes.Add(Convert.ToByte(b));
+                }
+            }
+
+            //Console.WriteLine(");
+            foreach (byte b in bytes)
+            {
+                Console.Write(b.ToString() + ", ");
+
+            }
+
+            byte[] properArray = bytes.ToArray();
+
+
+            int i = BitConverter.ToInt32(properArray, 0);
+
+            return i;
+
+        }
+
+        public override string ToString()
+        {
+            return $"Stat Name: {statName} \n" + $"Stat Value: {value}";
         }
     }
 }

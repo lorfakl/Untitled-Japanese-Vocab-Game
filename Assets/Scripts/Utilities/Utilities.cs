@@ -139,6 +139,11 @@ namespace Utilities
             Debug.LogError(msg);
         }
 
+        public static void Warning<T>(T msg)
+        {
+            Debug.LogWarning(DateTime.Now + ": " + msg.ToString());
+        }
+
         public static void Log<T>(T msg)
         {
             Debug.Log(DateTime.Now + ": " + msg.ToString());

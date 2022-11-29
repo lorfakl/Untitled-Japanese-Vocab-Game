@@ -7,7 +7,10 @@ using PlayFab;
 using PlayFab.Samples;
 using PlayFabCloudScript;
 using PlayFab.ServerModels;
+using PlayFab.GroupsModels;
 using PlayFabCloudScript.OnLogin;
+using Newtonsoft.Json;
+using Utilities;
 
 public enum UserDataKey
 {
@@ -26,6 +29,274 @@ public enum TitleDataKeys
     StarterWords,
     CommonWords
 }
+
+public enum StatisticName
+{
+    LeagueSP,
+    MonthlySP,
+    WordsSeen,
+    WordsMastered,
+    StudyStreak,
+    TotalSP
+}
+
+public enum EntityTypes
+{
+    title_player_account,
+    group,
+    character,
+    master_player_account,
+    title
+}
+
+public class CloudScriptStatArgument
+{
+    [JsonProperty("statName")]
+    public string statName { get; set; }
+
+    [JsonProperty("value")]
+    public string value { get; set; }
+}
+
+public class BasicProfile
+{
+    [JsonProperty("avatarURL")]
+    public string AvatarURL { get; private set; }
+    
+    [JsonProperty("playfabID")]
+    public string PlayFabID { get; private set; }
+    
+    [JsonProperty("statistics")]
+    public Dictionary<StatisticName, CloudScriptStatArgument> Statistics { get; private set; }
+
+    [JsonProperty("displayName")]
+    public string DisplayName { get; private set; }
+
+    [JsonConstructor]
+    public BasicProfile(string avatarURL, string playfabID, string displayName, List<StatisticModel> stats)
+    {
+        AvatarURL = avatarURL;
+        PlayFabID = playfabID;
+        DisplayName = displayName;
+        if(stats.Count > 0)
+        {
+            Statistics = new Dictionary<StatisticName, CloudScriptStatArgument>();
+            Dictionary<StatisticName, int> statVersion = new Dictionary<StatisticName, int>();
+            try
+            {
+                foreach(StatisticModel s in stats)
+                {
+                    StatisticName sn = HelperFunctions.ParseEnum<StatisticName>(s.Name);
+                    if(statVersion.ContainsKey(sn) && Statistics.ContainsKey(sn))
+                    {
+                        if(s.Version > statVersion[sn])
+                        {
+                            statVersion[sn] = s.Version;
+                            Statistics[sn].value = s.Value.ToString();
+
+                        }
+                    }
+                    else
+                    {
+                        statVersion.Add(sn, s.Version);
+                        Statistics.Add(sn, new CloudScriptStatArgument
+                        {
+                            statName = s.Name,
+                            value = s.Value.ToString()
+                        });
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                PlayFabHelper.CaptureException(e, GetModifiedProfileData.logger);
+            }
+            
+        }
+        
+    }
+}
+
+public class UniversalEntityKey
+    {
+        [JsonProperty("ID")]
+        public string ID
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("Type")]
+        public string Type
+        {
+            get;
+            set;
+        }
+
+        public static implicit operator PlayFab.AuthenticationModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.AuthenticationModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.ClientModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.ClientModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.CloudScriptModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.CloudScriptModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.DataModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.DataModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.GroupsModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.GroupsModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.EconomyModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.EconomyModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.EventsModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.EventsModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.ExperimentationModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.ExperimentationModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.MultiplayerModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.MultiplayerModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        public static implicit operator PlayFab.ProfilesModels.EntityKey(UniversalEntityKey k)
+        {
+            return new PlayFab.ProfilesModels.EntityKey
+            {
+                Id = k.ID,
+                Type = k.Type
+            };
+        }
+        
+        public static explicit operator UniversalEntityKey(PlayFab.AuthenticationModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.ClientModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.CloudScriptModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.DataModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.GroupsModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.EconomyModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.EventsModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.ExperimentationModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.MultiplayerModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+        public static explicit operator UniversalEntityKey(PlayFab.ProfilesModels.EntityKey e)
+        {
+            return new UniversalEntityKey
+            {
+                ID = e.Id,
+                Type = e.Type
+            };
+        }
+
+
+    }
 
 public static class PlayFabHelper
     {
@@ -66,7 +337,28 @@ public static class PlayFabHelper
             
         }
 
-        
+        public static Task<PlayFabResult<PlayFab.GroupsModels.EmptyResponse>> AddMembers(PlayFab.GroupsModels.EntityKey groupKey, List<PlayFab.GroupsModels.EntityKey> members, ILogger log)
+        {
+            AddMembersRequest rq = new AddMembersRequest
+            {
+                Group = groupKey,
+                Members = members
+            };
+
+            var playfabHttpTask = PlayFabGroupsAPI.AddMembersAsync(rq);
+            log.LogInformation("Add Group Request Made ");
+            return playfabHttpTask;
+        }
+
+        public static Task<PlayFabResult<GetPlayerProfileResult>> GetPlayerProfile(string id, PlayerProfileViewConstraints constraint, ILogger log)
+        {
+            var playfabHttpTask = PlayFabServerAPI.GetPlayerProfileAsync( new GetPlayerProfileRequest {
+                PlayFabId = id,
+                ProfileConstraints = constraint
+            });
+            log.LogInformation("Specific request made: " + id + " " + constraint.ToString());
+            return playfabHttpTask;
+        }
         
         public static Task<PlayFabResult<GetUserDataResult>> GetUserData(string id, List<string> keys)
         {
@@ -101,6 +393,30 @@ public static class PlayFabHelper
             log.LogInformation( "PlayFabID" + addTagRq.PlayFabId + "TagName" + addTagRq.TagName);
             //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
             return playfabHttpTask;
+        }
+
+        public static Task<PlayFabResult<UpdatePlayerStatisticsResult>> UpdateUserStatistic(string id, List<CloudScriptStatArgument> updates, ILogger log)
+        {
+            List<StatisticUpdate> statisticUpdates = new List<StatisticUpdate>();
+            foreach(CloudScriptStatArgument st in updates)
+            {
+                int v = DecodeStringValue(st.value);
+                statisticUpdates.Add( new StatisticUpdate 
+                {
+                    StatisticName = st.statName,
+                    Value = v
+                });
+            }
+
+            var updateStatRq = new UpdatePlayerStatisticsRequest
+            {
+                PlayFabId = id,
+                Statistics = statisticUpdates
+            };
+
+            log.LogInformation("ID: " + id + " " + "Statistic Values " + HelperFunctions.PrintListContent(updates));
+            var statisticUpdateTask = PlayFabServerAPI.UpdatePlayerStatisticsAsync(updateStatRq);
+            return statisticUpdateTask;
         }
 
         public static Task<PlayFabResult<UpdateUserDataResult>> UpdateUserData(string id, Dictionary<string, string> dict)
@@ -140,10 +456,40 @@ public static class PlayFabHelper
             }
         }
 
-        public static void CaptureException(Exception ex, ILogger log)
+        private static int DecodeStringValue(string value)
         {
-            string err = ex.Message + "Inner Exception:  " + ex.InnerException + " Stack Trace:" + ex.StackTrace+ " Source:" + ex.Source;
+            List<byte> bytes = new List<byte>();
+
+            foreach (string b in value.Split(','))
+            {
+                if(!String.IsNullOrEmpty(b))
+                {
+                    bytes.Add(Convert.ToByte(b));
+                }
+            }
+
+            //Console.WriteLine(");
+            foreach (byte b in bytes)
+            {
+                Console.Write(b.ToString() + ", ");
+                
+            }
+
+            byte[] properArray = bytes.ToArray();
+
+
+            int i = BitConverter.ToInt32(properArray, 0);
+
+            return i;
+
+        }
+
+        public static string CaptureException(Exception ex, ILogger log)
+        {
+            string err = ex.ToString();
             log.Log(LogLevel.Error, err);
+            GetModifiedProfileData.errorStrings.Add(err);
+            return err;
         }
 
         public static void CapturePlayFabError(PlayFabError error, ILogger log)

@@ -95,7 +95,7 @@ public class StudyObject : MonoBehaviour
     {
         if(selectionEnabled)
         {
-            HelperFunctions.Log("Was clicked");
+            //HelperFunctions.Log("Was clicked");
 
             if (studyObjectSelectedEvent != null)
             {

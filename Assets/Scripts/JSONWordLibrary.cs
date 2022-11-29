@@ -13,7 +13,7 @@ public class JSONWordLibrary : MonoBehaviour
     public static List<JapaneseWord> WordsToStudy
     {
         get { return wordsToStudy; }
-        set { wordsToStudy = value; }
+        private set { wordsToStudy = value; }
     }
     #endregion
 
@@ -61,6 +61,11 @@ public class JSONWordLibrary : MonoBehaviour
         wordBank.Add(CurrentWord);
         HelperFunctions.Shuffle(wordBank);
         return wordBank;
+    }
+
+    public static void SetWordsToStudy(List<JapaneseWord> b)
+    {
+        WordsToStudy = b;
     }
 
 #endregion

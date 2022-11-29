@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: a403f83d75a093e428e3b46a60196d01
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - BIZ UDMincho
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1159d51d13b489448972162b0e3994dc, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

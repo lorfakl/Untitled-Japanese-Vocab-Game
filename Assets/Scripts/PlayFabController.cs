@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
-using Utilities.PlayFab;
+using Utilities.PlayFabHelper;
 using PlayFab.ClientModels;
 using PlayFab.CloudScriptModels;
 using System;
-
+using PlayFab.GroupsModels;
+using PlayFab.ProfilesModels;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public delegate void IsAuthenticatedNotification();
 
@@ -33,7 +37,8 @@ public enum StatisticName
     MonthlySP,
     WordsSeen,
     WordsMastered,
-    StudyStreak
+    StudyStreak,
+    TotalSP
 }
 
 public enum CSFunctionNames
@@ -43,18 +48,39 @@ public enum CSFunctionNames
     BuildSessionList,
     SetLoginStatus,
     AddNewWords,
-    UpdateTag
+    UpdateTag,
+    Record,
+    GetProfile,
+    AddMembers
 }
 
 public enum PlayerTags
 {
-    InGroup
+    InGroup,
+    HasPlayed,
+    HasPlayedThisWeek,
+    HasPlayedThisMonth
 }
 
-public struct UniversalEntityKey
+public struct ProfileStruct
 {
-    public string id;
-    public string type;
+    public string displayName;
+    public string rank;
+    public string playfabID;
+    public Dictionary<string, EntityStatisticValue> statistics;
+    public string avatarURL;
+
+    public void Print()
+    {
+        HelperFunctions.Log("DisplayName: " + this.displayName + "\n" +
+            "Rank: " + this.rank + "\n" +
+            "PlayFabID: " + this.playfabID + "\n" +
+            "Score: " + this.statistics + "\n" +
+            "AvatarURL: " + this.avatarURL);
+    }
+
+
+    
 }
 #endregion
 public class PlayFabController : MonoBehaviour
@@ -72,11 +98,25 @@ public class PlayFabController : MonoBehaviour
     [SerializeField]
     bool useRandomAccounts = false;
 
-    static string emptyLeitnerLevelData = @"{'Zero':[],'One': [],'Two': [],'Three': [],'Four': [],'Five': []}";
+    [SerializeField]
+    LocalPlayFabData localData;
+
+    static string emptyLeitnerLevelData = @"{'Zero':[],'One':[],'Two':[],'Three':[],'Four':[],'Five':[]}";
     static string emptyProfeincyLevelData = @"{'One': [],'Two': [],'Three': [],'Four': [],'Five': [],'Six': [],'Seven': [],'Eight': []}";
     static TimeSpan twelveHours = new TimeSpan(12, 0, 0);
     static TimeSpan twoMinutes = new TimeSpan(0, 2, 0);
-
+    private static PlayFabController _instance;
+    private PlayFabController Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = this;
+            }
+            return _instance;
+        }
+    }
     #endregion
 
     #region Events
@@ -123,7 +163,7 @@ public class PlayFabController : MonoBehaviour
             OnPlayFabError);
         }
 
-        public static void ExecutionCSFunction(CSFunctionNames functionName, Dictionary<string, string> parameter, bool shouldGeneratePlaystream, Action<PlayFab.CloudScriptModels.ExecuteFunctionResult> action = null)
+        public static void ExecutionCSFunction<TKey, TValue>(CSFunctionNames functionName, Dictionary<TKey,TValue> parameter, bool shouldGeneratePlaystream, Action<PlayFab.CloudScriptModels.ExecuteFunctionResult> action = null)
         {
             Playfab.ExecuteFunction(new ExecuteFunctionRequest
             {
@@ -133,6 +173,22 @@ public class PlayFabController : MonoBehaviour
             }, (result)=>
             { 
                 if(action != null)
+                {
+                    action(result);
+                }
+            }, OnPlayFabError);
+        }
+
+        public static void ExecutionCSFunction(CSFunctionNames functionName, object parameter, Action<PlayFab.CloudScriptModels.ExecuteFunctionResult> action = null)
+        {
+            Playfab.ExecuteFunction(new ExecuteFunctionRequest
+            {
+                FunctionName = functionName.ToString(),
+                FunctionParameter = parameter,
+                GeneratePlayStreamEvent = Playfab.ArePlayStreamEventsGenerated
+            }, (result) =>
+            {
+                if (action != null)
                 {
                     action(result);
                 }
@@ -164,8 +220,8 @@ public class PlayFabController : MonoBehaviour
                     {
                         UniversalEntityKey entityKey = new UniversalEntityKey
                         {
-                            id = kvp.Value.Id,
-                            type = kvp.Value.Type
+                            ID = kvp.Value.Id,
+                            Type = kvp.Value.Type
                         };
                         dict.Add(kvp.Key, entityKey);
                     }
@@ -188,13 +244,101 @@ public class PlayFabController : MonoBehaviour
                     parameterDict.Add("TagName", PlayerTags.InGroup.ToString());
 
                     ExecutionCSFunction(CSFunctionNames.UpdateTag, parameterDict, Playfab.ArePlayStreamEventsGenerated);
+                    HelperFunctions.Log("Group Entity Key ID: " + result.Group.Id);
+                    HelperFunctions.Log("Group Entity Key Type: " + result.Group.Type);
                     success(result);
                 }, OnPlayFabError);
         }
 
         
-        //public static void ()
-        //public static void ()
+        public static void AddToGroup(List<UniversalEntityKey> membersToAdd, UniversalEntityKey grpKey = null)
+        {
+            List <PlayFab.GroupsModels.EntityKey> convertedList = new List<PlayFab.GroupsModels.EntityKey>();
+            foreach(UniversalEntityKey memberKey in membersToAdd)
+            {
+                convertedList.Add(memberKey);
+            }
+
+            AddMembersRequest rq = new AddMembersRequest
+            {
+                Group = Playfab.GroupEntityKey,
+                Members = convertedList
+            };
+
+            Playfab.AddMembers(rq, OnPlayFabError);
+        }
+
+        
+        public static void GetGroupMembers(UniversalEntityKey groupKey, Action<List<BasicProfile>> callback)
+        {
+            
+            ListGroupMembersRequest rq = new ListGroupMembersRequest
+            {
+                Group = new PlayFab.GroupsModels.EntityKey
+                {
+                    Id = groupKey.ID,
+                    Type = groupKey.Type
+                }
+            };
+            Playfab.ListGroupMembers(rq, (result) =>
+            {
+                List<UniversalEntityKey> memberKeys = new List<UniversalEntityKey>();
+            List<string> memberPfIds = new List<string>();
+                foreach (EntityMemberRole role in result.Members)
+                {
+                    foreach (EntityWithLineage member in role.Members)
+                    {
+                        memberKeys.Add((UniversalEntityKey)member.Key);
+                        string id = member.Lineage[EntityTypes.master_player_account.ToString()].Id;
+                        if(!memberPfIds.Contains(id))
+                        {
+                            memberPfIds.Add(id);
+                            HelperFunctions.Log(id);
+                        }
+
+                    
+                        
+                    }
+                }
+
+                List<PlayFab.ProfilesModels.EntityKey> entityKeys = new List<PlayFab.ProfilesModels.EntityKey>();
+                foreach(var mKey in memberKeys)
+                {
+                    entityKeys.Add(mKey);
+                }
+                //GetPlayerProfileRequest 
+                PlayerProfileViewConstraints profileViewConstraints = new PlayerProfileViewConstraints
+                {
+                    ShowAvatarUrl = true,
+                    ShowDisplayName = true,
+                    ShowStatistics = true,
+                    ShowTags = true
+                };
+
+                ExecuteFunctionRequest getProfilesCS = new ExecuteFunctionRequest
+                {
+                    FunctionName = CSFunctionNames.GetProfile.ToString(),
+                    FunctionParameter = new ProfileCSArgument 
+                    { 
+                        PlayFabIDs = memberPfIds,
+                        ProfileConstraints = profileViewConstraints
+                    },
+                    GeneratePlayStreamEvent = Playfab.ArePlayStreamEventsGenerated
+                };
+
+                
+
+                Playfab.ExecuteFunction(getProfilesCS, (profilesResult) =>
+                {
+                    List<BasicProfile> profileLeaderboard = new List<BasicProfile>();
+                    string functionResultJson = profilesResult.FunctionResult.ToString();
+                    profileLeaderboard = ParseGetProfileFunctionResponse(functionResultJson);
+                    callback(profileLeaderboard);
+                   
+                }, OnPlayFabError);
+            }, OnPlayFabError);
+            
+        }
         //public static void ()
         //public static void ()
         //public static void ()
@@ -229,7 +373,14 @@ public class PlayFabController : MonoBehaviour
     #region Unity Methods
         void Awake()
         {
-        
+            if(Instance != this)
+            {
+                HelperFunctions.Log("Destroying newly created PlayFab Controller object");
+                Destroy(this.gameObject);
+                return;
+            }
+            DontDestroyOnLoad(this.gameObject);
+            HelperFunctions.Log("Does awake get called twice?");
         }
         
         void Start()
@@ -323,8 +474,113 @@ public class PlayFabController : MonoBehaviour
         static void OnPlayFabError(PlayFab.PlayFabError error)
         {
             //Pass to Retry Engine
-            HelperFunctions.Log(Playfab.DisplayPlayFabError(error));
+            HelperFunctions.Log(error.ApiEndpoint + " " + error.GenerateErrorReport());
+        }
+
+        static List<BasicProfile> ParseGetProfileFunctionResponse(string jsonString)
+        {
+            HelperFunctions.Log(jsonString);
+            List<BasicProfile> profiles = new List<BasicProfile>();
+            JArray functionResult = JArray.Parse(jsonString);
+            foreach(JObject o in functionResult.Children<JObject>())
+            {
+                var d = JsonConvert.DeserializeObject<Dictionary<StatisticName, CloudScriptStatArgument>>(o["statistics"].ToString());
+                BasicProfile p = new BasicProfile(o["avatarURL"].ToString(), o["playfabID"].ToString(), o["displayName"].ToString(), d);
+                if (!profiles.Any(profile => profile.PlayFabID == p.PlayFabID))
+                {
+                    profiles.Add(p);
+                }
+            }
+            HelperFunctions.Log($"Profiles created: {profiles.Count}");
+            return profiles;
         }
     
     #endregion
+}
+
+public class ProfileCSArgument
+{
+    /// <summary>
+    /// C# Class for the argument for the GetProfile CS Function
+    /// </summary>
+    [JsonProperty("PlayFabIDs")]
+    public List<string> PlayFabIDs { get; set; }
+
+    [JsonProperty("ProfileConstraints")]
+    public PlayerProfileViewConstraints ProfileConstraints { get; set; }
+
+
+}
+public class AddMembersCSArgument
+{
+    [JsonProperty("MemberKeys")]
+    public List<string> MemberKeys { get; set; }
+
+    [JsonProperty("GroupID")]
+    public string GroupID { get; set; }
+}
+public class BasicProfile
+{
+    [JsonProperty("avatarURL")]
+    public string AvatarURL { get; private set; }
+
+    [JsonProperty("playfabID")]
+    public string PlayFabID { get; private set; }
+
+    [JsonProperty("statistics")]
+    public Dictionary<StatisticName, CloudScriptStatArgument> Statistics { get; private set; }
+
+    [JsonProperty("displayName")]
+    public string DisplayName { get; private set; }
+
+    public BasicProfile(){}
+
+    public BasicProfile(string avatarURL, string playfabID, string displayName, Dictionary<StatisticName, CloudScriptStatArgument> stats)
+    {
+        AvatarURL = avatarURL;
+        PlayFabID = playfabID;
+        DisplayName = displayName;
+        Statistics = stats;
+    }
+
+    [JsonConstructor]
+    public BasicProfile(string avatarURL, string playfabID, string displayName, List<PlayFab.ClientModels.StatisticModel> stats)
+    {
+        AvatarURL = avatarURL;
+        PlayFabID = playfabID;
+        DisplayName = displayName;
+        if (stats.Count > 0)
+        {
+            Statistics = new Dictionary<StatisticName, CloudScriptStatArgument>();
+            Dictionary<StatisticName, int> statVersion = new Dictionary<StatisticName, int>();
+            try
+            {
+                foreach (PlayFab.ClientModels.StatisticModel s in stats)
+                {
+                    StatisticName sn = HelperFunctions.ParseEnum<StatisticName>(s.Name);
+                    if (statVersion.ContainsKey(sn) && Statistics.ContainsKey(sn))
+                    {
+                        if (s.Version > statVersion[sn])
+                        {
+                            statVersion[sn] = s.Version;
+                            Statistics[sn].value = s.Value.ToString();
+
+                        }
+                    }
+                    else
+                    {
+                        statVersion.Add(sn, s.Version);
+                        Statistics.Add(sn, new CloudScriptStatArgument(HelperFunctions.ParseEnum<StatisticName>(s.Name), s.Value));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                HelperFunctions.CatchException(e);
+            }
+
+        }
+
+    }
+
 }

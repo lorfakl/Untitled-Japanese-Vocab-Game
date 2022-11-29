@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Utilities;
 using Utilities.Events;
@@ -8,6 +9,18 @@ public class ScoreEventProcessors : MonoBehaviour
 {
 
     #region Public Variables
+    public static int Score
+    {
+        get
+        {
+            return currentScore;
+        }
+
+        private set
+        {
+
+        }
+    }
     #endregion
 
     #region Private Variables
@@ -19,7 +32,7 @@ public class ScoreEventProcessors : MonoBehaviour
 
     float averageFlightTime = 8.8f;
     float baseScore = 10;
-    int currentScore = 0;
+    static int currentScore = 0;
     int comboCount = 0;
     #endregion
 
