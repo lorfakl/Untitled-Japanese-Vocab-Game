@@ -3,15 +3,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using Utilities.Events;
+using Utilities.PlayFabHelper.CSArguments;
 using Utilities.PlayFabHelper;
 using Utilities;
 using PlayFab.ClientModels;
-
-using UnityEditor;
-using static UnityEngine.EventSystems.EventTrigger;
-using Newtonsoft.Json.Linq;
-using UnityEngine.Profiling;
 
 public struct LeaderboardEntry
 {

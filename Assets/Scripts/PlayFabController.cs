@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 using Utilities.PlayFabHelper;
+using Utilities.PlayFabHelper.CSArguments;
 using PlayFab.ClientModels;
 using PlayFab.CloudScriptModels;
 using System;
@@ -14,75 +15,6 @@ using Newtonsoft.Json.Linq;
 
 public delegate void IsAuthenticatedNotification();
 
-#region PlayFabHelperEnumsandStructs
-public enum UserDataKey
-{
-    LeitnerLevels,
-    PrestigeLevels,
-    SessionWords,
-    LoginCount,
-    NextSession,
-    WordsSeen
-}
-
-public enum TitleDataKeys
-{
-    StarterWords,
-    CommonWords
-}
-
-public enum StatisticName
-{
-    LeagueSP,
-    MonthlySP,
-    WordsSeen,
-    WordsMastered,
-    StudyStreak,
-    TotalSP
-}
-
-public enum CSFunctionNames
-{
-    TestingFunc,
-    FirstTimeWordSetup,
-    BuildSessionList,
-    SetLoginStatus,
-    AddNewWords,
-    UpdateTag,
-    Record,
-    GetProfile,
-    AddMembers
-}
-
-public enum PlayerTags
-{
-    InGroup,
-    HasPlayed,
-    HasPlayedThisWeek,
-    HasPlayedThisMonth
-}
-
-public struct ProfileStruct
-{
-    public string displayName;
-    public string rank;
-    public string playfabID;
-    public Dictionary<string, EntityStatisticValue> statistics;
-    public string avatarURL;
-
-    public void Print()
-    {
-        HelperFunctions.Log("DisplayName: " + this.displayName + "\n" +
-            "Rank: " + this.rank + "\n" +
-            "PlayFabID: " + this.playfabID + "\n" +
-            "Score: " + this.statistics + "\n" +
-            "AvatarURL: " + this.avatarURL);
-    }
-
-
-    
-}
-#endregion
 public class PlayFabController : MonoBehaviour
 {
 
@@ -92,6 +24,12 @@ public class PlayFabController : MonoBehaviour
         get;
         private set;
     }
+
+    public LocalPlayFabData LocalPlayFabData
+    {
+        get { return localData; }
+    }
+
     #endregion
 
     #region Private Variables
@@ -106,7 +44,7 @@ public class PlayFabController : MonoBehaviour
     static TimeSpan twelveHours = new TimeSpan(12, 0, 0);
     static TimeSpan twoMinutes = new TimeSpan(0, 2, 0);
     private static PlayFabController _instance;
-    private PlayFabController Instance
+    public PlayFabController Instance
     {
         get
         {
@@ -498,89 +436,5 @@ public class PlayFabController : MonoBehaviour
     #endregion
 }
 
-public class ProfileCSArgument
-{
-    /// <summary>
-    /// C# Class for the argument for the GetProfile CS Function
-    /// </summary>
-    [JsonProperty("PlayFabIDs")]
-    public List<string> PlayFabIDs { get; set; }
-
-    [JsonProperty("ProfileConstraints")]
-    public PlayerProfileViewConstraints ProfileConstraints { get; set; }
 
 
-}
-public class AddMembersCSArgument
-{
-    [JsonProperty("MemberKeys")]
-    public List<string> MemberKeys { get; set; }
-
-    [JsonProperty("GroupID")]
-    public string GroupID { get; set; }
-}
-public class BasicProfile
-{
-    [JsonProperty("avatarURL")]
-    public string AvatarURL { get; private set; }
-
-    [JsonProperty("playfabID")]
-    public string PlayFabID { get; private set; }
-
-    [JsonProperty("statistics")]
-    public Dictionary<StatisticName, CloudScriptStatArgument> Statistics { get; private set; }
-
-    [JsonProperty("displayName")]
-    public string DisplayName { get; private set; }
-
-    public BasicProfile(){}
-
-    public BasicProfile(string avatarURL, string playfabID, string displayName, Dictionary<StatisticName, CloudScriptStatArgument> stats)
-    {
-        AvatarURL = avatarURL;
-        PlayFabID = playfabID;
-        DisplayName = displayName;
-        Statistics = stats;
-    }
-
-    [JsonConstructor]
-    public BasicProfile(string avatarURL, string playfabID, string displayName, List<PlayFab.ClientModels.StatisticModel> stats)
-    {
-        AvatarURL = avatarURL;
-        PlayFabID = playfabID;
-        DisplayName = displayName;
-        if (stats.Count > 0)
-        {
-            Statistics = new Dictionary<StatisticName, CloudScriptStatArgument>();
-            Dictionary<StatisticName, int> statVersion = new Dictionary<StatisticName, int>();
-            try
-            {
-                foreach (PlayFab.ClientModels.StatisticModel s in stats)
-                {
-                    StatisticName sn = HelperFunctions.ParseEnum<StatisticName>(s.Name);
-                    if (statVersion.ContainsKey(sn) && Statistics.ContainsKey(sn))
-                    {
-                        if (s.Version > statVersion[sn])
-                        {
-                            statVersion[sn] = s.Version;
-                            Statistics[sn].value = s.Value.ToString();
-
-                        }
-                    }
-                    else
-                    {
-                        statVersion.Add(sn, s.Version);
-                        Statistics.Add(sn, new CloudScriptStatArgument(HelperFunctions.ParseEnum<StatisticName>(s.Name), s.Value));
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                HelperFunctions.CatchException(e);
-            }
-
-        }
-
-    }
-
-}

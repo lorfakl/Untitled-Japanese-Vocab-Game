@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using Utilities;
 
 public class MenuController : MonoBehaviour
 {
@@ -15,10 +16,17 @@ public class MenuController : MonoBehaviour
     GameObject settingsPanel;
     [SerializeField]
     GameObject profilePanel;
+    [SerializeField]
+    GameObject openingPanel;
 
+    [SerializeField]
     GameObject[] panels;
+
     GameObject activePanel;
-    Vector3 stowedPosition = new Vector3(-1080, 0, 0);
+
+    Dictionary<GameObject, Vector3> stowPositionDict = new Dictionary<GameObject, Vector3>();
+
+    #region Public Methods
     public void StudyButtonClickHandler()
     {
         SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
@@ -77,14 +85,34 @@ public class MenuController : MonoBehaviour
             activePanel = shopPanel;
         }
     }
+    #endregion
+
+    #region Unity Methods
+
+    private void Awake()
+    {
+        foreach(GameObject p in panels)
+        {
+            if(p.transform.localPosition == Vector3.zero)
+            {
+                activePanel = p;
+            }
+            p.SetActive(false);
+            stowPositionDict.Add(p, p.transform.localPosition);
+            HelperFunctions.Log("Local Position: " + p.gameObject.transform.localPosition);
+            HelperFunctions.Log("Position: " + p.gameObject.transform.position);
+        }
+
+        if(activePanel != null)
+        {
+            activePanel.SetActive(true);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        panels = new GameObject[] {profilePanel, settingsPanel, shopPanel, statsPanel};
-        foreach(GameObject p in panels)
-        {
-            p.SetActive(false);
-        }
+       
     }
 
     // Update is called once per frame
@@ -92,23 +120,27 @@ public class MenuController : MonoBehaviour
     {
         
     }
-
-    private void ChangeActivePanel(GameObject panel)
+    #endregion
+    private void ChangeActivePanel(GameObject selectedPanel)
     {
-        activePanel?.GetComponent<RectTransform>().DOLocalMove(stowedPosition, .25f);
+        if(activePanel != null)
+        {
+            Vector3 stowPosition = stowPositionDict[activePanel];
+            activePanel?.GetComponent<RectTransform>().DOLocalMove(stowPosition, .25f);
 
+        }
+        
         for (int i = 0; i < panels.Length; i++)
         {
-            if(panels[i] != panel)
+            if(panels[i] != selectedPanel)
             {
                 panels[i].SetActive(false);
             }
         }
 
-        panel.SetActive(true);
-        activePanel = panel;
-        panel.GetComponent<RectTransform>().DOLocalMove(Vector3.zero, .25f);
-
+        selectedPanel.SetActive(true);
+        activePanel = selectedPanel;
+        selectedPanel.GetComponent<RectTransform>().DOLocalMove(Vector3.zero, .25f);
     }
 
 
