@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 using Utilities.Events;
+using Utilities.PlayFabHelper;
+using Utilities.SaveOperations;
 
 public class TestingStuff : MonoBehaviour
 {
@@ -28,12 +30,16 @@ public class TestingStuff : MonoBehaviour
         StudyObject so = (StudyObject)studyObj;
         HelperFunctions.Log("Selected Word: " + so.Word.ToString());
     }
-#endregion
+    #endregion
 
-#region Unity Methods
+    #region Unity Methods
+    private void Awake()
+    {
+        
+    }
     void Start()
     {
-                
+        TestSaving();  
     
     }
 
@@ -49,5 +55,22 @@ public class TestingStuff : MonoBehaviour
 #endregion
 
 #region Private Methods
+    void TestSaving()
+    {
+        BasicProfile b = new BasicProfile("yourmon bro", "im the dad that stepped up", "deeznuts", 
+            new Dictionary<StatisticName, CloudScriptStatArgument>
+            { 
+                [StatisticName.TotalSP] = new CloudScriptStatArgument(StatisticName.TotalSP, 874561)
+            });
+
+        HelperFunctions.Log(b);
+        SaveSystem.Save<BasicProfile>(b, DataCategory.Profile);
+
+
+        BasicProfile notB = SaveSystem.Load<BasicProfile>(DataCategory.Profile);
+        HelperFunctions.Log("These the same: " + b.Equals(notB));
+        HelperFunctions.Log("Heeeeres B: " + "\n" + notB.Statistics[StatisticName.TotalSP].DecodeStatisticValue());
+    }
+
 #endregion
 }

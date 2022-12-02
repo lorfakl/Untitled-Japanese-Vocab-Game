@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Utilities.PlayFabHelper
 {
+    [Serializable]
     public class CloudScriptStatArgument
     {
         [JsonProperty("statName")]
@@ -41,7 +42,8 @@ namespace Utilities.PlayFabHelper
 
             return byteString;
         }
-        private static int DecodeStringValue(string value)
+
+        public int DecodeStatisticValue()
         {
             List<byte> bytes = new List<byte>();
 

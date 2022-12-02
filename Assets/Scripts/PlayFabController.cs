@@ -350,7 +350,7 @@ public class PlayFabController : MonoBehaviour
                 return;
             }
        
-
+            
             TimeSpan deltaTime = (TimeSpan)(DateTime.UtcNow - result.LastLoginTime);
             HelperFunctions.Log("Delta time since last login" + deltaTime);
             string l = "Detla Hours: " + deltaTime.Hours + "\n" + "Detla Minutes: " + deltaTime.Minutes + "\n" + "Detla Seconds: " + deltaTime.Seconds;

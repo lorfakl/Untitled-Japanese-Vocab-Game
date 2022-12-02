@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Utilities.PlayFabHelper
 {
+    [Serializable]
     public class UniversalEntityKey
     {
         public string ID

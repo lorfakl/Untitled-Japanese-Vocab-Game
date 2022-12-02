@@ -144,9 +144,11 @@ namespace Utilities
             Debug.LogWarning(DateTime.Now + ": " + msg.ToString());
         }
 
-        public static void Log<T>(T msg)
+        public static string Log<T>(T msg)
         {
-            Debug.Log(DateTime.Now + ": " + msg.ToString());
+            string msgStr = DateTime.Now + ": " + msg.ToString();
+            Debug.Log(msgStr);
+            return msgStr;
         }
 
         public static void LogListContent<T>(string msg, List<T> list)
@@ -196,20 +198,22 @@ namespace Utilities
             Debug.LogWarning(e.InnerException);
         }
 
-        public static void PrintObjectProperties<T>(T src)
+        public static string PrintObjectProperties<T>(T src)
         {
             Type type = typeof(T);
 
             PropertyInfo[] propertyInfo = type.GetProperties();
-
+            string res = "";
             foreach (PropertyInfo pInfo in propertyInfo)
             {
                 string val = type.GetProperty(pInfo.Name)?.GetValue(src, null)?.ToString();
                 if (!String.IsNullOrEmpty(val))
                 {
-                    Print(pInfo.Name + ": " + val);
+                    res += pInfo.Name + ": " + val + "\n";
                 }
             }
+
+            return Log(res);
         }
         #endregion
 

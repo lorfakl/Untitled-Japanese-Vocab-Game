@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Utilities.PlayFabHelper
 {
+    [Serializable]
     public class BasicProfile
     {
         [JsonProperty("avatarURL")]
@@ -70,5 +71,9 @@ namespace Utilities.PlayFabHelper
 
         }
 
+        public override string ToString()
+        {
+            return HelperFunctions.PrintObjectProperties(this);
+        }
     }
 }
