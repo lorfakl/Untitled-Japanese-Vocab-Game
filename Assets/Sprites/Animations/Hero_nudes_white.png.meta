@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2bd2ddd625fb2c347a3db0ef9fcad534
+guid: 4225c1f035618bb478729376196e73be
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -35,15 +35,15 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: 2
+    aniso: 1
     mipBias: 0
     wrapU: 0
     wrapV: 0
     wrapW: 0
-  nPOTScale: 0
+  nPOTScale: 1
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 0
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -54,7 +54,7 @@ TextureImporter:
   alphaUsage: 1
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 0
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 16384
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -105,11 +105,11 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
-    maxTextureSize: 16384
+    maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 74
+    textureFormat: -1
     textureCompression: 1
-    compressionQuality: 100
+    compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
@@ -127,142 +127,20 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Yuki-Ogre-ani-Sheet-Sheet_0
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 3
-        width: 95
-        height: 108
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 48f8130fa2149fa48b47fd5fdb92e1d2
-      internalID: -1433661413
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Yuki-Ogre-ani-Sheet-Sheet_1
-      rect:
-        serializedVersion: 2
-        x: 139
-        y: 3
-        width: 99
-        height: 109
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5e45220c62b5da74281cb9f84ce3862e
-      internalID: -85652543
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Yuki-Ogre-ani-Sheet-Sheet_2
-      rect:
-        serializedVersion: 2
-        x: 271
-        y: 3
-        width: 95
-        height: 111
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9178f4b7952a5ee4d8ba65910ca8a92c
-      internalID: -1060894803
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Yuki-Ogre-ani-Sheet-Sheet_3
-      rect:
-        serializedVersion: 2
-        x: 399
-        y: 3
-        width: 96
-        height: 110
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f1085db430b84b84a8a3968d66dfa590
-      internalID: 1627466228
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Yuki-Ogre-ani-Sheet-Sheet_4
-      rect:
-        serializedVersion: 2
-        x: 527
-        y: 3
-        width: 95
-        height: 108
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fb8ad1b0fc4913a4799f4a23bf669e1f
-      internalID: -463719708
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: df15677f743992f4284e950f80b5764c
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Yuki-Ogre-ani-Sheet-Sheet_1: -85652543
-      Yuki-Ogre-ani-Sheet-Sheet_0: -1433661413
-      Yuki-Ogre-ani-Sheet-Sheet_3: 1627466228
-      Yuki-Ogre-ani-Sheet-Sheet_2: -1060894803
-      Yuki-Ogre-ani-Sheet-Sheet_4: -463719708
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
