@@ -23,6 +23,14 @@ namespace Utilities.PlayFabHelper
 
         public BasicProfile() { }
 
+        public BasicProfile(PlayFab.ClientModels.PlayerProfileModel p)
+        {
+            PlayFabID = p.PlayerId;
+            AvatarURL = p.AvatarUrl;
+            DisplayName = p.DisplayName;
+            ParsePFStatisticModel(p.Statistics);
+        }
+
         public BasicProfile(string avatarURL, string playfabID, string displayName, Dictionary<StatisticName, CloudScriptStatArgument> stats)
         {
             AvatarURL = avatarURL;
@@ -37,6 +45,12 @@ namespace Utilities.PlayFabHelper
             AvatarURL = avatarURL;
             PlayFabID = playfabID;
             DisplayName = displayName;
+            ParsePFStatisticModel(stats);
+
+        }
+
+        private void ParsePFStatisticModel(List<PlayFab.ClientModels.StatisticModel> stats)
+        {
             if (stats.Count > 0)
             {
                 Statistics = new Dictionary<StatisticName, CloudScriptStatArgument>();
@@ -66,11 +80,8 @@ namespace Utilities.PlayFabHelper
                 {
                     HelperFunctions.CatchException(e);
                 }
-
             }
-
         }
-
         public override string ToString()
         {
             return HelperFunctions.PrintObjectProperties(this);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Utilities.PlayFabHelper
@@ -13,6 +14,11 @@ namespace Utilities.PlayFabHelper
         public Dictionary<string, BasicProfile> Members
         {
             get { return _members; }
+        }
+
+        public List<BasicProfile> MembersList
+        {
+            get { return _members.Values.ToList(); }
         }
 
         UniversalEntityKey _entityKey;
@@ -36,10 +42,7 @@ namespace Utilities.PlayFabHelper
 
         public PlayFabGroup(List<BasicProfile> members)
         {
-            foreach (BasicProfile member in members)
-            {
-                _members.Add(member.PlayFabID, member);
-            }
+            ModifyMemberDict(members);
         }
 
         public PlayFabGroup(UniversalEntityKey entityKey, string name)
@@ -50,12 +53,22 @@ namespace Utilities.PlayFabHelper
 
         public PlayFabGroup(UniversalEntityKey entityKey, List<BasicProfile> members)
         {
-            foreach (BasicProfile member in members)
+            ModifyMemberDict(members);
+
+            this._entityKey = entityKey;
+        }
+
+        public void Add(List<BasicProfile> members)
+        {
+            this.ModifyMemberDict(members);
+        }
+    
+        private void ModifyMemberDict(List<BasicProfile> m)
+        {
+            foreach (BasicProfile member in m)
             {
                 _members.Add(member.PlayFabID, member);
             }
-
-            this._entityKey = entityKey;
         }
     }
 }

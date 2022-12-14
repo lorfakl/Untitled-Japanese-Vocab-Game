@@ -157,10 +157,10 @@ namespace Utilities
             Log(msg + contents);
         }
 
-        public static void LogListContent<T>(List<T> list)
+        public static string LogListContent<T>(List<T> list)
         {
             string contents = PrintListContent(list);
-            Log(contents);
+            return Log(contents);
         }
 
         public static void LogDictContent<Tkey, TVal>(Dictionary<Tkey, TVal> dict)
@@ -169,7 +169,7 @@ namespace Utilities
             foreach (Tkey key in dict.Keys)
             {
                 //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                dictContents += string.Format("Key = {0}, Value = {1}", key.ToString(), dict[key]) + "\n";
+                dictContents += $"Key = {key.ToString()}, Value = {dict[key].ToString()}"+"\n";
             }
             Log(dictContents);
         }
@@ -177,10 +177,19 @@ namespace Utilities
         public static string PrintListContent<T>(List<T> list)
         {
             string contents = "";
-            foreach (T element in list)
+            if(list != null)
+            {
+                contents = String.Join(" ", list);
+            }
+            else
+            {
+                contents = "Supplied List is null";
+            }
+            
+            /*foreach (T element in list)
             {
                 contents += element.ToString() + " ";
-            }
+            }*/
 
             return contents;
         }
@@ -214,6 +223,21 @@ namespace Utilities
             }
 
             return Log(res);
+        }
+
+        public static string PrintObjectFields<T>(T src)
+        {
+            Type type = typeof(T);
+
+            FieldInfo[] fieldInfo = type.GetFields();
+            string fieldContent = "";
+
+            foreach(FieldInfo field in fieldInfo)
+            {
+                fieldContent += field.Name + ": " + field.GetValue(src) + "\n";
+            }
+
+            return Log(fieldContent);
         }
         #endregion
 

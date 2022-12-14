@@ -8,6 +8,8 @@ using PlayFab.Samples;
 using PlayFabCloudScript;
 using PlayFab.ServerModels;
 using PlayFab.GroupsModels;
+using PlayFab.DataModels;
+using PlayFab.AuthenticationModels;
 using PlayFabCloudScript.OnLogin;
 using Newtonsoft.Json;
 using Utilities;
@@ -295,8 +297,55 @@ public class UniversalEntityKey
             };
         }
 
+        public override string ToString()
+        {
+            return $"ID: {ID} \n Type: {Type} ";
+        }
 
     }
+
+public class PlayFabFileInfo
+{
+    [JsonProperty("FileName")]
+    public readonly string FileName;
+    
+    [JsonProperty("DownloadUrl")]
+    public readonly string DownloadUrl;
+    
+    [JsonProperty("UploadUrl")]
+    public readonly string UploadUrl;
+    
+    [JsonProperty("Size")]
+    public readonly int Size;
+    
+    [JsonProperty("LastModified")]
+    public readonly DateTime LastModified;
+
+    [JsonConstructor]
+    public PlayFabFileInfo(string fileName, string dwnUrl, string upldUrl, int s, DateTime lastMod)
+    {
+        FileName = fileName;
+        DownloadUrl = dwnUrl;
+        UploadUrl = upldUrl;
+        Size = s;
+        LastModified = lastMod;
+    }
+
+    public override string ToString()
+    {
+        return $"File Name: {FileName} \n DownloadUrl: {DownloadUrl} \n " +
+            $"UploadUrl: {UploadUrl} \n Size: {Size} \n  Last Modified: {LastModified}";
+    }
+}
+
+public class ModifyTagParameter
+{
+    [JsonProperty]
+    public string Operation { get; set; }
+    
+    [JsonProperty]
+    public List<string> TagNames { get; set; }
+}
 
 public static class PlayFabHelper
     {
@@ -393,6 +442,57 @@ public static class PlayFabHelper
             log.LogInformation( "PlayFabID" + addTagRq.PlayFabId + "TagName" + addTagRq.TagName);
             //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
             return playfabHttpTask;
+        }
+
+        public static Task<PlayFabResult<GetEntityTokenResponse>> GetEntityToken()
+        {
+            GetEntityTokenRequest rq = new GetEntityTokenRequest{};
+            return PlayFabAuthenticationAPI.GetEntityTokenAsync(rq);
+        }
+
+        public static Task<PlayFabResult<RemovePlayerTagResult>> RemovePlayerTag(string pfID, string tagName, ILogger log)
+        {
+            var removeTagRq = new RemovePlayerTagRequest 
+            {
+                PlayFabId = pfID,
+                TagName = tagName
+            };
+            try
+            {
+                var playfabHttpTask = PlayFabServerAPI.RemovePlayerTagAsync(removeTagRq);
+                log.LogInformation( "PlayFabID" + removeTagRq.PlayFabId + "TagName" + removeTagRq.TagName);
+                //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
+                return playfabHttpTask;
+            }
+            catch(Exception e)
+            {
+                log.LogError(e.Message + "\n" + e.StackTrace + "\n Inner Exception: " + e.InnerException);
+                return default(Task<PlayFabResult<RemovePlayerTagResult>>);
+            }
+            
+        }
+        
+        /*public static Task<PlayFabResult<GetPlayersInSegmentResult>> GetPlayersInSegment()
+        {
+            var segmentRequest = new GetPlayersInSegmentRequest
+            {
+                SegmentId
+            }
+        }*/
+
+        public static Task<PlayFabResult<GetFilesResponse>> GetEntityFiles(UniversalEntityKey e, ILogger log = null, List<string> logList = null)
+        {
+            GetFilesRequest rq = new GetFilesRequest
+            {
+                Entity = e
+            };
+            var getFilesRequest = PlayFabDataAPI.GetFilesAsync(rq);
+            if(log != null && logList != null)
+            {
+                LogInfo("Request Entity: " + e.ToString(), log, logList);
+            }
+
+            return getFilesRequest;
         }
 
         public static Task<PlayFabResult<UpdatePlayerStatisticsResult>> UpdateUserStatistic(string id, List<CloudScriptStatArgument> updates, ILogger log)
@@ -498,5 +598,11 @@ public static class PlayFabHelper
                 "Error: " + error.Error.ToString() + "\n" + "Error Message: " + error.ErrorMessage
                 + "\n" + "Error Details: " + error.ErrorDetails.ToString() + "\n" + error.GenerateErrorReport();
             log.Log(LogLevel.Error, fullErrorDetails);
+        }
+
+        public static void LogInfo(string message, ILogger log, List<string> listOfLogs)
+        {
+            log.LogInformation(message);
+            listOfLogs.Add(DateTime.UtcNow + ": " + message);
         }
     }

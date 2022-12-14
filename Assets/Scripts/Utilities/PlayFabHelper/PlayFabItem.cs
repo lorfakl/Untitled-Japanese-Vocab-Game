@@ -37,6 +37,19 @@ namespace Utilities.PlayFabHelper
             get { return _itemClass; }
         }
 
+        string _customData;
+        public string CustomData
+        {
+            get { return _customData; }
+        }
+
+        List<string> _tags = new List<string>();
+
+        public List<string> Tags
+        {
+            get { return _tags; }
+        }
+
         Dictionary<string, uint> _pricesDict = new Dictionary<string, uint>();
         public Dictionary<string, uint> Prices
         {
@@ -59,6 +72,12 @@ namespace Utilities.PlayFabHelper
         public bool IsTradable
         {
             get { return _isTradable; }
+        }
+
+        Sprite _imageReference;
+        public Sprite Sprite
+        {
+            get { return _imageReference; }
         }
 
         string _catalogVersion;
@@ -89,7 +108,9 @@ namespace Utilities.PlayFabHelper
                 ItemId = i.ID,
                 IsLimitedEdition = i.IsLimited,
                 IsTradable = i.IsTradable,
-                InitialLimitedEditionCount = i.LimitCount
+                InitialLimitedEditionCount = i.LimitCount,
+                CustomData = i.CustomData,
+                Tags = i.Tags,
 
             };
         }
@@ -117,8 +138,25 @@ namespace Utilities.PlayFabHelper
                 _isLimited = i.IsLimitedEdition,
                 _isTradable = i.IsTradable,
                 _limitCount = i.InitialLimitedEditionCount,
-                _pricesDict = i.VirtualCurrencyPrices
+                _pricesDict = i.VirtualCurrencyPrices,
+                _customData = i.CustomData,
+                _tags = i.Tags,
+                _iconUrl = i.ItemImageUrl
             };
+        }
+
+        public void SetSprite(Sprite s)
+        {
+            _imageReference = s;
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {ID} \n" +
+                $"Name: {Name} \n" +
+                $"ItemClass: {ItemClass} \n" +
+                $"Tags: {HelperFunctions.LogListContent(Tags)} \n" +
+                $"Image Location: {_iconUrl} \n";
         }
     }
 }
