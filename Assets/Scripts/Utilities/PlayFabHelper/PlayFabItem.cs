@@ -74,7 +74,9 @@ namespace Utilities.PlayFabHelper
             get { return _isTradable; }
         }
 
+        [NonSerialized]
         Sprite _imageReference;
+        
         public Sprite Sprite
         {
             get { return _imageReference; }

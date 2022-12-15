@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Utilities;
+using Utilities.Events;
 using Utilities.PlayFabHelper;
 using static UnityEditor.Progress;
 
@@ -14,6 +16,9 @@ public class StoreManager : MonoBehaviour
     GameObject _containerContentParent;
     [SerializeField]
     GameObject _itemThumbnailPrefab;
+
+    [SerializeField]
+    GameEvent _itemCategoriesCreatedEvent;
 
     Dictionary<string, Transform> _thumbnailParents = new Dictionary<string,Transform>();
 
@@ -44,6 +49,7 @@ public class StoreManager : MonoBehaviour
         PlayFabController.GetItemCatalog(ParseCatalogItems);
     }
 
+
     private void ParseCatalogItems(List<PlayFabItem> items)
     {
         foreach(var item in items)
@@ -69,6 +75,8 @@ public class StoreManager : MonoBehaviour
                 AddToDictionary("Limited", item);
             }
         }
+
+        RaiseItemCategoiesCreatedEvent();
     }
 
     private void ConfigureItems(string key, PlayFabItem i)
@@ -97,5 +105,10 @@ public class StoreManager : MonoBehaviour
             ConfigureItems(key, item);
             
         }
+    }
+
+    private void RaiseItemCategoiesCreatedEvent()
+    {
+        _itemCategoriesCreatedEvent.Raise(_thumbnailParents);
     }
 }

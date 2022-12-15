@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
 using Utilities.PlayFabHelper.CurrentUser;
@@ -20,11 +21,13 @@ public class FundsDisplayController : MonoBehaviour
     [SerializeField]
     GameEvent _startPurchaseProcessEvent;
     
-    int _availableFunds;
+    uint _availableFunds;
     uint _totalCost;
     Color _defaultColor;
     bool _isAfforable;
-    
+    PlayFabUser _user;
+
+
     public void On_StoreItemSelected(object i)
     {
         PlayFabItem item = (PlayFabItem)i;
@@ -46,18 +49,38 @@ public class FundsDisplayController : MonoBehaviour
 
     public void On_ItemRemovedFromCart(object i)
     {
-
+        PlayFabItem item = (PlayFabItem)i;
+        uint itemPrice = item.Prices[VirtualCurrency.SP.ToString()];
+        _totalCost -= itemPrice;
+        UpdateText(_totalCostText, _totalCost);
+        _isAfforable = true;
+        UpdateTextColor(_availableFundsText, _isAfforable);
     }
 
     public void On_PlayerCheckOut()
     {
-        
+        if(_totalCost <= _availableFunds)
+        {
+            long remaingFunds = _availableFunds - _totalCost;
+            string msg = $"You will have {remaingFunds} SP remaining after this purchase " +
+                $"\n Would you like to continue: ";
+
+            MessageBox.Show(msg, MessageBoxType.Confirmation /*OnRecievedPurchaseConfirmation*/);
+            StartPurchaseEvent(_totalCost);
+        }
+    }
+
+    public void On_PurchaseComplete()
+    {
+        UpdateText(_totalCostText, 0);
+        UpdateText(_availableFundsText, _availableFunds);
     }
     
     // Start is called before the first frame update
     void Start()
     {
-        _availableFunds = CurrentAuthedPlayer.CurrentUser.Inventory.VirtualCurrencies[VirtualCurrency.SP];
+        _user = CurrentAuthedPlayer.CurrentUser;
+        _availableFunds = (uint)_user.Inventory.VirtualCurrencies[VirtualCurrency.SP];
         _totalCost = 0;
 
         _availableFundsText.text = _availableFunds.ToString();
@@ -95,6 +118,15 @@ public class FundsDisplayController : MonoBehaviour
 
     private void StartPurchaseEvent(object c)
     {
+        _availableFunds -= _totalCost;
         _startPurchaseProcessEvent.Raise(c);
+    }
+
+    private void OnRecievedPurchaseConfirmation(bool shouldStartPurchase)
+    {
+        if(shouldStartPurchase)
+        {
+            StartPurchaseEvent(_totalCost);
+        }
     }
 }

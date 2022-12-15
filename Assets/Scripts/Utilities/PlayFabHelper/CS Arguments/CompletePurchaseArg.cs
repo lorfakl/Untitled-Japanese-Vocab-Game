@@ -13,6 +13,9 @@ namespace Utilities.PlayFabHelper.CSArguments
         [JsonProperty("price")]
         public string Price { get; set; }
 
+        [JsonProperty("vc")]
+        public string VC { get; set; }
+
         public CompletePurchaseArg()
         {
 

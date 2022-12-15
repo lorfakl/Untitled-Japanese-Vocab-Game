@@ -16,18 +16,28 @@ public class PurchaseManager : MonoBehaviour
     public void On_ItemRemovedFromCart(object i)
     {
         PlayFabItem item = (PlayFabItem)i;
-        _itemsInCart.Remove(item);
+        bool removed = _itemsInCart.Remove(item);
+        if(removed)
+        {
+            HelperFunctions.Log($"Items in cart: {_itemsInCart.Count}");
+        }
+        else
+        {
+            HelperFunctions.Error($"Not sure how this happned but Item: {item} was not removed");
+            HelperFunctions.LogListContent(_itemsInCart);
+        }
     }
 
     public void On_PossibleToPurchase(object i)
     {
         PlayFabItem item = (PlayFabItem)i;
         _itemsInCart.Add(item);
+        HelperFunctions.Log($"Items in cart: {_itemsInCart.Count}");
     }
 
     public void On_StartPurchase(object cost)
     {
-        int price = (int)cost;
+        uint price = (uint)cost;
         CompletePurchaseArg arg = new CompletePurchaseArg();
         List<string> itemIDs = new List<string>();
         foreach(var item in _itemsInCart)
@@ -37,6 +47,7 @@ public class PurchaseManager : MonoBehaviour
 
         arg.ItemIDs = itemIDs;
         arg.Price = price.ToString();
+        arg.VC = VirtualCurrency.SP.ToString();
         PlayFabController.ExecutionCSFunction(CSFunctionNames.CompletePurchase,
             arg, OnCompletePurchaseSuccess);
     }
@@ -56,5 +67,7 @@ public class PurchaseManager : MonoBehaviour
     private void OnCompletePurchaseSuccess(ExecuteFunctionResult res)
     {
         HelperFunctions.Log("The Purchase was completed on PF side. GO CHECK!");
+        _itemsInCart.Clear();
+        _purchaseCompleteEvent.Raise();
     }
 }

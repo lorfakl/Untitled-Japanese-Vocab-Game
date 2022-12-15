@@ -179,7 +179,7 @@ namespace Utilities
             string contents = "";
             if(list != null)
             {
-                contents = String.Join(" ", list);
+                contents = String.Join(", ", list);
             }
             else
             {

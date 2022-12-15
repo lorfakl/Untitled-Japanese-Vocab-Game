@@ -338,6 +338,23 @@ public class PlayFabFileInfo
     }
 }
 
+public class CompletePurchaseArg
+{
+    [JsonProperty("itemIds")]
+    public List<string> ItemIDs { get; set; }
+
+    [JsonProperty("price")]
+    public string Price { get; set; }
+
+    [JsonProperty("vc")]
+    public string VC { get; set; }
+
+    public CompletePurchaseArg()
+    {
+
+    }
+}
+
 public class ModifyTagParameter
 {
     [JsonProperty]
@@ -479,6 +496,48 @@ public static class PlayFabHelper
                 SegmentId
             }
         }*/
+
+        public static Task<PlayFabResult<GetCatalogItemsResult>> GetCatalogItem(ILogger log = null, List<string> logList = null)
+        {
+            GetCatalogItemsRequest rq = new GetCatalogItemsRequest();
+            var catalogRgTask = PlayFabServerAPI.GetCatalogItemsAsync(rq);
+            return catalogRgTask;
+        }
+
+        public static Task<PlayFabResult<GrantItemsToUserResult>> GrantItemsToUser(string id, List<string> itemIds, ILogger log = null, List<string> logList = null)
+        {
+            GrantItemsToUserRequest rq = new GrantItemsToUserRequest
+            {
+                PlayFabId = id,
+                ItemIds = itemIds
+            };
+
+            if(log != null && logList != null)
+            {
+                LogInfo($"Request Parameters: ID - {id} \n Item IDs: {Utilities.HelperFunctions.PrintListContent(itemIds)}", log, logList);
+            }
+
+            var grantTask = PlayFabServerAPI.GrantItemsToUserAsync(rq);
+            return grantTask;
+        }
+
+        public static Task<PlayFabResult<ModifyUserVirtualCurrencyResult>> SubTractUserVC(int amount, string id, string vc, ILogger log = null, List<string> logList = null)
+        {
+            SubtractUserVirtualCurrencyRequest rq = new SubtractUserVirtualCurrencyRequest
+            {
+                PlayFabId = id,
+                Amount = amount,
+                VirtualCurrency = vc
+            };
+
+            if(log != null && logList != null)
+            {
+                LogInfo($"Request Parameters: ID - {id} \n Amount to Subtract: {amount} \n VC: {vc}", log, logList);
+            }
+
+            var subtractTask = PlayFabServerAPI.SubtractUserVirtualCurrencyAsync(rq);
+            return subtractTask;
+        }
 
         public static Task<PlayFabResult<GetFilesResponse>> GetEntityFiles(UniversalEntityKey e, ILogger log = null, List<string> logList = null)
         {

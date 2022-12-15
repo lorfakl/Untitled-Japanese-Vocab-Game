@@ -17,6 +17,15 @@ public class CartController : MonoBehaviour
         var cartItem = Instantiate(_itemInCartPrefab, _cartContentParent);
         cartItem.GetComponent<ItemInCartController>().SetItemInstance(item);
     }
+
+    public void On_PurchaseComplete()
+    {
+        for(int i= 0; i < _cartContentParent.childCount; i++)
+        {
+            var child = _cartContentParent.GetChild(i);
+            Abort(child);
+        }
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -30,5 +39,9 @@ public class CartController : MonoBehaviour
         
     }
 
+    private void Abort(Transform c)
+    {
+        Destroy(c.gameObject);
+    }
 
 }

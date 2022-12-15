@@ -423,18 +423,22 @@ public class PlayFabController : MonoBehaviour
             IsAuthedEvent?.Invoke();
         }
 
-        var user = SaveSystem.Load<PlayFabUser>(DataCategory.User);
-
-        if (user != null)
+        if(CurrentAuthedPlayer.CurrentUser == null)
         {
-            HelperFunctions.Log("Actual data was loaded");
-            CurrentAuthedPlayer.SetCurrentUser(user);
+            var user = SaveSystem.Load<PlayFabUser>(DataCategory.User);
+            if (user != null)
+            {
+                HelperFunctions.Log("Actual data was loaded");
+                CurrentAuthedPlayer.SetCurrentUser(user);
+            }
+            else
+            {
+                HelperFunctions.Log("Default user obj was returned");
+                CurrentAuthedPlayer.SetCurrentUser(null);
+                HelperFunctions.Error("A CurrentUser was not created via file or on Login. There's an issue here");
+            }
         }
-        else
-        {
-            HelperFunctions.Log("Default user obj was returned");
-            CurrentAuthedPlayer.SetCurrentUser(null);
-        }
+        
 
 
     }

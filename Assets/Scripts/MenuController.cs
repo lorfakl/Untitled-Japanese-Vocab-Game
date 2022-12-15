@@ -99,8 +99,8 @@ public class MenuController : MonoBehaviour
             }
             p.SetActive(false);
             stowPositionDict.Add(p, p.transform.localPosition);
-            HelperFunctions.Log("Local Position: " + p.gameObject.transform.localPosition);
-            HelperFunctions.Log("Position: " + p.gameObject.transform.position);
+            //HelperFunctions.Log("Local Position: " + p.gameObject.transform.localPosition);
+            //HelperFunctions.Log("Position: " + p.gameObject.transform.position);
         }
 
         if(activePanel != null)
