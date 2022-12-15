@@ -1,5 +1,5 @@
 #if UNITY_EDITOR
-using UnityEditor;
+/*using UnityEditor;
 using UnityEngine;
 using Utilities.Events;
 
@@ -48,5 +48,5 @@ using Utilities.Events;
 
         #region Private Methods
         #endregion
-    }
+    }*/
 #endif

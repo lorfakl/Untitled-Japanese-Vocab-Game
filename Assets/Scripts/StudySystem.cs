@@ -120,7 +120,7 @@ public class StudySystem : MonoBehaviour
             }, true);
 
            
-            SceneManager.LoadScene("StatsScene", LoadSceneMode.Single);
+            SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
         }
     }
     #endregion
@@ -139,7 +139,10 @@ public class StudySystem : MonoBehaviour
     {
         for(int i = 0; i < Word.maxLeitnerLevel; i++)
         {
-            sessionWordLeitnerLevel.Add((ProficiencyLevels)i, new List<JapaneseWord>());
+            if(!sessionWordLeitnerLevel.ContainsKey((ProficiencyLevels)i))
+            {
+                sessionWordLeitnerLevel.Add((ProficiencyLevels)i, new List<JapaneseWord>());
+            }
         }
     }
 

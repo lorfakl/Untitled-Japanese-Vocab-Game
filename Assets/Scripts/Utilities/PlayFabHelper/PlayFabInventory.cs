@@ -1,4 +1,3 @@
-using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,8 +23,8 @@ namespace Utilities.PlayFabHelper
             get { return _pfId; }
         }
 
-        Dictionary<string, int> _virtualCurrency = new Dictionary<string, int>();
-        public Dictionary<string, int> VirtualCurrencies
+        Dictionary<VirtualCurrency, int> _virtualCurrency = new Dictionary<VirtualCurrency, int>();
+        public Dictionary<VirtualCurrency, int> VirtualCurrencies
         {
             get { return _virtualCurrency; }
         }
@@ -33,7 +32,19 @@ namespace Utilities.PlayFabHelper
         public PlayFabInventory(List<PlayFab.ClientModels.ItemInstance> i, string id, Dictionary<string, int> dict)
         {
             _pfId = id;
-            _virtualCurrency = dict;
+            foreach(string key in dict.Keys)
+            {
+                try
+                {
+                    VirtualCurrency vcCode = HelperFunctions.ParseEnum<VirtualCurrency>(key);
+                    _virtualCurrency.Add(vcCode,dict[key]);
+                }
+                catch(Exception e)
+                {
+                    HelperFunctions.CatchException(e);
+                }
+            }
+
             foreach(PlayFab.ClientModels.ItemInstance item in i)
             {
                 _inventory.Add((PlayFabItem)item);

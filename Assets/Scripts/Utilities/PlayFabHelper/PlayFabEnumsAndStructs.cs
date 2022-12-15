@@ -1,4 +1,5 @@
 using PlayFab.ProfilesModels;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,6 +46,11 @@ namespace Utilities.PlayFabHelper
         TotalSP
     }
 
+    public enum VirtualCurrency
+    {
+        SP
+    }
+
     public enum CSFunctionNames
     {
         TestingFunc,
@@ -55,7 +61,10 @@ namespace Utilities.PlayFabHelper
         UpdateTag,
         Record,
         GetProfile,
-        AddMembers
+        AddMembers,
+        ModifyTag, 
+        GetRivalAvatars,
+        CompletePurchase
     }
 
     public enum PlayerTags

@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 440875235}
   - component: {fileID: 440875234}
   - component: {fileID: 440875237}
-  - component: {fileID: 440875236}
   - component: {fileID: 440875238}
   m_Layer: 5
   m_Name: score
@@ -261,37 +260,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 440875232}
   m_CullTransparentMesh: 1
---- !u!114 &440875236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 440875232}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d5eb5770c0ff094fba3b921cdc6af7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 5915d6f80e2e5484fbdcbbec03e857b2, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls: []
-  ResponseWithData:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 440875237}
-        m_TargetAssemblyTypeName: ScoreEventProcessors, Assembly-CSharp
-        m_MethodName: CorrectAnswerEventProcessorCalculateScore
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &440875237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,7 +281,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 440875232}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d5eb5770c0ff094fba3b921cdc6af7a, type: 3}
   m_Name: 
@@ -700,6 +668,87 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &885807578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 885807582}
+  - component: {fileID: 885807581}
+  - component: {fileID: 885807580}
+  - component: {fileID: 885807579}
+  m_Layer: 0
+  m_Name: Ads
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &885807579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885807578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d6a78dfdf4b4749a6b974723119fba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _androidAdUnitId: Interstitial_Android
+  _iOsAdUnitId: Interstitial_iOS
+--- !u!114 &885807580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885807578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 105eb907cebfeca46b7ba8a0e885df29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _loadBannerButton: {fileID: 1354849271}
+  _showBannerButton: {fileID: 484596220}
+  _hideBannerButton: {fileID: 1041973982}
+  _bannerPosition: 6
+  _androidAdUnitId: Banner_Android
+  _iOSAdUnitId: Banner_iOS
+--- !u!114 &885807581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885807578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43eaee9694b1ee34597285e85ebbad58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _androidGameId: 5066681
+  _iOSGameId: 
+  _testMode: 1
+--- !u!4 &885807582
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885807578}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 711.2082, y: 919.6372, z: -3.1009521}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,7 +1109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1264293847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1578,7 +1627,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1603029890}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d5eb5770c0ff094fba3b921cdc6af7a, type: 3}
   m_Name: 
@@ -1609,7 +1658,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1603029890}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d5eb5770c0ff094fba3b921cdc6af7a, type: 3}
   m_Name: 
@@ -1645,6 +1694,7 @@ GameObject:
   - component: {fileID: 1667909289}
   - component: {fileID: 1667909288}
   - component: {fileID: 1667909291}
+  - component: {fileID: 1667909292}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1714,6 +1764,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testingEvent: {fileID: 0}
+--- !u!114 &1667909292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1667909287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df4bcab26f784d84686b92c8940213da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useRandomAccounts: 0
+  localData: {fileID: 0}
 --- !u!1 &1709569336
 GameObject:
   m_ObjectHideFlags: 0

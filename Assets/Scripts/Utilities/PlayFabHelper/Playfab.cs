@@ -9,6 +9,12 @@ using PlayFab.ProfilesModels;
 using PlayFab.GroupsModels;
 using Newtonsoft.Json;
 using Unity.VisualScripting;
+using Utilities.PlayFabHelper.Caching;
+using Utilities.PlayFabHelper.CurrentUser;
+using PlayFab.DataModels;
+using PlayFab.Internal;
+using Utilities.SaveOperations;
+using System.Text;
 
 namespace Utilities.PlayFabHelper
 {
@@ -48,6 +54,18 @@ namespace Utilities.PlayFabHelper
             private set;
         }
 
+        private static DateTime TokenExpirationTime
+        {
+            get;
+            set;
+        }
+
+        public static List<string> ActiveFileUploads
+        {
+            get;
+            private set;
+        }
+
         public static UniversalEntityKey GroupEntityKey
         {
             get;
@@ -80,75 +98,61 @@ namespace Utilities.PlayFabHelper
 
         public static void Login(Action<LoginResult> success, Action<PlayFabError> failure, bool useRandom)
         {
-            PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
+            if(TokenExpirationTime == null || DateTime.UtcNow > TokenExpirationTime)
             {
-                TitleId = PlayFabSettings.TitleId,
-                CustomId = SystemInfo.deviceUniqueIdentifier + Guid.NewGuid().ToString(),
-                CreateAccount = true
-            },
-            (result) =>
-            {
-                PlayFabID = result.PlayFabId;
-                TitlePlayerID = result.EntityToken.Entity.Id;
-                SessionTicket = result.SessionTicket;
-                EntityToken = result.EntityToken.EntityToken;
-                HelperFunctions.Log("Is this a new account: " + result.NewlyCreated);
-                if (result.NewlyCreated)
+                string customID = SystemInfo.deviceUniqueIdentifier;
+                if (useRandom)
                 {
-                    WasUserJustCreated = true;
+                    customID += Guid.NewGuid().ToString();
                 }
-                else
-                {
-                    WasUserJustCreated = false;
-                }
-                success(result);
 
-            },
-            (error) =>
-            {
-                HandlePlayFabError(error);
-                failure(error);
-            });
+                PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
+                {
+                    TitleId = PlayFabSettings.TitleId,
+                    CustomId = customID,
+                    CreateAccount = true,
+                    InfoRequestParameters = GetInfoRequest()
+
+                },
+                (result) =>
+                {
+                    SetAuthenticatedUserDefaults(result);
+                    success(result);
+
+                },
+                (error) =>
+                {
+                    HandlePlayFabError(error);
+                    failure(error);
+                });
+            }
+            
         }
 
         public static void Login(Action<LoginResult> success, Action<PlayFabError> failure)
         {
-            PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
-            {
-                TitleId = PlayFabSettings.TitleId,
-                CustomId = /*"devtest",*/SystemInfo.deviceUniqueIdentifier,
-                CreateAccount = true
-            },
-            (result) =>
-            {
-                PlayFabID = result.PlayFabId;
-                TitlePlayerID = result.EntityToken.Entity.Id;
-                SessionTicket = result.SessionTicket;
-                EntityToken = result.EntityToken.EntityToken;
-              
-                if(result.NewlyCreated)
-                {
-                    WasUserJustCreated = true;
-                }
-                else
-                {
-                    WasUserJustCreated = false;
-                }
-                success(result);
-
-            },
-            (error) =>
-            {
-                HandlePlayFabError(error);
-                failure(error);
-            });
+            Login(success, failure, false);
         }
         
         public static void ExecuteFunction(ExecuteFunctionRequest rq, Action<ExecuteFunctionResult> success, Action<PlayFabError> failure)
         {
-            PlayFabCloudScriptAPI.ExecuteFunction(rq, success, failure);
+            //var cacheResult = CacheSystem.GetResponse(rq);
+            //if (cacheResult == null)
+            //{
+                PlayFabCloudScriptAPI.ExecuteFunction(rq, 
+                    (suc)=>
+                    {
+                        CacheSystem.Add(rq, suc);
+                        success(suc);
+                    }, failure);
+            //}
+            /*else
+            {
+                ExecuteFunctionResult cached = (ExecuteFunctionResult)cacheResult;
+                success(cached);
+            }*/
         }
-        
+
         public static void GetUserData(GetUserDataRequest rq, Action<GetUserDataResult> success, Action<PlayFabError> failure)
         {
             PlayFabClientAPI.GetUserData(rq, success, failure);
@@ -188,11 +192,22 @@ namespace Utilities.PlayFabHelper
                     ProfileConstraints = profileView
                 };
 
-                PlayFabClientAPI.GetLeaderboardAroundPlayer(rq,
+                //var cacheResult = CacheSystem.GetResponse(rq);
+                //if (cacheResult == null)
+                //{
+                    PlayFabClientAPI.GetLeaderboardAroundPlayer(rq,
                     (suc) =>
                     {
+                        //CacheSystem.Add(rq, suc);
                         success(suc.Leaderboard);
                     }, HandlePlayFabError);
+                //}
+                /*else
+                {
+                    GetLeaderboardAroundPlayerResult cached = (GetLeaderboardAroundPlayerResult)cacheResult;
+                    success(cached.Leaderboard);
+                }*/
+                
             }
             else
             {
@@ -202,12 +217,21 @@ namespace Utilities.PlayFabHelper
                     StatisticName = name.ToString(),
                     ProfileConstraints = profileView
                 };
-
-                PlayFabClientAPI.GetLeaderboard(rq,
+               // var cacheResult = CacheSystem.GetResponse(rq);
+                //if (cacheResult == null)
+                //{
+                    PlayFabClientAPI.GetLeaderboard(rq,
                     (suc) =>
                     {
+
                         success(suc.Leaderboard);
                     }, HandlePlayFabError);
+               // }
+               /* else
+                {
+                    GetLeaderboardResult cached = (GetLeaderboardResult)cacheResult;
+                    success(cached.Leaderboard);
+                }*/
             }
         }
 
@@ -241,17 +265,19 @@ namespace Utilities.PlayFabHelper
         }
         public static void AddMembers(AddMembersRequest rq, Action<PlayFabError> error)
         {
-            PlayFabGroupsAPI.AddMembers(rq, (result) => { }, error);
+            PlayFabGroupsAPI.AddMembers(rq, (result) => {  }, error);
         }
         
         public static void ListGroupMembers(ListGroupMembersRequest r, Action<ListGroupMembersResponse> success, Action<PlayFabError> error)
         {
             PlayFabGroupsAPI.ListGroupMembers(r, success, error);
         }
+        
         public static void GetProfiles(GetEntityProfilesRequest r, Action<GetEntityProfilesResponse> suceess, Action<PlayFabError> error)
         {
             PlayFabProfilesAPI.GetProfiles(r, suceess, error);
         }
+        
         public static void GetGroup(Action<GetGroupResponse> success, Action<PlayFabError> error, bool hasOptinalArgs, string grpName = "", UniversalEntityKey grpKey = null)
         {
             GetGroupRequest rq;
@@ -273,6 +299,83 @@ namespace Utilities.PlayFabHelper
 
             PlayFabGroupsAPI.GetGroup(rq, success, error);
         }
+        
+        public static void GetFiles(GetFilesRequest rq, Action<PlayFabError> error, Action<List<PlayFabFileInfo>> success = null)
+        {
+            PlayFabDataAPI.GetFiles(rq, 
+                (result) => 
+                { 
+                    List<PlayFabFileInfo> files = new List<PlayFabFileInfo>();  
+                    foreach(var pair in result.Metadata)
+                    {
+                        PlayFabFileInfo f = new PlayFabFileInfo
+                        (
+                            pair.Value.FileName,
+                            pair.Value.DownloadUrl,
+                            String.Empty,
+                            pair.Value.Size,
+                            pair.Value.LastModified
+                        );
+
+                        files.Add(f);
+                    }
+                    success(files);
+                }, error);
+        }
+
+        public static void DownloadFileFromPlayFab(string dwnldURl, Action<byte[]> success, Action<string> error)
+        {
+            PlayFabHttp.SimpleGetCall(dwnldURl, success, error);
+        }
+
+        public static void InitiateFileUploads(InitiateFileUploadsRequest rq, Action<InitiateFileUploadsResponse> success, Action<PlayFabError> error)
+        {
+            ActiveFileUploads = rq.FileNames;
+            PlayFabDataAPI.InitiateFileUploads(rq, success, error);
+        }
+
+        public static void UploadEntityFile(InitiateFileUploadsResponse initialFileInfo, DataCategory c, Action<string> error)
+        {
+            byte[] fileInBytes = SaveSystem.PrepareFileForUpload(c);
+            if(fileInBytes != null)
+            {
+                PlayFabHttp.SimplePutCall(initialFileInfo.UploadDetails[0].UploadUrl,
+                fileInBytes, FinalizeUpload, error);
+            }
+             
+        }
+        public static void FinalizeUpload(byte[] somethingIGuess)
+        {
+            HelperFunctions.Log("Apparantly this array is null ??");
+            HelperFunctions.Log(somethingIGuess == null ? "They sent me a null ??" : "Its not null I suppose" 
+                + Encoding.UTF8.GetString(somethingIGuess));
+
+            var rq = new FinalizeFileUploadsRequest
+            {
+                Entity = CurrentAuthedPlayer.CurrentUser.EntityKey,
+                FileNames = ActiveFileUploads
+            };
+
+            PlayFabDataAPI.FinalizeFileUploads(rq, (result) =>
+            {
+                HelperFunctions.Log("Successfully Uploaded: ");
+                HelperFunctions.LogDictContent(result.Metadata);
+            }, LogPlayFabError);
+        }
+        public static void GetCatalogItems(Action<List<PlayFabItem>> success, Action<PlayFabError> error)
+        {
+            GetCatalogItemsRequest rq = new GetCatalogItemsRequest();
+            PlayFabClientAPI.GetCatalogItems(rq, (result) =>
+            {
+                List<PlayFabItem> items = new List<PlayFabItem>();
+                
+                foreach(var i in result.Catalog)
+                {
+                    items.Add((PlayFabItem)i);
+                }
+                success(items);
+            }, error);
+        }
         //public static void ()
         //public static void ()
         //public static void ()
@@ -292,14 +395,51 @@ namespace Utilities.PlayFabHelper
         //public static void ()
         //public static void ()
         //public static void ()
-        //public static void ()
-        //public static void ()
-        //public static void ()
-        //public static void ()
-        //public static void ()
-        //public static void ()
-        //public static void ()
-        //public static void ()
+        private static GetPlayerCombinedInfoRequestParams GetInfoRequest()
+        {
+            GetPlayerCombinedInfoRequestParams infoRequest = new GetPlayerCombinedInfoRequestParams
+            {
+                GetPlayerProfile = true,
+                GetUserAccountInfo = true,
+                GetUserInventory = true,
+                GetUserVirtualCurrency = true,
+                ProfileConstraints = new PlayerProfileViewConstraints
+                {
+                    ShowAvatarUrl = true,
+                    ShowDisplayName = true,
+                    ShowTags = true,
+                    ShowStatistics = true
+                }
+            };
+
+            return infoRequest;
+        }
+
+        private static void SetAuthenticatedUserDefaults(LoginResult result)
+        {
+            PlayFabID = result.PlayFabId;
+            TitlePlayerID = result.EntityToken.Entity.Id;
+            SessionTicket = result.SessionTicket;
+            EntityToken = result.EntityToken.EntityToken;
+            TokenExpirationTime = (DateTime)result.EntityToken.TokenExpiration;
+            HelperFunctions.Log("Is this a new account: " + result.NewlyCreated);
+            if (result.NewlyCreated)
+            {
+                WasUserJustCreated = true;
+            }
+            else
+            {
+                WasUserJustCreated = false;
+            }
+            
+            BasicProfile b = new BasicProfile(result.InfoResultPayload.PlayerProfile);
+            PlayFabInventory pfInventory = new PlayFabInventory(result.InfoResultPayload.UserInventory, PlayFabID, result.InfoResultPayload.UserVirtualCurrency);
+            PlayFabUser user = new PlayFabUser(PlayFabID, result.InfoResultPayload.PlayerProfile.Tags,
+                (UniversalEntityKey)result.EntityToken.Entity, b, pfInventory);
+
+            CurrentAuthedPlayer.SetCurrentUser(user);
+        }
+        
         private static void HandlePlayFabError(PlayFabError error)
         {
             string fullErrorDetails = "Error in PlayFab API: " + error.ApiEndpoint + "\n" +
@@ -313,6 +453,14 @@ namespace Utilities.PlayFabHelper
                 "Error: " + error?.Error.ToString() + "\n" + "Error Message: " + error?.ErrorMessage
                 + "\n" + "Error Details: " + error?.ErrorDetails.ToString();
             return fullErrorDetails;
+        }
+
+        public static void LogPlayFabError(PlayFabError error)
+        {
+            string fullErrorDetails = "Error in PlayFab API: " + error?.GenerateErrorReport() + "\n" +
+                "Error: " + error?.Error.ToString() + "\n" + "Error Message: " + error?.ErrorMessage
+                + "\n" + "Error Details: " + error?.ErrorDetails.ToString();
+            HelperFunctions.Error(fullErrorDetails);
         }
     }
 

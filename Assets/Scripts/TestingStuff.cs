@@ -5,6 +5,7 @@ using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
 using Utilities.SaveOperations;
+using Utilities.PlayFabHelper.CurrentUser;
 
 public class TestingStuff : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class TestingStuff : MonoBehaviour
     #endregion
 
     #region Private Variables
-
+    bool hasuploadedFile = true;
     #endregion
 
     #region Events
@@ -39,8 +40,7 @@ public class TestingStuff : MonoBehaviour
     }
     void Start()
     {
-        TestSaving();  
-    
+        //TestSaving(); 
     }
 
     // Update is called once per frame
@@ -51,10 +51,30 @@ public class TestingStuff : MonoBehaviour
             testingEvent.Raise();
             HelperFunctions.Log("SpaceBAR!");
         }
+        if(CurrentAuthedPlayer.CurrentUser != null)
+        {
+            //RequestFileInfomation(CurrentAuthedPlayer.CurrentUser.EntityKey);
+            if (!hasuploadedFile)
+            {
+                PlayFabController.InitiateFileUploads(CurrentAuthedPlayer.CurrentUser.EntityKey, "avatar");
+                hasuploadedFile = true;
+            }
+        }
+        
     }
 #endregion
 
 #region Private Methods
+    void RequestFileInfomation(UniversalEntityKey e)
+    {
+        PlayFabController.GetFileInfo(e, PrintFileInfomation);
+    }
+    
+    void PrintFileInfomation(List<PlayFabFileInfo> files)
+    {
+        HelperFunctions.LogListContent(files);
+    }
+    
     void TestSaving()
     {
         BasicProfile b = new BasicProfile("yourmon bro", "im the dad that stepped up", "deeznuts", 
