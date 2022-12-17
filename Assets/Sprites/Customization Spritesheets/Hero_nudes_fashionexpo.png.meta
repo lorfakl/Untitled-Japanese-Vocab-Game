@@ -40,10 +40,10 @@ TextureImporter:
     wrapU: 0
     wrapV: 0
     wrapW: 0
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -54,7 +54,7 @@ TextureImporter:
   alphaUsage: 1
   alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -129,18 +129,568 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_0
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 1235
+        width: 17
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 710a286f73750bd45bb2dac57c44a97b
+      internalID: 2108069058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_1
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 1168
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4cdb8911d9d1f843a1206ad044d6267
+      internalID: -1441177803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_2
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 1161
+        width: 11
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8ee4ab797d9e9c4e94b5c9ba07abd5d
+      internalID: 2023497974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_3
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 1161
+        width: 11
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be8dcd54cd1bf31409e3022c0a748114
+      internalID: 1550501243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_4
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1099
+        width: 26
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7babb2c86b33a014c9fa74ec1a09dd64
+      internalID: 692126624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_5
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1048
+        width: 21
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d6d7fa3c7cce9a4a965f5944900564e
+      internalID: -1215596094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_6
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 1037
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e34ff4e640ead194b8ff619623e63f19
+      internalID: -1535226161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_7
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 1037
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55b7da0b4633fd146aa919a76c1d3c1f
+      internalID: 109115245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_8
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 984
+        width: 19
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75be337f9c849f849978f87da53e5778
+      internalID: 1296341789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_9
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 973
+        width: 10
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc4cc19ac540e5044b67c0c2d4624e38
+      internalID: -679660938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_10
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 973
+        width: 10
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65afd0a460af75d41acfb496a1f78948
+      internalID: 1363314335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_11
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 909
+        width: 26
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7fd7f903094f9c4697b5b12671cc15b
+      internalID: 1422155495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_12
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 848
+        width: 28
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e55c47ea25b8b4a4686a1396d924db39
+      internalID: 2118802823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_13
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 779
+        width: 31
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa459fd81d090d047ae1616ec52d997e
+      internalID: -1113358571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_14
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 715
+        width: 30
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57fe79090cf0bf54cb807b47f47cd9d3
+      internalID: -1097999614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_15
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 649
+        width: 31
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dcbd7b7f641d887438b266e8b11e2cdb
+      internalID: -540134533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_16
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 588
+        width: 31
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 829a162892cce024abb4be41c7693546
+      internalID: 100402519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_17
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 523
+        width: 32
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8f6b28cd1249de458a58054c3fe0610
+      internalID: -1330896610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_18
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 458
+        width: 33
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df9afb161786bc743ac65786b7274eee
+      internalID: -1398767020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_19
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 393
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee4a978f731137848a948cdc7de85698
+      internalID: -1014760810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_20
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 272
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a624a45acb77e1041a8905f22b245e6a
+      internalID: 520713609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_21
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 200
+        width: 34
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b004872e1eccf8408b98a3545213dbf
+      internalID: 412664463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_22
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 149
+        width: 42
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fe9ea499dfb7e54780cca866fc9ebb3
+      internalID: 142717424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_23
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 69
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b95200e7f46c0f468d6545999cbff76
+      internalID: 949777847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hero_nudes_fashionexpo_24
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 74
+        width: 10
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e64056c2c3a656f4180c76853ca8c03c
+      internalID: 728838020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 4ceccabc11c92d140a9ee2a36279709f
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Hero_nudes_fashionexpo_22: 142717424
+      Hero_nudes_fashionexpo_23: 949777847
+      Hero_nudes_fashionexpo_12: 2118802823
+      Hero_nudes_fashionexpo_4: 692126624
+      Hero_nudes_fashionexpo_3: 1550501243
+      Hero_nudes_fashionexpo_21: 412664463
+      Hero_nudes_fashionexpo_10: 1363314335
+      Hero_nudes_fashionexpo_2: 2023497974
+      Hero_nudes_fashionexpo_6: -1535226161
+      Hero_nudes_fashionexpo_13: -1113358571
+      Hero_nudes_fashionexpo_7: 109115245
+      Hero_nudes_fashionexpo_17: -1330896610
+      Hero_nudes_fashionexpo_18: -1398767020
+      Hero_nudes_fashionexpo_19: -1014760810
+      Hero_nudes_fashionexpo_5: -1215596094
+      Hero_nudes_fashionexpo_14: -1097999614
+      Hero_nudes_fashionexpo_15: -540134533
+      Hero_nudes_fashionexpo_9: -679660938
+      Hero_nudes_fashionexpo_8: 1296341789
+      Hero_nudes_fashionexpo_0: 2108069058
+      Hero_nudes_fashionexpo_24: 728838020
+      Hero_nudes_fashionexpo_11: 1422155495
+      Hero_nudes_fashionexpo_20: 520713609
+      Hero_nudes_fashionexpo_16: 100402519
+      Hero_nudes_fashionexpo_1: -1441177803
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
