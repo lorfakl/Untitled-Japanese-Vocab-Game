@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,25 +16,32 @@ public class ItemFilterController : MonoBehaviour
     Dictionary<string, Transform> itemCategoryContainers = new Dictionary<string, Transform>();
     public void On_ItemCategoriesCreated(object itemCategories)
     {
-
-        itemCategoryContainers = (Dictionary<string, Transform>)itemCategories;
-        List<string> categories = new List<string>();
-        categories = itemCategoryContainers.Keys.ToList();
-
-        //HelperFunctions.LogListContent(categories);
-        filterDropdown.options.Clear();
-        string defaultFilterOption = "None";
-        
-        filterDropdown.options.Add(new TMP_Dropdown.OptionData { text = defaultFilterOption });
-        filterNames.Add(0, defaultFilterOption);
-        
-        foreach(string cat in categories)
+        try
         {
-            TMP_Dropdown.OptionData optionData = new TMP_Dropdown.OptionData();
-            optionData.text = cat;
-            filterDropdown.options.Add(optionData);
-            filterNames.Add(categories.IndexOf(cat) + 1, cat);
+            itemCategoryContainers = (Dictionary<string, Transform>)itemCategories;
+            List<string> categories = new List<string>();
+            categories = itemCategoryContainers.Keys.ToList();
+
+            //HelperFunctions.LogListContent(categories);
+            filterDropdown.options.Clear();
+            string defaultFilterOption = "None";
+
+            filterDropdown.options.Add(new TMP_Dropdown.OptionData { text = defaultFilterOption });
+            filterNames.Add(0, defaultFilterOption);
+
+            foreach (string cat in categories)
+            {
+                TMP_Dropdown.OptionData optionData = new TMP_Dropdown.OptionData();
+                optionData.text = cat;
+                filterDropdown.options.Add(optionData);
+                filterNames.Add(categories.IndexOf(cat) + 1, cat);
+            }
         }
+        catch(ArgumentException e)
+        {
+            HelperFunctions.CatchException(e);
+        }
+        
 
     }
 

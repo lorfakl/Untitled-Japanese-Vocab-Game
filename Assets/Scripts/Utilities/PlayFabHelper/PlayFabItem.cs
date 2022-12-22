@@ -2,9 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace Utilities.PlayFabHelper
 {
+    public enum CustomDataKeys
+    {
+        Rare
+    }
+
     [Serializable]
     public class PlayFabItem
     {
@@ -37,8 +44,8 @@ namespace Utilities.PlayFabHelper
             get { return _itemClass; }
         }
 
-        string _customData;
-        public string CustomData
+        Dictionary<string, string> _customData = new Dictionary<string, string>();
+        public Dictionary<string, string> CustomData
         {
             get { return _customData; }
         }
@@ -95,12 +102,20 @@ namespace Utilities.PlayFabHelper
                 CatalogVersion = i.CatalogVersion,
                 DisplayName = i.Name,
                 ItemClass = i.ItemClass,
-                ItemId = i.ID
+                ItemId = i.ID,
+                CustomData = i.CustomData
             };
         }
 
         public static implicit operator PlayFab.ClientModels.CatalogItem(PlayFabItem i)
         {
+            string c = "";
+
+            if (i.CustomData.Count > 0)
+            {
+                c = JsonConvert.SerializeObject(i.CustomData);
+            }
+
             return new PlayFab.ClientModels.CatalogItem
             {
                 CatalogVersion = i.CatalogVersion,
@@ -111,7 +126,7 @@ namespace Utilities.PlayFabHelper
                 IsLimitedEdition = i.IsLimited,
                 IsTradable = i.IsTradable,
                 InitialLimitedEditionCount = i.LimitCount,
-                CustomData = i.CustomData,
+                CustomData = c,
                 Tags = i.Tags,
 
             };
@@ -124,12 +139,20 @@ namespace Utilities.PlayFabHelper
                 _catalogVersion = i.CatalogVersion,
                 _name = i.DisplayName,
                 _itemClass = i.ItemClass,
-                _id = i.ItemId
+                _id = i.ItemId,
+                _customData = i.CustomData
             };
         }
 
         public static explicit operator PlayFabItem(PlayFab.ClientModels.CatalogItem i)
         {
+            Dictionary<string, string> dic = new Dictionary<string, string>();  
+            
+            if(!String.IsNullOrEmpty(i.CustomData))
+            {
+                dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(i.CustomData);
+            }
+
             return new PlayFabItem
             {
                 _catalogVersion = i.CatalogVersion,
@@ -141,7 +164,7 @@ namespace Utilities.PlayFabHelper
                 _isTradable = i.IsTradable,
                 _limitCount = i.InitialLimitedEditionCount,
                 _pricesDict = i.VirtualCurrencyPrices,
-                _customData = i.CustomData,
+                _customData = dic,
                 _tags = i.Tags,
                 _iconUrl = i.ItemImageUrl
             };

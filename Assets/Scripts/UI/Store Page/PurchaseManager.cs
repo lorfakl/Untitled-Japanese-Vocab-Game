@@ -5,6 +5,7 @@ using Utilities.PlayFabHelper;
 using Utilities.PlayFabHelper.CSArguments;
 using PlayFab.CloudScriptModels;
 using Utilities;
+using Utilities.PlayFabHelper.CurrentUser;
 
 public class PurchaseManager : MonoBehaviour
 {
@@ -67,7 +68,14 @@ public class PurchaseManager : MonoBehaviour
     private void OnCompletePurchaseSuccess(ExecuteFunctionResult res)
     {
         HelperFunctions.Log("The Purchase was completed on PF side. GO CHECK!");
+        foreach(var item in _itemsInCart)
+        {
+            //dont need to check if they exist in inventory because all these items are from the 
+            CurrentAuthedPlayer.CurrentUser.Inventory.Inventory.Add(item);
+            HelperFunctions.Log("Added new purchased item to inventory");
+        }
         _itemsInCart.Clear();
         _purchaseCompleteEvent.Raise();
+        
     }
 }

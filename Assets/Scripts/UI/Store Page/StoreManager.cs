@@ -6,7 +6,6 @@ using UnityEngine;
 using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
-using static UnityEditor.Progress;
 
 public class StoreManager : MonoBehaviour
 {
@@ -25,6 +24,13 @@ public class StoreManager : MonoBehaviour
 
     Dictionary<string, List<PlayFabItem>> _itemCategories = new Dictionary<string, List<PlayFabItem>>();
 
+    GridItemDisplayController _gridController;
+
+    public void On_StorePageClicked()
+    {
+        RaiseItemCategoiesCreatedEvent();
+    }
+
     void Start()
     {
         if(PlayFabController.IsAuthenticated)
@@ -35,7 +41,8 @@ public class StoreManager : MonoBehaviour
         {
             PlayFabController.IsAuthedEvent += OnAuthenticatedEvent;
         }
-        
+
+        _gridController = new GridItemDisplayController(_thumbnailParents, _itemCategories, _itemDisplayContainerPrefab, _itemThumbnailPrefab, _containerContentParent.transform);
     }
 
     // Update is called once per frame
@@ -52,31 +59,8 @@ public class StoreManager : MonoBehaviour
 
     private void ParseCatalogItems(List<PlayFabItem> items)
     {
-        foreach(var item in items)
-        {
-            AddToDictionary(item.ItemClass, item);
-
-            try
-            {
-                if (item.Tags.Contains("Rare"))
-                {
-                    AddToDictionary("Rare", item);
-                }
-            }
-            catch(Exception e)
-            {
-                HelperFunctions.CatchException(e);
-                //HelperFunctions.Log(item);
-            }
-            
-
-            if(item.IsLimited)
-            {
-                AddToDictionary("Limited", item);
-            }
-        }
-
-        RaiseItemCategoiesCreatedEvent();
+        _gridController.CreateItemDictionaries(items);
+        
     }
 
     private void ConfigureItems(string key, PlayFabItem i)
