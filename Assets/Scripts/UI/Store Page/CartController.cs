@@ -11,9 +11,10 @@ public class CartController : MonoBehaviour
     [SerializeField]
     Transform _cartContentParent;
 
-    public void On_PossibleToPurchase(object i)
+    public void On_AddedToCart(object i)
     {
         PlayFabItem item = (PlayFabItem)i;
+
         var cartItem = Instantiate(_itemInCartPrefab, _cartContentParent);
         cartItem.GetComponent<ItemInCartController>().SetItemInstance(item);
     }

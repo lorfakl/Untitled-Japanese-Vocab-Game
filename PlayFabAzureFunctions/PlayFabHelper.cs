@@ -606,10 +606,12 @@ public static class PlayFabHelper
         {
             if(playFabResult.Error == null)
             {
+                log.LogInformation("API call was successful");
                 return true;
             }
             else
             {
+                log.LogInformation("An Error has occured");
                 CapturePlayFabError(playFabResult.Error, log);
                 return false;
             }
@@ -653,10 +655,21 @@ public static class PlayFabHelper
 
         public static void CapturePlayFabError(PlayFabError error, ILogger log)
         {
-            string fullErrorDetails = "Error in PlayFab API: " + error.RequestId + "\n" +
-                "Error: " + error.Error.ToString() + "\n" + "Error Message: " + error.ErrorMessage
-                + "\n" + "Error Details: " + error.ErrorDetails.ToString() + "\n" + error.GenerateErrorReport();
-            log.Log(LogLevel.Error, fullErrorDetails);
+            string errorDetails = "";
+            try
+            {
+                errorDetails += "Error in PlayFab API: " + error.RequestId;
+                errorDetails += "\n" + "Error: " + error.Error.ToString();
+                errorDetails += "\n" + "Error Message: " + error.ErrorMessage;
+                errorDetails += "\n" + "Error Details: " + error.ErrorDetails.ToString();
+                log.Log(LogLevel.Error, errorDetails);
+            }
+            catch(Exception e)
+            {
+                CaptureException(e, log);
+                log.LogInformation("Error information before exception: " + errorDetails);
+            }
+            
         }
 
         public static void LogInfo(string message, ILogger log, List<string> listOfLogs)

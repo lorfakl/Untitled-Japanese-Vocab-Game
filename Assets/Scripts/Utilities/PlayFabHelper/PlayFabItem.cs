@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace Utilities.PlayFabHelper
 {
@@ -12,10 +14,13 @@ namespace Utilities.PlayFabHelper
         Rare
     }
 
+    public delegate void ItemSelectionStatus(bool isSelected);
+
     [Serializable]
-    public class PlayFabItem
+    public class PlayFabItem : IEquatable<PlayFabItem>
     {
-        string _id;
+        readonly Guid _internalID;
+        readonly string _id;
         public string ID
         {
             get { return _id; }
@@ -95,6 +100,40 @@ namespace Utilities.PlayFabHelper
             get { return _catalogVersion; }
         }
 
+        [field: NonSerialized]
+        public event ItemSelectionStatus OnSelectionChangeEvent;
+
+        public PlayFabItem()
+        {
+
+        }
+
+        public PlayFabItem(string id, string name, string description, string iconUrl, string itemClass, Dictionary<string, string> customData, List<string> tags, Dictionary<string, uint> pricesDict, bool isLimited, int limitCount, bool isTradable, string catalogVersion)
+        {
+            _id = id;
+            _name = name;
+            _description = description;
+            _iconUrl = iconUrl;
+            _itemClass = itemClass;
+            _customData = customData;
+            _tags = tags;
+            _pricesDict = pricesDict;
+            _isLimited = isLimited;
+            _limitCount = limitCount;
+            _isTradable = isTradable;
+            _catalogVersion = catalogVersion;
+        }
+
+        public PlayFabItem(string id, string name, string itemClass, Dictionary<string, string> customData, string catalogVersion)
+        {
+            _id = id;
+            _name = name;
+            _itemClass = itemClass;
+            _customData = customData;
+            _catalogVersion = catalogVersion;
+            _internalID = Guid.NewGuid();
+
+        }
         public static implicit operator PlayFab.ClientModels.ItemInstance(PlayFabItem i)
         {
             return new PlayFab.ClientModels.ItemInstance
@@ -134,14 +173,8 @@ namespace Utilities.PlayFabHelper
 
         public static explicit operator PlayFabItem(PlayFab.ClientModels.ItemInstance i)
         {
-            return new PlayFabItem
-            {
-                _catalogVersion = i.CatalogVersion,
-                _name = i.DisplayName,
-                _itemClass = i.ItemClass,
-                _id = i.ItemId,
-                _customData = i.CustomData
-            };
+            
+            return new PlayFabItem(i.ItemId, i.DisplayName, i.ItemClass, i.CustomData, i.CatalogVersion);
         }
 
         public static explicit operator PlayFabItem(PlayFab.ClientModels.CatalogItem i)
@@ -153,21 +186,12 @@ namespace Utilities.PlayFabHelper
                 dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(i.CustomData);
             }
 
-            return new PlayFabItem
-            {
-                _catalogVersion = i.CatalogVersion,
-                _description = i.Description,
-                _name = i.DisplayName,
-                _itemClass = i.ItemClass,
-                _id = i.ItemId,
-                _isLimited = i.IsLimitedEdition,
-                _isTradable = i.IsTradable,
-                _limitCount = i.InitialLimitedEditionCount,
-                _pricesDict = i.VirtualCurrencyPrices,
-                _customData = dic,
-                _tags = i.Tags,
-                _iconUrl = i.ItemImageUrl
-            };
+            return new PlayFabItem(i.ItemId, i.DisplayName, i.Description, i.ItemImageUrl, i.ItemClass, dic, i.Tags, i.VirtualCurrencyPrices, i.IsLimitedEdition, i.InitialLimitedEditionCount, i.IsTradable, i.CatalogVersion);
+        }
+
+        public void SetSelectionStatus(bool selectionState)
+        {
+            OnSelectionChangeEvent?.Invoke(selectionState);
         }
 
         public void SetSprite(Sprite s)
@@ -180,8 +204,29 @@ namespace Utilities.PlayFabHelper
             return $"ID: {ID} \n" +
                 $"Name: {Name} \n" +
                 $"ItemClass: {ItemClass} \n" +
-                $"Tags: {HelperFunctions.LogListContent(Tags)} \n" +
+                $"Tags: {HelperFunctions.PrintListContent(Tags)} \n" +
                 $"Image Location: {_iconUrl} \n";
+        }
+
+        public bool Equals(PlayFabItem other)
+        {
+            if(this.ID == other.ID)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool Equals(object obj) => Equals(obj as PlayFabItem);
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            hash = (hash * 7) + this.ID.GetHashCode();
+            //hash = (hash * 7) + this._internalID.GetHashCode();
+            return hash;
         }
     }
 }

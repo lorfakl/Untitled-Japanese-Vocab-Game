@@ -1,10 +1,13 @@
+using PlayFab.ClientModels;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
 using Utilities.PlayFabHelper.CurrentUser;
+using static UnityEditor.Progress;
 
 public class ProfileManager : MonoBehaviour
 {
@@ -38,20 +41,26 @@ public class ProfileManager : MonoBehaviour
     {
         if (PlayFabController.IsAuthenticated)
         {
-            GrabPlayerInventory();
+            GrabInitialPlayerInventory();
         }
         else
         {
-            PlayFabController.IsAuthedEvent += GrabPlayerInventory;
+            PlayFabController.IsAuthedEvent += GrabInitialPlayerInventory;
         }
 
-        _gridController = new GridItemDisplayController(_thumbnailParents, _itemCategories, _itemDisplayContainerPrefab, _itemThumbnailPrefab, _containerContentParent.transform);
+        if(_gridController == null)
+        {
+            _gridController = new GridItemDisplayController(_thumbnailParents, _itemCategories, _itemDisplayContainerPrefab, _itemThumbnailPrefab, _containerContentParent.transform);
+        }
+        
     }
 
 
-    private void GrabPlayerInventory()
+    private void GrabInitialPlayerInventory()
     {
-        _inventoryItems = CurrentAuthedPlayer.CurrentUser.Inventory.Inventory;
+        _inventoryItems = CurrentAuthedPlayer.CurrentUser.Inventory.Inventory.ToList();
+        //EVERYTHING IS SECRETLY A POINTER!!!!!!!!!!!! ToList() is used to get a NEW LIST but the SAME items
+        
         HelperFunctions.Log("Items in inventory: " + _inventoryItems.Count);
         _gridController.CreateItemDictionaries(_inventoryItems);
 
@@ -69,18 +78,17 @@ public class ProfileManager : MonoBehaviour
         List<PlayFabItem> newlyAddedInventoryItems = new List<PlayFabItem>();
         HelperFunctions.Log($"Number of items in the iventory {CurrentAuthedPlayer.CurrentUser.Inventory.Inventory.Count}");
         HelperFunctions.Log($"As compared to {_inventoryItems.Count}");
-        foreach(var item in CurrentAuthedPlayer.CurrentUser.Inventory.Inventory)
+        
+        if(CurrentAuthedPlayer.CurrentUser.Inventory.Inventory.Count != _inventoryItems.Count)
         {
-            if(!_inventoryItems.Contains(item))
-            {
-                newlyAddedInventoryItems.Add(item);
-            }
+            newlyAddedInventoryItems = CurrentAuthedPlayer.CurrentUser.Inventory.Inventory.Except(_inventoryItems).ToList();
         }
 
         if(newlyAddedInventoryItems.Count > 0)
         {
             HelperFunctions.Log(newlyAddedInventoryItems.Count + " new inventory items!");
             _gridController.CreateItemDictionaries(newlyAddedInventoryItems);
+
         }
     }
 }

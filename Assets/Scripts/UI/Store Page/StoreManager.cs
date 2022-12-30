@@ -6,6 +6,7 @@ using UnityEngine;
 using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
+using Utilities.PlayFabHelper.CurrentUser;
 
 public class StoreManager : MonoBehaviour
 {
@@ -29,6 +30,11 @@ public class StoreManager : MonoBehaviour
     public void On_StorePageClicked()
     {
         RaiseItemCategoiesCreatedEvent();
+    }
+
+    public void On_PurchaseComplete()
+    {
+        //CurrentAuthedPlayer.CurrentUser.Inventory.Inventory
     }
 
     void Start()
@@ -59,38 +65,18 @@ public class StoreManager : MonoBehaviour
 
     private void ParseCatalogItems(List<PlayFabItem> items)
     {
-        _gridController.CreateItemDictionaries(items);
-        
-    }
-
-    private void ConfigureItems(string key, PlayFabItem i)
-    {
-        var thumbnail = Instantiate(_itemThumbnailPrefab, _thumbnailParents[key]);
-        thumbnail.GetComponent<ItemDisplayController>().SetItemInstance(i);
-    }
-
-    private void AddToDictionary(string key, PlayFabItem item)
-    {
-        if (_itemCategories.ContainsKey(key))
+        List<PlayFabItem> storeItems = new List<PlayFabItem>();
+        if(CurrentAuthedPlayer.CurrentUser.Inventory.Inventory != null)
         {
-            _itemCategories[key].Add(item);
-            ConfigureItems(key, item);
-        }
-        else
-        {
-            _itemCategories.Add(key, new List<PlayFabItem>());
-            _itemCategories[key].Add(item);
-            
-            var container = GameObject.Instantiate(_itemDisplayContainerPrefab, _containerContentParent.transform);
-            Transform thumbnailParent = container.GetComponent<ItemContainerController>().Content;
-            
-            _thumbnailParents.Add(key, thumbnailParent);
-
-            ConfigureItems(key, item);
-            
+            storeItems = items.Except(CurrentAuthedPlayer.CurrentUser.Inventory.Inventory).ToList();
+            HelperFunctions.Log("Inventory Count: " + CurrentAuthedPlayer.CurrentUser.Inventory.Inventory.Count);
+            HelperFunctions.Log("Catalog Count: " + items.Count);
+            HelperFunctions.Log("StoreItems Count: " + storeItems.Count);
+            _gridController.CreateItemDictionaries(storeItems);
         }
     }
 
+    
     private void RaiseItemCategoiesCreatedEvent()
     {
         _itemCategoriesCreatedEvent.Raise(_thumbnailParents);

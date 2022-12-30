@@ -6,6 +6,7 @@ using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
 using Utilities.PlayFabHelper.CurrentUser;
+using static UnityEditor.Progress;
 
 public class FundsDisplayController : MonoBehaviour
 {
@@ -27,6 +28,16 @@ public class FundsDisplayController : MonoBehaviour
     bool _isAfforable;
     PlayFabUser _user;
 
+    public void On_AddedToCart(object i)
+    {
+        PlayFabItem item = (PlayFabItem)i;
+        item.SetSelectionStatus(true);
+        uint itemPrice = item.Prices[VirtualCurrency.SP.ToString()];
+        _totalCost += itemPrice;
+        UpdateText(_totalCostText, _totalCost);
+        _isAfforable = true;
+        UpdateTextColor(_availableFundsText, _isAfforable);
+    }
 
     public void On_StoreItemSelected(object i)
     {
@@ -35,10 +46,7 @@ public class FundsDisplayController : MonoBehaviour
         if (_totalCost + itemPrice <= _availableFunds)
         {
             PossibleToPurchaseEvent(item);
-            _totalCost += itemPrice;
-            UpdateText(_totalCostText, _totalCost);
-            _isAfforable = true;
-            UpdateTextColor(_availableFundsText, _isAfforable);
+            
         }
         else
         {
@@ -52,6 +60,7 @@ public class FundsDisplayController : MonoBehaviour
         PlayFabItem item = (PlayFabItem)i;
         uint itemPrice = item.Prices[VirtualCurrency.SP.ToString()];
         _totalCost -= itemPrice;
+        item.SetSelectionStatus(false);
         UpdateText(_totalCostText, _totalCost);
         _isAfforable = true;
         UpdateTextColor(_availableFundsText, _isAfforable);

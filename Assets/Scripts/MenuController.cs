@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using Utilities;
+using Utilities.Events;
 
 public class MenuController : MonoBehaviour
 {
@@ -21,6 +22,11 @@ public class MenuController : MonoBehaviour
 
     [SerializeField]
     GameObject[] panels;
+
+    [SerializeField]
+    GameEvent _profilePageActiveEvent;
+    [SerializeField]
+    GameEvent _shopPageActiveEvent;
 
     GameObject activePanel;
 
@@ -71,6 +77,8 @@ public class MenuController : MonoBehaviour
             profilePanel.GetComponent<RectTransform>().localPosition = Vector3.zero;
             activePanel = profilePanel;
         }
+
+        _profilePageActiveEvent.Raise();
     }
 
     public void ShopButtonClickHandler()
@@ -84,6 +92,8 @@ public class MenuController : MonoBehaviour
             shopPanel.GetComponent<RectTransform>().localPosition = Vector3.zero;
             activePanel = shopPanel;
         }
+
+        _shopPageActiveEvent.Raise();
     }
     #endregion
 

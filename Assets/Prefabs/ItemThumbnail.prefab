@@ -214,3 +214,4 @@ MonoBehaviour:
   _itemImage: {fileID: 0}
   _itemButton: {fileID: 0}
   _itemIconClicked: {fileID: 11400000, guid: d617bcb1804c80b478f1312025c803fc, type: 2}
+  _selectedBorder: {fileID: 21300000, guid: 671be959a95108d48b6c080e5e426c3f, type: 3}

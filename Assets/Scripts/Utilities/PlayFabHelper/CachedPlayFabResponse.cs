@@ -70,7 +70,8 @@ namespace Utilities.PlayFabHelper.Caching
 
         public override int GetHashCode()
         {
-            int hashcode = HelperFunctions.PrintObjectFields(_request).GetHashCode();
+            int hashcode = UnityEngine.Random.Range(0, 546964562);
+            HelperFunctions.Error("Implement a proper override for gethashcode");
             return hashcode;
         }
     }

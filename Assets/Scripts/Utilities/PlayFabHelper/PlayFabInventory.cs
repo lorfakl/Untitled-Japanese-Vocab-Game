@@ -47,6 +47,7 @@ namespace Utilities.PlayFabHelper
 
             foreach(PlayFab.ClientModels.ItemInstance item in i)
             {
+                
                 _inventory.Add((PlayFabItem)item);
             }
         }

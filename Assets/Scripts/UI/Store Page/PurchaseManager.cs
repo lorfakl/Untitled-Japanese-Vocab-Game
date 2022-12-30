@@ -12,6 +12,9 @@ public class PurchaseManager : MonoBehaviour
     [SerializeField]
     GameEvent _purchaseCompleteEvent;
 
+    [SerializeField]
+    GameEvent _addedToCartEvent;
+
     List<PlayFabItem> _itemsInCart = new List<PlayFabItem>();
 
     public void On_ItemRemovedFromCart(object i)
@@ -32,8 +35,13 @@ public class PurchaseManager : MonoBehaviour
     public void On_PossibleToPurchase(object i)
     {
         PlayFabItem item = (PlayFabItem)i;
-        _itemsInCart.Add(item);
-        HelperFunctions.Log($"Items in cart: {_itemsInCart.Count}");
+        if(!_itemsInCart.Contains(item))
+        {
+            _itemsInCart.Add(item);
+            HelperFunctions.Log($"Items in cart: {_itemsInCart.Count}");
+            _addedToCartEvent.Raise(item);    
+        }
+        
     }
 
     public void On_StartPurchase(object cost)
@@ -72,7 +80,7 @@ public class PurchaseManager : MonoBehaviour
         {
             //dont need to check if they exist in inventory because all these items are from the 
             CurrentAuthedPlayer.CurrentUser.Inventory.Inventory.Add(item);
-            HelperFunctions.Log("Added new purchased item to inventory");
+            HelperFunctions.Log($"Added new purchased item: {item.ID}  added to inventory");
         }
         _itemsInCart.Clear();
         _purchaseCompleteEvent.Raise();

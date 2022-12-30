@@ -1,4 +1,5 @@
 using DG.Tweening.Plugins.Core.PathCore;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
+
 
 public class ItemDisplayController : MonoBehaviour
 {
@@ -19,6 +21,14 @@ public class ItemDisplayController : MonoBehaviour
     [SerializeField]
     GameEvent _itemIconClicked;
 
+    [SerializeField]
+    Sprite _selectedBorder;
+
+    
+    Sprite _defaultBorder;
+
+    Image _borderSourceImage; 
+
     PlayFabItem _itemInstance;
     public PlayFabItem Instance
     {
@@ -30,6 +40,7 @@ public class ItemDisplayController : MonoBehaviour
         if(_itemInstance == null)
         {
             _itemInstance = i;
+            i.OnSelectionChangeEvent += OnSelectionChange_Handler;
             //HelperFunctions.Log("Item instance set: " + i);
             //HelperFunctions.Log("I will now, continue the rest of the setup!");
         }
@@ -38,11 +49,14 @@ public class ItemDisplayController : MonoBehaviour
             return;
         }
     }
+
     private void Awake()
     {
         var child = this.gameObject.transform.GetChild(0);
         _itemButton = child.GetComponent<Button>();
         _itemImage = child.GetComponent<Image>();
+        _borderSourceImage = GetComponent<Image>();
+        _defaultBorder = _borderSourceImage.sprite;
     }
 
     // Start is called before the first frame update
@@ -57,6 +71,7 @@ public class ItemDisplayController : MonoBehaviour
         if(image == null)
         {
             HelperFunctions.Log("The image is in fact null");
+            HelperFunctions.Log("Expected path: " + path);
         }
         _itemImage.sprite = image;
         Instance.SetSprite(image);
@@ -70,7 +85,20 @@ public class ItemDisplayController : MonoBehaviour
 
     private void ItemClickedHandler()
     {
-        HelperFunctions.Log("Item has been clicked on! FIRE AN EVENT");
         _itemIconClicked.Raise(Instance);
     }
+
+    private void OnSelectionChange_Handler(bool isSelected)
+    {
+        if(isSelected)
+        {
+            _borderSourceImage.sprite = _selectedBorder;
+        }
+        else
+        {
+            _borderSourceImage.sprite = _defaultBorder;
+        }
+    }
+
+
 }
