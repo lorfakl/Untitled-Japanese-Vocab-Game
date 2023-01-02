@@ -45,8 +45,8 @@ public class JSONWordLibrary : MonoBehaviour
 
     public static JapaneseWord GetNewRandomWord()
     {
-        int randomIndex = Random.Range(0, wordsToStudy.Count);
-        JapaneseWord nextWord = wordsToStudy[randomIndex];
+        int randomIndex = Random.Range(0, WordsToStudy.Count);
+        JapaneseWord nextWord = WordsToStudy[randomIndex];
         return nextWord;
     }
 
@@ -80,7 +80,9 @@ public class JSONWordLibrary : MonoBehaviour
 
     void Start()
     {
-        
+        /*ReadTextFile();
+        ParseFileLines();
+        WriteJsonFile();*/
     }
 
     // Update is called once per frame
@@ -110,7 +112,7 @@ public class JSONWordLibrary : MonoBehaviour
 
     void ReadTextFile()
     {
-        string path = Application.dataPath + "//japaneseWords.txt";
+        string path = Application.dataPath + "//kanaFile.txt";
         HelperFunctions.Log(path);
         List<string> fileLines = new List<string>();
         string[] lines = File.ReadAllLines(path);
@@ -126,37 +128,13 @@ public class JSONWordLibrary : MonoBehaviour
 
         foreach(string l in linesInFile)
         {
-            int kanaStartIndex = l.IndexOf('[');
-            int englishStartIndex = l.IndexOf(':');
-            string kanji = "";
-            string english = "";
-            string kana = "";
-            if (kanaStartIndex == -1)
-            {
-                //this line has no kanji
-                string pureKana = l.Substring(0, englishStartIndex);
-                //print(pureKana);
-                kana = pureKana;
-                kanji = "-1";
-            }
-            else
-            {
-                int kanaEndIndex = l.IndexOf(':');
-                int totalKanaLength = (kanaEndIndex - kanaStartIndex) - 2;
-                string kanaString = l.Substring(kanaStartIndex + 1, totalKanaLength);
-                string kanjiString = l.Substring(0, kanaStartIndex);
-                //print(kanjiString);
-                //print(kanaString);
-                kana = kanaString;
-                kanji = kanjiString;
-            }
-
-            
-            english = l.Substring(englishStartIndex+1);
+            int spaceIndex = l.IndexOf(" ");
+            string english = l.Substring(spaceIndex);
+            string kana = l.Substring(0, spaceIndex);
 
             JapaneseWord word = new JapaneseWord
             {
-                Kanji = kanji,
+                Kanji = "-1",
                 Kana = kana,
                 English = english
             };
@@ -170,7 +148,7 @@ public class JSONWordLibrary : MonoBehaviour
     void WriteJsonFile()
     {
         string allJson = JsonConvert.SerializeObject(jsonWords);
-        File.WriteAllText(Application.dataPath + "//japaneseWords.json", allJson);
+        File.WriteAllText(Application.dataPath + "//kana.json", allJson);
     }
 
 #endregion

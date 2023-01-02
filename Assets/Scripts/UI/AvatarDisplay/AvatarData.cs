@@ -1,18 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
-public class AvatarData : MonoBehaviour
+public enum AvatarItemLocation
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Head,
+    Top,
+    Bottom,
+    Base
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+[Serializable]
+public class AvatarData
+{
+    string _avatarJsonString = "";
+    Dictionary<AvatarData, string> _avatarDataDict = new Dictionary<AvatarData, string>();
+
+    
 }

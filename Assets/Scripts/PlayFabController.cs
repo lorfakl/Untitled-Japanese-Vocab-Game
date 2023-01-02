@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
@@ -14,7 +13,6 @@ using PlayFab.DataModels;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UnityEngine.UIElements;
 
 public delegate void IsAuthenticatedNotification();
 
