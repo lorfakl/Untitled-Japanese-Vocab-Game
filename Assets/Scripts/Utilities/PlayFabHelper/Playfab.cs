@@ -36,6 +36,12 @@ namespace Utilities.PlayFabHelper
             private set;
         }
 
+        public static string DisplayName
+        {
+            get;
+            set;
+        }
+
         public static string PlayFabID
         {
             get;

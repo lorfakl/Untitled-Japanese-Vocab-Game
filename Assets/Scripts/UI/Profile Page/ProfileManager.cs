@@ -1,5 +1,3 @@
-using PlayFab.ClientModels;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,7 +5,6 @@ using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
 using Utilities.PlayFabHelper.CurrentUser;
-using static UnityEditor.Progress;
 
 public class ProfileManager : MonoBehaviour
 {

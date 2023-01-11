@@ -6,7 +6,6 @@ using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
 using Utilities.PlayFabHelper.CurrentUser;
-using static UnityEditor.Progress;
 
 public class FundsDisplayController : MonoBehaviour
 {

@@ -27,6 +27,12 @@ namespace Utilities.PlayFabHelper.CurrentUser
             get { return _profile; }
         }
         BasicProfile _profile;
+
+        public AvatarData Avatar
+        {
+            get { return _avatarData; }
+        }
+        AvatarData _avatarData;
         
         public PlayFabInventory Inventory
         {
@@ -82,6 +88,11 @@ namespace Utilities.PlayFabHelper.CurrentUser
 
         }
     
+        public void UpdateAvatar(AvatarData data)
+        {
+            _avatarData = data;
+        }
+
         public void UpdateGroup(PlayFabGroup g)
         {
             _groups.Insert(0, g);
