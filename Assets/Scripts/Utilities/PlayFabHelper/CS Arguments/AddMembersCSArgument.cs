@@ -12,4 +12,10 @@ namespace Utilities.PlayFabHelper.CSArguments
         [JsonProperty("GroupID")]
         public string GroupID { get; set; }
     }
+
+    public class GetRivalAvatarsCSArgument
+    {
+        [JsonProperty("Rivals")]
+        public List<UniversalEntityKey> Rivals { get; set; }
+    }
 }

@@ -257,7 +257,6 @@ public class StatPageManager : MonoBehaviour
                     HelperFunctions.LogDictContent(p.Statistics);   
                 }
             }
-
         }
 
         foreach(BasicProfile profile in profiles)

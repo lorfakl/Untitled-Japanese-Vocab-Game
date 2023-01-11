@@ -43,7 +43,8 @@ namespace Utilities.PlayFabHelper
         WordsSeen,
         WordsMastered,
         StudyStreak,
-        TotalSP
+        TotalSP,
+        ArcadeScore
     }
 
     public enum VirtualCurrency

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Utilities;
+
 public class LeaderboardEntryController : MonoBehaviour
 {
     [SerializeField]
@@ -24,7 +26,8 @@ public class LeaderboardEntryController : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        entry = StatPageManager.GetLeaderboardEntry(this);
+        HelperFunctions.Error("NORMAL STATS PAGE IS BROKEN IMPLEMENT AN ABSTRACT LEADERBOARD HANDLER CLASS");
+        entry = ArcadeLeaderboardController.GetLeaderboardEntry(this);
         entry.Print();
     }
     void Start()

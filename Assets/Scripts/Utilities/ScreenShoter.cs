@@ -2,10 +2,13 @@ using System.Collections;
 
 using UnityEngine;
 using Utilities;
+using Utilities.Events;
 
 public class ScreenShoter : MonoBehaviour
 {
-       
+    [SerializeField]
+    GameEvent _;
+
     private static ScreenShoter _instance;
     private Camera _camera;
     private bool takeScreenshotOnNextFrame;
