@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3b05c9b5e5fc7f445bda041a1da22d23
+guid: a8ca7d9a99d90ea44a466cc8477a9a6a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -131,274 +131,148 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Enenra(Alt)_0
+      name: Yokai Chat Title Screen_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1500
-        height: 1600
+        width: 1800
+        height: 3550
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f5fe4d1c735aaa4eab8c60484a0003f
-      internalID: -1231438745
+      spriteID: d3f731ec7cd6e1f46843e0d7208c31c8
+      internalID: -1327976382
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enenra(Alt)_1
+      name: Yokai Chat Title Screen_1
       rect:
         serializedVersion: 2
-        x: 1500
+        x: 1800
         y: 0
-        width: 1500
-        height: 1600
+        width: 1800
+        height: 3550
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1c48a14bcb577b242be622d7dd0a7dac
-      internalID: -1920656226
+      spriteID: 8eaa37b0e20442946b66951c1ab49114
+      internalID: -811084903
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enenra(Alt)_2
+      name: Yokai Chat Title Screen_2
       rect:
         serializedVersion: 2
-        x: 3000
+        x: 3600
         y: 0
-        width: 1500
-        height: 1600
+        width: 1800
+        height: 3550
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4df3746ce2217ff4197577ca30a121f3
-      internalID: -1168809900
+      spriteID: ada5973e83fb4bf47834b7a9efde5b41
+      internalID: -597841121
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enenra(Alt)_3
+      name: Yokai Chat Title Screen_3
       rect:
         serializedVersion: 2
-        x: 4500
+        x: 5400
         y: 0
-        width: 1500
-        height: 1600
+        width: 1800
+        height: 3550
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1a782786d66259646a95c0d17ed4eca7
-      internalID: -832303671
+      spriteID: 65b4c0dce01209446a14548d5c2c0ab1
+      internalID: -1584753413
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enenra(Alt)_4
+      name: Yokai Chat Title Screen_4
       rect:
         serializedVersion: 2
-        x: 6000
+        x: 7200
         y: 0
-        width: 1500
-        height: 1600
+        width: 1800
+        height: 3550
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bc0e8047de82cc042be408e6d96c1239
-      internalID: -2007467275
+      spriteID: fe718936bf78b254db64ad3db5927267
+      internalID: 466662618
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enenra(Alt)_5
-      rect:
-        serializedVersion: 2
-        x: 7500
-        y: 0
-        width: 1500
-        height: 1600
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1ee1ffbcdb614dd488f3de7366baa391
-      internalID: 894506462
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enenra(Alt)_6
+      name: Yokai Chat Title Screen_5
       rect:
         serializedVersion: 2
         x: 9000
         y: 0
-        width: 1500
-        height: 1600
+        width: 1800
+        height: 3550
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8881b00024fd2904eaf29be7277cd3d5
-      internalID: 35019502
+      spriteID: fb5968b9177561c449707edfbc3b2673
+      internalID: -701641283
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Enenra(Alt)_7
+      name: Yokai Chat Title Screen_6
       rect:
         serializedVersion: 2
-        x: 10500
+        x: 10800
         y: 0
-        width: 1500
-        height: 1600
+        width: 1800
+        height: 3550
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a5a96285e76203543b8848a7e783fbaf
-      internalID: 945354493
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enenra(Alt)_8
-      rect:
-        serializedVersion: 2
-        x: 12000
-        y: 0
-        width: 1500
-        height: 1600
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cee786a7418663b42ae34ce670f9aa4f
-      internalID: 806126437
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enenra(Alt)_9
-      rect:
-        serializedVersion: 2
-        x: 13500
-        y: 0
-        width: 1500
-        height: 1600
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d61220ced8974424ea83d75e3c95968e
-      internalID: 1263700625
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enenra(Alt)_10
-      rect:
-        serializedVersion: 2
-        x: 15000
-        y: 0
-        width: 1500
-        height: 1600
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1603382879c11be41a013c7c3f92f329
-      internalID: 1104656260
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enenra(Alt)_11
-      rect:
-        serializedVersion: 2
-        x: 16500
-        y: 0
-        width: 1500
-        height: 1600
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cc29713bfa34c6d459bde9c90fc383ac
-      internalID: -90243926
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Enenra(Alt)_12
-      rect:
-        serializedVersion: 2
-        x: 18000
-        y: 0
-        width: 1500
-        height: 1600
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dad05cfdf45cee548b9221354a897aed
-      internalID: 1250416090
+      spriteID: dc8e3ab35189a6344b89a805b1e3a78c
+      internalID: 1162234627
       vertices: []
       indices: 
       edges: []
@@ -406,7 +280,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 0048060cd2c009b42ab05072a3f735bd
+    spriteID: 1289db8260fc61c48aca363642c5a90f
     internalID: 0
     vertices: []
     indices: 
@@ -414,19 +288,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Enenra(Alt)_6: 35019502
-      Enenra(Alt)_8: 806126437
-      Enenra(Alt)_10: 1104656260
-      Enenra(Alt)_3: -832303671
-      Enenra(Alt)_11: -90243926
-      Enenra(Alt)_0: -1231438745
-      Enenra(Alt)_5: 894506462
-      Enenra(Alt)_7: 945354493
-      Enenra(Alt)_4: -2007467275
-      Enenra(Alt)_12: 1250416090
-      Enenra(Alt)_1: -1920656226
-      Enenra(Alt)_2: -1168809900
-      Enenra(Alt)_9: 1263700625
+      Yokai Chat Title Screen_5: -701641283
+      Yokai Chat Title Screen_0: -1327976382
+      Yokai Chat Title Screen_4: 466662618
+      Yokai Chat Title Screen_3: -1584753413
+      Yokai Chat Title Screen_2: -597841121
+      Yokai Chat Title Screen_6: 1162234627
+      Yokai Chat Title Screen_1: -811084903
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
