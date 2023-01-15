@@ -32,19 +32,23 @@ namespace Utilities.PlayFabHelper
         public PlayFabInventory(List<PlayFab.ClientModels.ItemInstance> i, string id, Dictionary<string, int> dict)
         {
             _pfId = id;
-            foreach(string key in dict.Keys)
+
+            if (dict != null)
             {
-                try
+
+                foreach (string key in dict.Keys)
                 {
-                    VirtualCurrency vcCode = HelperFunctions.ParseEnum<VirtualCurrency>(key);
-                    _virtualCurrency.Add(vcCode,dict[key]);
-                }
-                catch(Exception e)
-                {
-                    HelperFunctions.CatchException(e);
+                    try
+                    {
+                        VirtualCurrency vcCode = HelperFunctions.ParseEnum<VirtualCurrency>(key);
+                        _virtualCurrency.Add(vcCode, dict[key]);
+                    }
+                    catch (Exception e)
+                    {
+                        HelperFunctions.CatchException(e);
+                    }
                 }
             }
-
             foreach(PlayFab.ClientModels.ItemInstance item in i)
             {
                 

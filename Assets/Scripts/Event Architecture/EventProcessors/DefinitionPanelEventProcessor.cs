@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class DefinitionPanelEventProcessor : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
     #region Private Variables
     [SerializeField]
     TMP_Text definitionText;
+
+    [SerializeField]
+    Image panel;
     #endregion
 
     #region Events
@@ -22,11 +26,13 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
     public void StudyObjectClickedEventHandler()
     {
         definitionText.text = WordBankManager.NextWord.PrintAnswer();
+        panel.enabled = true;
         definitionText.enabled = true;
     }
 
     public void NextWordButtonClickedEventHandler()
     {
+        panel.enabled = false;
         definitionText.enabled = false;
     }
     #endregion

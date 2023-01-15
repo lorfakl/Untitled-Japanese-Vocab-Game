@@ -5,6 +5,9 @@ using UnityEngine;
 using Utilities;
 using Utilities.Events;
 using TMPro;
+using Utilities.PlayFabHelper;
+using Utilities.PlayFabHelper.CurrentUser;
+
 public class ScoreEventProcessors : MonoBehaviour
 {
 
@@ -55,6 +58,12 @@ public class ScoreEventProcessors : MonoBehaviour
     {
         comboCount = 0;
     }
+
+    public void GameOverEvent_Handler()
+    {
+        SaveScore();
+    }
+
     #endregion
 
     #region Unity Methods
@@ -68,8 +77,34 @@ public class ScoreEventProcessors : MonoBehaviour
     {
         
     }
-#endregion
 
-#region Private Methods
-#endregion
+    private void SaveScore()
+    {
+        PlayFabController.ExecutionCSFunction<string, List<CloudScriptStatArgument>>(CSFunctionNames.Record, new Dictionary<string, List<CloudScriptStatArgument>>
+            {
+                {"Entries", new List<CloudScriptStatArgument>{ new CloudScriptStatArgument(StatisticName.ArcadeScore, Score)} }
+            }, true);
+
+        LeaderboardEntry e = LeaderboardManager.GetLeaderboard(StatisticName.ArcadeScore).GetLeaderboardEntry(Playfab.PlayFabID);
+        if (e.playfabID == Playfab.PlayFabID)
+        {
+            e.score += Score;
+        }
+        else
+        {
+            e = new LeaderboardEntry
+            {
+                displayName = Playfab.DisplayName,
+                avatarPhotoSprite = CurrentAuthedPlayer.CurrentUser.Avatar.AvatarPhoto,
+                playfabID = Playfab.PlayFabID,
+                score = Score
+            };
+            LeaderboardManager.GetLeaderboard(StatisticName.ArcadeScore).AddEntry(e);
+        }
+        
+    }
+    #endregion
+
+    #region Private Methods
+    #endregion
 }

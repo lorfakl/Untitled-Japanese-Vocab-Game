@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using Utilities.PlayFabHelper.CurrentUser;
+using Utilities.SaveOperations;
 using Utilities.PlayFabHelper;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Utilities;
+using Utilities.PlayFabHelper.CurrentUser;
+using System;
 
 public class AvatarDisplayController : MonoBehaviour
 {
@@ -29,16 +31,12 @@ public class AvatarDisplayController : MonoBehaviour
     Button _botNext;
 
     [SerializeField]
-    Button _startBtn;
-
-    [SerializeField]
     Button _skinBack;
 
     [SerializeField]
     Button _skinNext;
 
-    [SerializeField]
-    TMP_InputField _InputField;
+    
 
     [SerializeField]
     Sprite[] _tops;
@@ -84,7 +82,7 @@ public class AvatarDisplayController : MonoBehaviour
     int _currentbotIndex = 0;
     int _currentSkinIndex = 1;
     AvatarData _avatarData;
-
+    Dictionary<AvatarItemLocation, string> ava = new Dictionary<AvatarItemLocation, string>();
     // Start is called before the first frame update
     void Start()
     {
@@ -96,8 +94,6 @@ public class AvatarDisplayController : MonoBehaviour
         _skinNext.onClick.AddListener(ShowNextSkin);
         _botBack.onClick.AddListener(ShowPrevBot);
         _botNext.onClick.AddListener(ShowNextBot);
-
-        _startBtn.onClick.AddListener(StartStudy);
     }
 
     // Update is called once per frame
@@ -106,24 +102,69 @@ public class AvatarDisplayController : MonoBehaviour
         
     }
 
-    void StartStudy()
+    public void StartStudy()
     {
-        Dictionary<AvatarItemLocation, string> ava = new Dictionary<AvatarItemLocation, string>();
-        ava.Add(AvatarItemLocation.Head, _headImage.sprite.name);
-        ava.Add(AvatarItemLocation.Top, _topImage.sprite.name);
+        try
+        {
+            ava.Add(AvatarItemLocation.Head, _headImage.sprite.name);
+            HelperFunctions.Log("Head Sprite Name: " + _headImage.sprite.name);
+        }
+        catch (UnassignedReferenceException e)
+        {
+            HelperFunctions.CatchException(e);
+            ava.Add(AvatarItemLocation.Head, "None");
+            HelperFunctions.Log("Head Sprite Name: " + "Naked");
+        }
+
+        try
+        {
+            ava.Add(AvatarItemLocation.Top, _topImage.sprite.name);
+            HelperFunctions.Log("Top Sprite Name: " + _topImage.sprite.name);
+        }
+        catch (UnassignedReferenceException e)
+        {
+            HelperFunctions.CatchException(e);
+            ava.Add(AvatarItemLocation.Top, "None");
+            HelperFunctions.Log("Top Sprite Name: " + "Naked");
+        }
+
+        try
+        {
+            ava.Add(AvatarItemLocation.Bottom, _botImage.sprite.name);
+            HelperFunctions.Log("Bottom Sprite Name: " + _botImage.sprite.name);
+        }
+        catch(UnassignedReferenceException e)
+        {
+            HelperFunctions.CatchException(e);
+            ava.Add(AvatarItemLocation.Bottom, "None");
+            HelperFunctions.Log("Bottom Sprite Name: " + "Naked");
+        }
+
         ava.Add(AvatarItemLocation.Skin, _skinImage.sprite.name);
-        ava.Add(AvatarItemLocation.Bottom, _botImage.sprite.name);
+        HelperFunctions.Log("Skin Sprite Name: " + _skinImage.sprite.name);
+        /*ava.Add(AvatarItemLocation.Bottom, _botImage.sprite.name);
+        HelperFunctions.Log("Bottom Sprite Name: " + _botImage.sprite.name);*/
         ava.Add(AvatarItemLocation.Face, "None");
 
-        _avatarData = new AvatarData(ava);
 
-        HelperFunctions.Warning("Avatar Data is not saved");
-        //CurrentAuthedPlayer.CurrentUser.UpdateAvatar(_avatarData);
-        Playfab.DisplayName = _InputField.text;
-        ScreenShoter.TakeScreenShot(200, 200);
 
-        SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
+        //HelperFunctions.Warning("Avatar Data is not saved");
+        byte[] imageBytes = ScreenShoter.TakeScreenShot(200, 200);
+        
 
+        
+
+    }
+
+    public void CreateAvatarData(byte[] pngData)
+    {
+        _avatarData = new AvatarData(ava, pngData);
+        _avatarData.ImageData = pngData;
+
+        SaveSystem.Save(_avatarData, DataCategory.Avatar);
+        CurrentAuthedPlayer.CurrentUser.UpdateAvatar(_avatarData);
+        PlayFabController.UploadAvatarImage();
+        SceneManager.LoadScene("ArcadeStudyScene", LoadSceneMode.Single);
     }
 
     Sprite ShowNextOption(ref int index, bool nxt, Sprite[] spirteOptions)

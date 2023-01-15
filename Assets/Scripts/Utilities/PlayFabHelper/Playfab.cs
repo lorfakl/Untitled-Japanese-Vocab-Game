@@ -15,6 +15,7 @@ using PlayFab.DataModels;
 using PlayFab.Internal;
 using Utilities.SaveOperations;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Utilities.PlayFabHelper
 {
@@ -55,6 +56,12 @@ namespace Utilities.PlayFabHelper
         }
 
         public static string EntityToken
+        {
+            get;
+            private set;
+        }
+
+        public static UniversalEntityKey UserEntityKey
         {
             get;
             private set;
@@ -139,7 +146,40 @@ namespace Utilities.PlayFabHelper
         {
             Login(success, failure, false);
         }
-        
+
+        public static void ArcadeLogin(string id, Action<LoginResult> success, Action<PlayFabError> failure)
+        {
+            string customID = id;
+
+            PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
+            {
+                TitleId = PlayFabSettings.TitleId,
+                CustomId = customID,
+                CreateAccount = true,
+                InfoRequestParameters = GetInfoRequest()
+
+            },
+            (result) =>
+            {
+                SetAuthenticatedUserDefaults(result);
+                success(result);
+
+            },
+            (error) =>
+            {
+                HandlePlayFabError(error);
+                failure(error);
+            });
+            
+        }
+
+        public static void UpdateDisplayName(string name, Action<PlayFabError> onPlayFabError)
+        {
+            PlayFabClientAPI.UpdateUserTitleDisplayName
+                (
+                 new UpdateUserTitleDisplayNameRequest { DisplayName = name }, (result) => { }, onPlayFabError
+                );
+        }
         public static void ExecuteFunction(ExecuteFunctionRequest rq, Action<ExecuteFunctionResult> success, Action<PlayFabError> failure)
         {
             //var cacheResult = CacheSystem.GetResponse(rq);
@@ -179,7 +219,7 @@ namespace Utilities.PlayFabHelper
             PlayFabClientAPI.GetPlayerTags(rq, success, error); 
         }
 
-        public static void GetLeaderboard(bool isAroundUser, StatisticName name, Action<List<PlayerLeaderboardEntry>> success, Action<PlayFabError> error, int startPos = 1)
+        public static void GetLeaderboard(bool isAroundUser, StatisticName name, Action<List<PlayerLeaderboardEntry>> success, Action<PlayFabError> error, int startPos = 0)
         {
             PlayerProfileViewConstraints profileView = new PlayerProfileViewConstraints
             {
@@ -334,6 +374,16 @@ namespace Utilities.PlayFabHelper
             PlayFabHttp.SimpleGetCall(dwnldURl, success, error);
         }
 
+        public static Task<Sprite> DownloadandConvertToSprite(string dwnldURl, Func<byte[], Task<Sprite>> success, Action<string> error)
+        {
+            Task<Sprite> createdSprite = null;
+            PlayFabHttp.SimpleGetCall(dwnldURl,
+                (byteArray) =>
+                {
+                    createdSprite = success(byteArray);
+                }, error);
+            return createdSprite;
+        }
         public static void InitiateFileUploads(InitiateFileUploadsRequest rq, Action<InitiateFileUploadsResponse> success, Action<PlayFabError> error)
         {
             ActiveFileUploads = rq.FileNames;
@@ -425,6 +475,7 @@ namespace Utilities.PlayFabHelper
         {
             PlayFabID = result.PlayFabId;
             TitlePlayerID = result.EntityToken.Entity.Id;
+            UserEntityKey = (UniversalEntityKey)result.EntityToken.Entity;
             SessionTicket = result.SessionTicket;
             EntityToken = result.EntityToken.EntityToken;
             TokenExpirationTime = (DateTime)result.EntityToken.TokenExpiration;
@@ -440,8 +491,17 @@ namespace Utilities.PlayFabHelper
             
             BasicProfile b = new BasicProfile(result.InfoResultPayload.PlayerProfile);
             PlayFabInventory pfInventory = new PlayFabInventory(result.InfoResultPayload.UserInventory, PlayFabID, result.InfoResultPayload.UserVirtualCurrency);
-            PlayFabUser user = new PlayFabUser(PlayFabID, result.InfoResultPayload.PlayerProfile.Tags,
+            PlayFabUser user = null;
+            if (result.InfoResultPayload.PlayerProfile != null)
+            {
+                user = new PlayFabUser(PlayFabID, result.InfoResultPayload.PlayerProfile.Tags,
                 (UniversalEntityKey)result.EntityToken.Entity, b, pfInventory);
+            }
+            else
+            {
+                user = new PlayFabUser(PlayFabID, null, (UniversalEntityKey)result.EntityToken.Entity, b, pfInventory);
+            }
+            
 
             CurrentAuthedPlayer.SetCurrentUser(user);
         }
@@ -468,6 +528,8 @@ namespace Utilities.PlayFabHelper
                 + "\n" + "Error Details: " + error?.ErrorDetails.ToString();
             HelperFunctions.Error(fullErrorDetails);
         }
+
+        
     }
 
     

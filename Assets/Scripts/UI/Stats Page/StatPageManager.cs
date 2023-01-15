@@ -8,24 +8,7 @@ using Utilities.PlayFabHelper.CurrentUser;
 using Utilities.PlayFabHelper;
 using Utilities;
 using PlayFab.ClientModels;
-
-public struct LeaderboardEntry
-{
-    public string displayName;
-    public string rank;
-    public string playfabID;
-    public string score;
-    public string avatarURL;
-
-    public void Print()
-    {
-        HelperFunctions.Log("DisplayName: " + this.displayName + "\n" +
-            "Rank: " + this.rank + "\n" +
-            "PlayFabID: " + this.playfabID + "\n" +
-            "Score: " + this.score + "\n" +
-            "AvatarURL: " + this.avatarURL);
-    }
-}
+using System.Threading.Tasks;
 
 public class StatPageManager : MonoBehaviour
 {
@@ -43,13 +26,12 @@ public class StatPageManager : MonoBehaviour
     [SerializeField]
     LocalPlayFabData LocalPlayFabData;
 
-    List<PlayerLeaderboardEntry> playerLeaderboardEntries;
+    Leaderboard playerLeaderboardEntries;
     
     bool isGrouped = false;
     bool hasPlayed = false;
     bool hasLoadedFromFile = false;
 
-    static Queue<LeaderboardEntry> entryQueue = new Queue<LeaderboardEntry>();
     #endregion
 
     #region Events
@@ -60,17 +42,6 @@ public class StatPageManager : MonoBehaviour
     #endregion
 
     #region Public Methods
-    public static LeaderboardEntry GetLeaderboardEntry(object caller)
-    {
-        if(caller.GetType() == typeof(LeaderboardEntryController))
-        {
-            return entryQueue.Dequeue();
-        }
-        else
-        {
-            return new LeaderboardEntry();
-        }
-    }
     #endregion
 
     #region Unity Methods
@@ -157,7 +128,7 @@ public class StatPageManager : MonoBehaviour
         else if(hasPlayed)
         {
             HelperFunctions.Log("Creating the group");
-            PlayFabController.GetLeadboard(true, StatisticName.TotalSP, ConvertToTitlePlayerIDs);
+            LeaderboardManager.CreateLeaderboard(StatisticName.TotalSP, leaderboardEntryPrefab, leaderboardPanelContent.transform, ConvertToTitlePlayerIDsAsync);
             PlayFabController.CreateGroup(Guid.NewGuid().ToString(), (success) => 
             {
                 LocalPlayFabData.GroupID = success.Group.Id;
@@ -169,21 +140,21 @@ public class StatPageManager : MonoBehaviour
         }
     }
 
-    private void ConvertToTitlePlayerIDs(List<PlayerLeaderboardEntry> leaderboardData)
+    private async Task ConvertToTitlePlayerIDsAsync(Leaderboard leaderboardData)
     {
         playerLeaderboardEntries = leaderboardData;
         List<string> playFabIDs = new List<string>();
-        foreach(PlayerLeaderboardEntry entry in leaderboardData)
+        foreach(LeaderboardEntry entry in leaderboardData.Entries)
         {
-            playFabIDs.Add(entry.PlayFabId);
+            playFabIDs.Add(entry.playfabID);
         }
 
         PlayFabController.GetTitlePlayerAccounts(playFabIDs, BuildRivalGroup);
+        await Task.Delay(1000);
     }
 
     private void BuildRivalGroup(Dictionary<string, UniversalEntityKey> convertedIDsDict)
     {
-        GenerateLeaderboardView();
         List<string> universalEntities = new List<string>();
         foreach(KeyValuePair<string, UniversalEntityKey> pair in convertedIDsDict)
         {
@@ -197,42 +168,6 @@ public class StatPageManager : MonoBehaviour
         PlayFabController.ExecutionCSFunction(CSFunctionNames.AddMembers, parameter);
     }
 
-    private void GenerateLeaderboardView()
-    {
-        foreach(PlayerLeaderboardEntry entry in playerLeaderboardEntries)
-        {
-            if (entry.PlayFabId == Playfab.PlayFabID)
-            {
-                entryQueue.Enqueue(new LeaderboardEntry
-                {
-                    avatarURL = entry.Profile.AvatarUrl,
-                    displayName = "YOU",
-                    playfabID = entry.PlayFabId,
-                    score = ScoreEventProcessors.Score + " **fix",
-                    rank = (playerLeaderboardEntries.IndexOf(entry) + 1).ToString()
-                });
-                
-            }
-            else
-            {
-                entryQueue.Enqueue(new LeaderboardEntry
-                {
-                    avatarURL = entry.Profile.AvatarUrl,
-                    displayName = entry.DisplayName,
-                    playfabID = entry.PlayFabId,
-                    rank = (playerLeaderboardEntries.IndexOf(entry) + 1).ToString(),
-                    score = entry.StatValue.ToString()
-                });
-            }
-            
-        }
-
-        foreach(PlayerLeaderboardEntry entry in playerLeaderboardEntries)
-        {
-            GameObject.Instantiate(leaderboardEntryPrefab, leaderboardPanelContent.transform);
-
-        }
-    }
 
     private void GenerateLeaderboardView(List<BasicProfile> profiles)
     {
@@ -263,25 +198,23 @@ public class StatPageManager : MonoBehaviour
         {
             if(profile.PlayFabID == Playfab.PlayFabID)
             {
-                entryQueue.Enqueue(new LeaderboardEntry
+                playerLeaderboardEntries.EntryQueue.Enqueue(new LeaderboardEntry
                 {
-                    avatarURL = profile.AvatarURL,
                     displayName = "YOU",
                     playfabID = profile.PlayFabID,
-                    score = ScoreEventProcessors.Score + "THIS ISNT ALWAYS CORRECT",
-                    rank = (profiles.IndexOf(profile) + 1).ToString()
+                    score = ScoreEventProcessors.Score,
+                    rank = (profiles.IndexOf(profile) + 1)
 
                 });
             }
             else
             {
-                entryQueue.Enqueue(new LeaderboardEntry
+                playerLeaderboardEntries.EntryQueue.Enqueue(new LeaderboardEntry
                 {
-                    avatarURL = profile.AvatarURL,
                     displayName = profile.DisplayName,
                     playfabID = profile.PlayFabID,
-                    score = profile.Statistics[StatisticName.LeagueSP].value.ToString(),
-                    rank = (profiles.IndexOf(profile) + 1).ToString()
+                    score = profile.Statistics[StatisticName.LeagueSP].DecodeStatisticValue(),
+                    rank = (profiles.IndexOf(profile) + 1)
                 });
             }
             
@@ -289,7 +222,8 @@ public class StatPageManager : MonoBehaviour
 
         foreach (BasicProfile entry in profiles)
         {
-            GameObject.Instantiate(leaderboardEntryPrefab, leaderboardPanelContent.transform);
+            LeaderboardEntryController c = GameObject.Instantiate(leaderboardEntryPrefab, leaderboardPanelContent.transform).GetComponent<LeaderboardEntryController>();
+            c.SetLeaderboardHost(playerLeaderboardEntries);
 
         }
 

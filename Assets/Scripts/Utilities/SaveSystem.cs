@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Utilities;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Utilities.SaveOperations
 {
@@ -15,7 +16,8 @@ namespace Utilities.SaveOperations
         Profile,
         Group,
         Inventory,
-        VirtualCurrency
+        VirtualCurrency,
+        Avatar
     }
 
     public static class SaveSystem
@@ -118,6 +120,21 @@ namespace Utilities.SaveOperations
                 return default(byte[]);
             }
             
+        }
+
+        public static async Task<Sprite> ConvertBytesToSprite(byte[] pngByte)
+        {
+            Sprite pngSprite = null;
+            using(MemoryStream me = new MemoryStream(pngByte))
+            {
+                System.Drawing.Image pngImage = System.Drawing.Image.FromStream(me);
+                Texture2D renderResult = new Texture2D(pngImage.Width, pngImage.Height, TextureFormat.ARGB32, false);
+                Rect rect = new Rect(0, 0, pngImage.Width, pngImage.Height);
+                renderResult.LoadImage(pngByte);
+                pngSprite = Sprite.Create(renderResult, rect, Vector2.zero);
+            }
+            await Task.FromResult(pngSprite);
+            return pngSprite;
         }
     }
 }

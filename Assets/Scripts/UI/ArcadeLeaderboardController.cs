@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Utilities.PlayFabHelper;
+using Utilities.SaveOperations;
 using Utilities.PlayFabHelper.CSArguments;
-using UnityEngine.SceneManagement;
 using PlayFab.ClientModels;
 using Utilities.Events;
 using Utilities;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System;
+using System.Linq;
 
 public class ArcadeLeaderboardController : MonoBehaviour
 {
@@ -19,24 +23,12 @@ public class ArcadeLeaderboardController : MonoBehaviour
     [SerializeField]
     GameEvent leaderboardLoadedEvent;
 
-    List<PlayerLeaderboardEntry> playerLeaderboardEntries;
-    static Queue<LeaderboardEntry> entryQueue = new Queue<LeaderboardEntry>();
-
-    public static LeaderboardEntry GetLeaderboardEntry(object caller)
-    {
-        if (caller.GetType() == typeof(LeaderboardEntryController))
-        {
-            return entryQueue.Dequeue();
-        }
-        else
-        {
-            return new LeaderboardEntry();
-        }
-    }
+    Leaderboard _playerLeaderboard;
+    List<string> playFabIDs = new List<string>();
 
     public void MoveToOpeningScene()
     {
-        SceneManager.LoadScene("ArcadeOpeningScene");
+        HelperFunctions.LoadScene(ProjectSpecificGlobals.SceneNames.ArcadeOpeningScene);
     }
 
     // Start is called before the first frame update
@@ -44,12 +36,13 @@ public class ArcadeLeaderboardController : MonoBehaviour
     {
         if(PlayFabController.IsAuthenticated)
         {
-            PlayFabController.GetLeadboard(false, StatisticName.ArcadeScore, ConvertToTitlePlayerIDs);
+            SetUpLeaderboard();
         }
         else
         {
-            PlayFabController.IsAuthedEvent += OnAuthenticationEvent;
+            PlayFabController.IsAuthedEvent += SetUpLeaderboard;
         }
+        HelperFunctions.Log("ArcadeLeaderboardStart");
     }
 
     // Update is called once per frame
@@ -58,21 +51,22 @@ public class ArcadeLeaderboardController : MonoBehaviour
         
     }
 
-    void OnAuthenticationEvent()
-    {
-        PlayFabController.GetLeadboard(false, StatisticName.ArcadeScore, ConvertToTitlePlayerIDs);
-    }
 
-    private void ConvertToTitlePlayerIDs(List<PlayerLeaderboardEntry> leaderboardData)
+    private async Task ConvertToTitlePlayerIDs(Leaderboard leaderboardData)
     {
-        playerLeaderboardEntries = leaderboardData;
-        List<string> playFabIDs = new List<string>();
-        foreach (PlayerLeaderboardEntry entry in leaderboardData)
+        _playerLeaderboard = leaderboardData;
+        foreach (var entry in leaderboardData.Entries)
         {
-            playFabIDs.Add(entry.PlayFabId);
+            playFabIDs.Add(entry.playfabID);
         }
 
-        PlayFabController.GetTitlePlayerAccounts(playFabIDs, GetAvatarPhotos);
+        if(playFabIDs.Count > 0)
+        {
+            PlayFabController.GetTitlePlayerAccounts(playFabIDs, GetAvatarPhotos);
+        }
+        
+        
+
     }
 
     void GetAvatarPhotos(Dictionary<string, UniversalEntityKey> convertedIDsDict)
@@ -82,7 +76,6 @@ public class ArcadeLeaderboardController : MonoBehaviour
         {
             universalEntities.Add(pair.Value);
         }
-        GenerateLeaderboardView();
 
         var getRivalArg = new GetRivalAvatarsCSArgument
         {
@@ -94,42 +87,34 @@ public class ArcadeLeaderboardController : MonoBehaviour
     void ProcessAvatarImages(PlayFab.CloudScriptModels.ExecuteFunctionResult leaderboardEntries)
     {
         HelperFunctions.Log(leaderboardEntries.FunctionResult);
+        List<GetRivalAvatarResult> rivalAvatarFiles = JsonConvert.DeserializeObject<List<GetRivalAvatarResult>>(leaderboardEntries.FunctionResult.ToString());
+        Dictionary<string, Task<Sprite>> IDtoSpriteDict = new Dictionary<string, Task<Sprite>>();
+        for(int i = 0; i < rivalAvatarFiles.Count; i++)
+        {
+            if(i < playFabIDs.Count)
+            {
+                IDtoSpriteDict.Add(playFabIDs[i], PlayFabController.PerformDownload(rivalAvatarFiles[i].URL, SaveSystem.ConvertBytesToSprite));
+
+            }
+
+        }
+
+        /*Task.WaitAll(IDtoSpriteDict.Values.ToArray());
+        foreach(var id in IDtoSpriteDict.Keys)
+        {
+            _playerLeaderboard[id].AssignSprite(IDtoSpriteDict[id].Result);
+        }*/
+        
     }
 
-    private void GenerateLeaderboardView()
+    void GetSpriteFromImageData(byte[] imageData)
     {
-        foreach (PlayerLeaderboardEntry entry in playerLeaderboardEntries)
-        {
-            if (entry.PlayFabId == Playfab.PlayFabID)
-            {
-                entryQueue.Enqueue(new LeaderboardEntry
-                {
-                    avatarURL = entry.Profile.AvatarUrl,
-                    displayName = "YOU",
-                    playfabID = entry.PlayFabId,
-                    score = ScoreEventProcessors.Score + " **fix",
-                    rank = (playerLeaderboardEntries.IndexOf(entry) + 1).ToString()
-                });
-
-            }
-            else
-            {
-                entryQueue.Enqueue(new LeaderboardEntry
-                {
-                    avatarURL = entry.Profile.AvatarUrl,
-                    displayName = entry.DisplayName,
-                    playfabID = entry.PlayFabId,
-                    rank = (playerLeaderboardEntries.IndexOf(entry) + 1).ToString(),
-                    score = entry.StatValue.ToString()
-                });
-            }
-
-        }
-
-        foreach (PlayerLeaderboardEntry entry in playerLeaderboardEntries)
-        {
-            GameObject.Instantiate(_leaderboardEntryPrefab, _content);
-
-        }
+        SaveSystem.ConvertBytesToSprite(imageData);
     }
+
+    void SetUpLeaderboard()
+    {
+        _playerLeaderboard = LeaderboardManager.CreateLeaderboard(StatisticName.ArcadeScore, _leaderboardEntryPrefab, _content, ConvertToTitlePlayerIDs);
+    }
+    
 }

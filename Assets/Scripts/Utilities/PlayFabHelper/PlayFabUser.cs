@@ -71,17 +71,20 @@ namespace Utilities.PlayFabHelper.CurrentUser
             _entityKey = e;
             _inventory = i;
 
-            foreach (PlayerTags et in Enum.GetValues(typeof(PlayerTags)))
+            if (t != null)
             {
-                foreach (var tag in t)
+                foreach (PlayerTags et in Enum.GetValues(typeof(PlayerTags)))
                 {
-                    if (tag.TagValue.Contains(et.ToString()))
+                    foreach (var tag in t)
                     {
-                        int tagStartIndex = tag.TagValue.IndexOf(et.ToString()[0]);
-                        string tagName = tag.TagValue.Substring(tagStartIndex);
-                        _tags.Add(HelperFunctions.ParseEnum<PlayerTags>(tagName));
+                        if (tag.TagValue.Contains(et.ToString()))
+                        {
+                            int tagStartIndex = tag.TagValue.IndexOf(et.ToString()[0]);
+                            string tagName = tag.TagValue.Substring(tagStartIndex);
+                            _tags.Add(HelperFunctions.ParseEnum<PlayerTags>(tagName));
+                        }
                     }
-                } 
+                }
             }
             _profile = b;
             _playFabID = id;

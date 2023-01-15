@@ -285,7 +285,7 @@ Camera:
   m_GameObject: {fileID: 92127564}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -1479,7 +1479,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.19215688, g: 0.2655247, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1540,6 +1540,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _: {fileID: 0}
+  PngDataCreated:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1404862630}
+        m_TargetAssemblyTypeName: AvatarDisplayController, Assembly-CSharp
+        m_MethodName: CreateAvatarData
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &676212395
 GameObject:
   m_ObjectHideFlags: 0
@@ -1711,7 +1726,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 121}
+  m_AnchoredPosition: {x: 0, y: -193}
   m_SizeDelta: {x: 1904, y: 1464.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &680577084
@@ -2045,7 +2060,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 419}
+  m_AnchoredPosition: {x: 0, y: 1861}
   m_SizeDelta: {x: 570.7, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &834030168
@@ -2077,8 +2092,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2310,7 +2325,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 121.00001}
+  m_AnchoredPosition: {x: 0, y: -193.00003}
   m_SizeDelta: {x: 871, y: 1081.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &944161599
@@ -3602,6 +3617,8 @@ GameObject:
   - component: {fileID: 1404862629}
   - component: {fileID: 1404862628}
   - component: {fileID: 1404862630}
+  - component: {fileID: 1404862632}
+  - component: {fileID: 1404862631}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -3647,14 +3664,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.019607844}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 589c0268ca7651b4fbb48f7b95ca5583, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d47ebfe0526a14a4b8f6ab5b37e5d635, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3690,10 +3707,8 @@ MonoBehaviour:
   _topNext: {fileID: 137252222}
   _botBack: {fileID: 1971653495}
   _botNext: {fileID: 1319961361}
-  _startBtn: {fileID: 393683241}
   _skinBack: {fileID: 2129179759}
   _skinNext: {fileID: 1802275938}
-  _InputField: {fileID: 1928975643}
   _tops:
   - {fileID: -1190623127, guid: 68c7640802f033046acf2bb512b15bd0, type: 3}
   - {fileID: 713148269, guid: 68c7640802f033046acf2bb512b15bd0, type: 3}
@@ -3717,6 +3732,52 @@ MonoBehaviour:
   _faceSR: {fileID: 0}
   _topSR: {fileID: 1906823991}
   _botSR: {fileID: 151687278}
+--- !u!114 &1404862631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404862626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d5eb5770c0ff094fba3b921cdc6af7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 3288de75a84f51741808757bc7fef0c3, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1404862630}
+        m_TargetAssemblyTypeName: AvatarDisplayController, Assembly-CSharp
+        m_MethodName: StartStudy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  ResponseWithData:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1404862632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404862626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98b422633d919704492467b9d78bcbcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startBtn: {fileID: 393683241}
+  _InputField: {fileID: 1928975643}
+  _startStudyEvent: {fileID: 11400000, guid: 3288de75a84f51741808757bc7fef0c3, type: 2}
 --- !u!1 &1440535038
 GameObject:
   m_ObjectHideFlags: 0

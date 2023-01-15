@@ -26,7 +26,6 @@ namespace PlayFabCloudScript.OnLogin
 
     public static class ModifyTag
     {
-        static string responseString = "";
         static string secretKey = "PlayFabSecretKey";
         static string titleID = "titleId";
         static string Id = "";
