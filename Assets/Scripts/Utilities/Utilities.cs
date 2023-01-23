@@ -14,6 +14,9 @@ namespace ProjectSpecificGlobals
 {
     public enum ContactType { GroundContact, CubeContact, BlockContact };
     public enum SceneNames { MenuScene, OpeningScene, SampleScene, ArcadeLeaderboard, ArcadeOpeningScene, ArcadeStudyScene, ArcadeGameOver}
+
+    public enum Tags { MainCanvas}
+
     public static class MobileSettings
     {
         public static int dragPower = 250;

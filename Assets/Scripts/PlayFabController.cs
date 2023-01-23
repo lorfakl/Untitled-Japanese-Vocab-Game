@@ -305,6 +305,20 @@ public class PlayFabController : MonoBehaviour
         Playfab.InitiateFileUploads(rq, PerformUpload, OnPlayFabError);
     }
 
+    public static void InitiateFileUpload(UniversalEntityKey e, DataCategory d, string fileName)
+    {
+        InitiateFileUploadsRequest rq = new InitiateFileUploadsRequest
+        {
+            Entity = e,
+            FileNames = new List<string> { fileName }
+        };
+
+        Playfab.InitiateFileUploads(rq, (result) => 
+        {
+            Playfab.UploadEntityFile(result, d, OnHTTPError);
+        }, OnPlayFabError);
+    }
+
     public static void UploadAvatarImage()
     {
         InitiateFileUploadsRequest rq = new InitiateFileUploadsRequest

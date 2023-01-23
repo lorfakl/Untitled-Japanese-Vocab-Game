@@ -26,6 +26,7 @@ public class FundsDisplayController : MonoBehaviour
     Color _defaultColor;
     bool _isAfforable;
     PlayFabUser _user;
+    MessageBox _loadingMessageBox;
 
     public void On_AddedToCart(object i)
     {
@@ -73,8 +74,8 @@ public class FundsDisplayController : MonoBehaviour
             string msg = $"You will have {remaingFunds} SP remaining after this purchase " +
                 $"\n Would you like to continue: ";
 
-            MessageBox.Show(msg, MessageBoxType.Confirmation /*OnRecievedPurchaseConfirmation*/);
-            StartPurchaseEvent(_totalCost);
+            MessageBox confirmPurchase = MessageBoxFactory.Create(MessageBoxType.Confirmation, msg, "Confirm Purchase");
+            confirmPurchase.DisplayMessageBox(OnRecievedPurchaseConfirmation, confirmPurchase.AutoDestroyMessageBox);
         }
     }
 
@@ -82,6 +83,7 @@ public class FundsDisplayController : MonoBehaviour
     {
         UpdateText(_totalCostText, 0);
         UpdateText(_availableFundsText, _availableFunds);
+        _loadingMessageBox.DestroyMessageBox();
     }
     
     // Start is called before the first frame update
@@ -130,11 +132,10 @@ public class FundsDisplayController : MonoBehaviour
         _startPurchaseProcessEvent.Raise(c);
     }
 
-    private void OnRecievedPurchaseConfirmation(bool shouldStartPurchase)
+    private void OnRecievedPurchaseConfirmation()
     {
-        if(shouldStartPurchase)
-        {
-            StartPurchaseEvent(_totalCost);
-        }
+        StartPurchaseEvent(_totalCost);
+        _loadingMessageBox = MessageBoxFactory.Create(MessageBoxType.Loading, "Completing Purchase...", "Purchasing Items...");
+        _loadingMessageBox.DisplayMessageBox(_loadingMessageBox.AutoDestroyMessageBox);
     }
 }

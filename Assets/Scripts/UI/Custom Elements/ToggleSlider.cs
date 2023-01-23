@@ -38,28 +38,57 @@ public class ToggleSlider : MonoBehaviour
     Slider _slider;
 
     [SerializeField]
-    string[] options;
+    string[] _options;
 
     public UnityEvent<string> OnValueSelectedChanged
     {
         get;
-        set;
+        private set;
     }
+
+    public Slider SliderComponent
+    {
+        get { return _slider; }
+    }
+
+    public string[] Options
+    {
+        get { return _options; }
+    }
+
+    public string CurrentSelection { get; private set; }
 
     float _mostRecentSliderVal = -1f;
     float _defaultXPosition;
     float _maximumXPosition;
 
+    public void DriveSlider(string opt)
+    {
+        for(int i = 0; i < Options.Length; i++) 
+        {
+            if (Options[i] == opt)
+            {
+                SliderComponent.value = i;
+                HelperFunctions.Log("WHERE R MY FUCKING CALLBACKS");
+                SliderComponent.onValueChanged.Invoke(SliderComponent.value);
+                return;
+            }
+        }
+
+        HelperFunctions.Error($"Unable to find Option: {opt} in array {Options}");
+    }
+
     private void Awake()
     {
-        
+        OnValueSelectedChanged = new UnityEvent<string>();
+
     }
 
     private void Start()
     {
-
         _slider.onValueChanged.AddListener(ChangeSliderLocation);
         _slider.onValueChanged.AddListener(ChangeSelectedValue);
+
 
         Vector2 sliderHandleSizeDelta = _toggleForeground.GetComponent<RectTransform>().sizeDelta;
         sliderHandleSizeDelta.x = _toggleBackground.GetComponent<RectTransform>().rect.width / (int)_totalTogglePositions;
@@ -73,33 +102,58 @@ public class ToggleSlider : MonoBehaviour
         LoadOptions();
     }
 
-    private void Update()
+    private void InitializeRequiredValues()
     {
-        
-    }
+        Vector2 sliderHandleSizeDelta = _toggleForeground.GetComponent<RectTransform>().sizeDelta;
+        sliderHandleSizeDelta.x = _toggleBackground.GetComponent<RectTransform>().rect.width / (int)_totalTogglePositions;
+        _defaultXPosition = _toggleForeground.transform.localPosition.x;
+        _maximumXPosition = _defaultXPosition + sliderHandleSizeDelta.x * ((int)_totalTogglePositions - 1);
 
+        _mostRecentSliderVal = 0;
+    }
     private void LoadOptions()
     {
         string opt = "";
-        for(int i = 0; i < options.Length; i++)
+        for(int i = 0; i < _options.Length; i++)
         {
-            if(i == (options.Length - 1))
+            if(i == (_options.Length - 1))
             {
-                opt += options[i];
+                opt += _options[i];
             }
             else
             {
-                opt += options[i] + "\t";
+                if(opt.Length == 2)
+                {
+                    opt += _options[i] + "\t\t";
+                }
+                else
+                {
+                    opt += _options[i] + "\t" + "\t";
+                }
+                
             }
         }
 
         textOptions.text = opt;
+        _totalTogglePositions = (ToggleSliderOptions)_options.Length;
+        CurrentSelection = _options[0];
     }
 
     private void ChangeSliderLocation(float value)
     {
+        HelperFunctions.Log("I hate UI SOOOOOOOOOOOO MUUUUUUUUUUUUUUCH");
         int signOperation = 1;
         int delta = 1;
+        
+        if(_mostRecentSliderVal < 0)
+        {
+            _mostRecentSliderVal = 0;
+        }
+
+        if(_mostRecentSliderVal == value)
+        {
+            return;
+        }
 
         Vector2 sliderHandleSizeDelta = _toggleForeground.GetComponent<RectTransform>().sizeDelta;
         Vector3 newVisibleSliderPosition = _toggleForeground.transform.localPosition;
@@ -136,7 +190,8 @@ public class ToggleSlider : MonoBehaviour
 
     private void ChangeSelectedValue(float value)
     {
-        OnValueSelectedChanged?.Invoke(options[(int)value]);
-        HelperFunctions.Log("New Value: " + options[(int)value]);
+        CurrentSelection = _options[(int)value];
+        OnValueSelectedChanged?.Invoke(_options[(int)value]);
+        HelperFunctions.Log("New Value: " + _options[(int)value]);
     }
 }

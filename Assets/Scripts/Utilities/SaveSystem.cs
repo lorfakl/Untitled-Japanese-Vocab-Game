@@ -7,6 +7,7 @@ using Utilities;
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 namespace Utilities.SaveOperations
 {
@@ -17,7 +18,8 @@ namespace Utilities.SaveOperations
         Group,
         Inventory,
         VirtualCurrency,
-        Avatar
+        Avatar,
+        Settings
     }
 
     public static class SaveSystem
@@ -85,6 +87,24 @@ namespace Utilities.SaveOperations
                 return default(T);
             }
 
+        }
+
+        public static T ConvertToObject<T>(byte[] data) where T : class
+        {
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            using(MemoryStream ms = new MemoryStream(data))
+            {
+                object obj = binaryFormatter.Deserialize(ms);
+                try
+                {
+                    return (T)obj;
+                }
+                catch(Exception e)
+                {
+                    HelperFunctions.CatchException(e);
+                    return default;
+                }
+            }
         }
     
         public static byte[] PrepareFileForUpload(DataCategory c)

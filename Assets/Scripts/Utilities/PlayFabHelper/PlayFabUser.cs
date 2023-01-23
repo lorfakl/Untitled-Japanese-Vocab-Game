@@ -13,6 +13,12 @@ namespace Utilities.PlayFabHelper.CurrentUser
             private set;
         }
 
+        public static UserSettingsData UserSettings
+        {
+            get;
+            set;
+        }
+
         public static void SetCurrentUser(PlayFabUser u)
         {
             CurrentUser = u;
@@ -34,6 +40,12 @@ namespace Utilities.PlayFabHelper.CurrentUser
         }
         AvatarData _avatarData;
         
+        public UserSettingsData UserSettings
+        {
+            get { return _userSettings; }
+        }
+        UserSettingsData _userSettings;
+
         public PlayFabInventory Inventory
         {
             get { return _inventory; }
@@ -100,6 +112,8 @@ namespace Utilities.PlayFabHelper.CurrentUser
         {
             _groups.Insert(0, g);
         }
+
+        
     }
 }
 
