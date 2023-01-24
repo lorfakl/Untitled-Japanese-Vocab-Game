@@ -13,6 +13,7 @@ using PlayFab.DataModels;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 public delegate void IsAuthenticatedNotification();
 
@@ -67,6 +68,20 @@ public class PlayFabController : MonoBehaviour
     #endregion
 
     #region Public Methods
+    public static void DisplayName(string name)
+    {
+        Playfab.UpdateDisplayName(name,OnPlayFabError);
+    }
+
+    public static void ArcadeLogin(string id, Action success)
+    {
+        Playfab.ArcadeLogin(id, (result) => 
+        { 
+            OnSuccessfulLogin(result);
+            success();
+        }, OnPlayFabError);
+    }
+
     public static void GetPlayerData(List<string> dataKeys, Action<Dictionary<string,string>> success)
     {
         GetUserDataRequest getUserDataRequest = new GetUserDataRequest()
@@ -290,9 +305,61 @@ public class PlayFabController : MonoBehaviour
         Playfab.InitiateFileUploads(rq, PerformUpload, OnPlayFabError);
     }
 
+    public static void InitiateFileUpload(UniversalEntityKey e, DataCategory d, string fileName)
+    {
+        InitiateFileUploadsRequest rq = new InitiateFileUploadsRequest
+        {
+            Entity = e,
+            FileNames = new List<string> { fileName }
+        };
+
+        Playfab.InitiateFileUploads(rq, (result) => 
+        {
+            Playfab.UploadEntityFile(result, d, OnHTTPError);
+        }, OnPlayFabError);
+    }
+
+    public static void UploadAvatarImage()
+    {
+        InitiateFileUploadsRequest rq = new InitiateFileUploadsRequest
+        {
+            Entity = Playfab.UserEntityKey,
+            FileNames = new List<string> { "AvatarImage" }
+        };
+
+        Playfab.InitiateFileUploads(rq,
+            (res) =>
+            {
+                Playfab.UploadEntityFile(res, DataCategory.Avatar, OnHTTPError);
+            }, OnPlayFabError);
+    }
+
     public static void PerformUpload(InitiateFileUploadsResponse res)
     {
         Playfab.UploadEntityFile(res, DataCategory.User, OnHTTPError);
+    }
+
+    public static void GetAvatarImage()
+    {
+        GetFileInfo(Playfab.UserEntityKey, GetAvatarImage);
+    }
+
+    public static void GetAvatarImage(UniversalEntityKey e)
+    {
+        //GetFileInfo(e,)
+    }
+
+    public static void GetFileInfo(UniversalEntityKey e, Func<List<PlayFabFileInfo>, Task<Sprite>> success)
+    {
+        GetFilesRequest rq = new GetFilesRequest
+        {
+            Entity = e
+        };
+
+        Playfab.GetFiles(rq, OnPlayFabError, (files) => 
+        { 
+            success(files);
+        });
     }
 
     public static void GetFileInfo(UniversalEntityKey e, Action<List<PlayFabFileInfo>> success)
@@ -308,6 +375,11 @@ public class PlayFabController : MonoBehaviour
     public static void PerformDownload(string url, Action<byte[]> success)
     {
         Playfab.DownloadFileFromPlayFab(url, success, OnHTTPError);
+    }
+
+    public static Task<Sprite> PerformDownload(string url, Func<byte[], Task<Sprite>> success)
+    {
+        return Playfab.DownloadandConvertToSprite(url, success, OnHTTPError);
     }
 
     public static void GetItemCatalog(Action<List<PlayFabItem>> success)
@@ -384,6 +456,20 @@ public class PlayFabController : MonoBehaviour
 
     #region Private Methods
 
+    static Task<Sprite> GetAvatarImage(List<PlayFabFileInfo> files)
+    {
+        string fileDownldUrl = "";
+        foreach(var f in files)
+        {
+            if(f.FileName.Contains("Image"))
+            {
+                fileDownldUrl = f.DownloadUrl;
+                break;
+            }
+        }
+
+        return PerformDownload(fileDownldUrl, SaveSystem.ConvertBytesToSprite);
+    }
     static void SaveGroupMembers(List<BasicProfile> basicProfiles)
     {
         CurrentAuthedPlayer.CurrentUser.Groups[0].Add(basicProfiles);
@@ -502,7 +588,9 @@ public class PlayFabController : MonoBehaviour
         HelperFunctions.Log($"Profiles created: {profiles.Count}");
         return profiles;
     }
+
     
+
     #endregion
 }
 

@@ -9,12 +9,6 @@ using Utilities.PlayFabHelper;
 using Utilities.PlayFabHelper.CurrentUser;
 
 
-public enum WordsPerSession
-{
-    Thirty = 30,
-    Forty = 40,
-    Fifty = 50
-}
 public class StoreManager : MonoBehaviour
 {
     [SerializeField]

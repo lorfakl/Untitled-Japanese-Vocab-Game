@@ -13,6 +13,12 @@ namespace Utilities.PlayFabHelper.CurrentUser
             private set;
         }
 
+        public static UserSettingsData UserSettings
+        {
+            get;
+            set;
+        }
+
         public static void SetCurrentUser(PlayFabUser u)
         {
             CurrentUser = u;
@@ -34,6 +40,12 @@ namespace Utilities.PlayFabHelper.CurrentUser
         }
         AvatarData _avatarData;
         
+        public UserSettingsData UserSettings
+        {
+            get { return _userSettings; }
+        }
+        UserSettingsData _userSettings;
+
         public PlayFabInventory Inventory
         {
             get { return _inventory; }
@@ -71,17 +83,20 @@ namespace Utilities.PlayFabHelper.CurrentUser
             _entityKey = e;
             _inventory = i;
 
-            foreach (PlayerTags et in Enum.GetValues(typeof(PlayerTags)))
+            if (t != null)
             {
-                foreach (var tag in t)
+                foreach (PlayerTags et in Enum.GetValues(typeof(PlayerTags)))
                 {
-                    if (tag.TagValue.Contains(et.ToString()))
+                    foreach (var tag in t)
                     {
-                        int tagStartIndex = tag.TagValue.IndexOf(et.ToString()[0]);
-                        string tagName = tag.TagValue.Substring(tagStartIndex);
-                        _tags.Add(HelperFunctions.ParseEnum<PlayerTags>(tagName));
+                        if (tag.TagValue.Contains(et.ToString()))
+                        {
+                            int tagStartIndex = tag.TagValue.IndexOf(et.ToString()[0]);
+                            string tagName = tag.TagValue.Substring(tagStartIndex);
+                            _tags.Add(HelperFunctions.ParseEnum<PlayerTags>(tagName));
+                        }
                     }
-                } 
+                }
             }
             _profile = b;
             _playFabID = id;
@@ -97,6 +112,8 @@ namespace Utilities.PlayFabHelper.CurrentUser
         {
             _groups.Insert(0, g);
         }
+
+        
     }
 }
 

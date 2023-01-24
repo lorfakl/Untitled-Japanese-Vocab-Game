@@ -1,18 +1,21 @@
 using System;
 using System.Data;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Reflection;
 //using PlayFab.ClientModels;
 //using PlayFab.ServerModels;
 //using PlayFab;
 using System.Collections;
-
+using ProjectSpecificGlobals;
 
 namespace ProjectSpecificGlobals
 {
     public enum ContactType { GroundContact, CubeContact, BlockContact };
+    public enum SceneNames { MenuScene, OpeningScene, SampleScene, ArcadeLeaderboard, ArcadeOpeningScene, ArcadeStudyScene, ArcadeGameOver}
+
+    public enum Tags { MainCanvas}
 
     public static class MobileSettings
     {
@@ -311,6 +314,11 @@ namespace Utilities
                 list[k] = list[n];
                 list[n] = value;
             }
+        }
+
+        public static void LoadScene(SceneNames s)
+        {
+            SceneManager.LoadScene(s.ToString());
         }
 
         public static List<int> CountDigit(int num)

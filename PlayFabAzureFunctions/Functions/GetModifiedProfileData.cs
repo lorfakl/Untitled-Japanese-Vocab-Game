@@ -24,7 +24,6 @@ namespace PlayFabCloudScript.OnLogin
 
     public static class GetModifiedProfileData
     {
-        static string responseString = "";
         static string secretKey = "PlayFabSecretKey";
         static string titleID = "titleId";
         static string Id = "";

@@ -19,10 +19,8 @@ namespace PlayFabCloudScript.Rivals
 {
     public static class GetRivalAvatars
     {
-        static string responseString = "";
         static string secretKey = "PlayFabSecretKey";
         static string titleID = "titleId";
-        static string Id = "";
         public static ILogger logger = null;
 
         static List<string> listOfLogs = null;
@@ -139,11 +137,12 @@ namespace PlayFabCloudScript.Rivals
         static PlayFabFileInfo FindAvatarFileInfo(Dictionary<string, GetFileMetadata> metaDataDict)
         {
             PlayFabFileInfo avatarFileInfo = null;
+            logger.LogInformation("Any info?: " + metaDataDict.Count);
             foreach(var pair in metaDataDict)
             {
                 if(pair.Value.FileName.Contains("vatar"))
                 {
-                    logger.LogInformation("Checking to see if the calls were successful");
+                    logger.LogInformation("We have a file!" + pair.Value.FileName);
                     avatarFileInfo = new PlayFabFileInfo
                     (
                         pair.Value.FileName,
@@ -153,6 +152,10 @@ namespace PlayFabCloudScript.Rivals
                         pair.Value.LastModified
                     );
                     break;
+                }
+                else if(String.IsNullOrEmpty(pair.Value.FileName))
+                {
+                    
                 }
             }
 

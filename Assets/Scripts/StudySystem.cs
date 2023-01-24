@@ -131,7 +131,7 @@ public class StudySystem : MonoBehaviour
         PlayFabController.IsAuthedEvent += PerformOneTimeWordSetUp;
         if(PlayFabController.IsAuthenticated)
         {
-            GetCurrentWordSetFromPlayFab();
+            PerformOneTimeWordSetUp();
         }
     }
 

@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Arcade Mode/ArcadeStudyScene.unity
     guid: 0f54883b9afae13448f56edecfb648b8
+  - enabled: 1
+    path: Assets/Scenes/Arcade Mode/ArcadeGameOver.unity
+    guid: 0fa65b00c6e486d4b8cf66a92ef1d3d2
   m_configObjects: {}

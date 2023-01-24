@@ -25,6 +25,13 @@ namespace Utilities.PlayFabHelper
 
         public BasicProfile(PlayFab.ClientModels.PlayerProfileModel p)
         {
+            if(p == null)
+            {
+                PlayFabID = Playfab.PlayFabID;
+                DisplayName = Playfab.DisplayName;
+                return;
+            }
+
             PlayFabID = p.PlayerId;
             AvatarURL = p.AvatarUrl;
             DisplayName = p.DisplayName;
