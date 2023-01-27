@@ -934,6 +934,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   definitionText: {fileID: 968071333}
+  panel: {fileID: 0}
 --- !u!114 &968071337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1574,7 +1575,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -916646627, guid: 91a29b470d80b9548b17e9cae1f12321, type: 3}
+  m_Sprite: {fileID: 1479701388, guid: 4e18d832a59b53843af3728236d72fbd, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

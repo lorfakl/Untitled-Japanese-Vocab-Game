@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Arcade Mode/ArcadeOpeningScene.unity
     guid: 6d0c575612c07604caddee0fb0048a5e
   - enabled: 1
-    path: Assets/Scenes/Arcade Mode/ArcadeStudyScene.unity
+    path: Assets/Scenes/Arcade Mode/EnenraScene.unity
     guid: 0f54883b9afae13448f56edecfb648b8
   - enabled: 1
     path: Assets/Scenes/Arcade Mode/ArcadeGameOver.unity

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1cac29186a1c7aa40a6cdad35901733a
+guid: 209e4a7a740af1247b03b941dec26eb7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -131,13 +131,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Kappa_doctor_0
+      name: UI Boxes_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 1280
-        height: 1360
+        y: 120
+        width: 64
+        height: 120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2b527adfbe9dfbf42808c47f9f972d6f
-      internalID: -1164698150
+      spriteID: 74098ef32c7e1b74791a52521da7be0e
+      internalID: -1451424453
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kappa_doctor_1
+      name: UI Boxes_1
       rect:
         serializedVersion: 2
-        x: 1280
-        y: 0
-        width: 1280
-        height: 1360
+        x: 1
+        y: 98
+        width: 62
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b80a1f4646f49c14ca055d8b08bde2ef
-      internalID: -818451993
+      spriteID: d232416a4e411ae46a721046cdd4d50d
+      internalID: 1375532031
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kappa_doctor_2
+      name: UI Boxes_2
       rect:
         serializedVersion: 2
-        x: 2560
-        y: 0
-        width: 1280
-        height: 1360
+        x: 2
+        y: 89
+        width: 28
+        height: 7
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,20 +187,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 81aa4ec55e8d9244c82d44515b6dc254
-      internalID: 1748600708
+      spriteID: 940d241e74087c34eafdded73567be87
+      internalID: -1500978361
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kappa_doctor_3
+      name: UI Boxes_3
       rect:
         serializedVersion: 2
-        x: 3840
-        y: 0
-        width: 1280
-        height: 1360
+        x: 33
+        y: 89
+        width: 28
+        height: 7
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,20 +208,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 83a6ea38393215c4e9ab19ff1b5caa8c
-      internalID: 166780076
+      spriteID: 1cae4225b209927409fc9edf7f6f0960
+      internalID: 845211729
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kappa_doctor_4
+      name: UI Boxes_4
       rect:
         serializedVersion: 2
-        x: 5120
-        y: 0
-        width: 1280
-        height: 1360
+        x: 4
+        y: 83
+        width: 4
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -229,20 +229,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ae5c8ae8d1988ea4faa986d62ed1bd8f
-      internalID: -558139954
+      spriteID: d265f42cc2911914fb6eb323dd2e6a54
+      internalID: 355462875
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kappa_doctor_5
+      name: UI Boxes_6
       rect:
         serializedVersion: 2
-        x: 6400
-        y: 0
-        width: 1280
-        height: 1360
+        x: 16
+        y: 83
+        width: 20
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -250,20 +250,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7361f3a224cebbe4aafb40bd9ebf6a84
-      internalID: 515792314
+      spriteID: 94104d610ab55274a9669d080f705db6
+      internalID: 2133240447
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kappa_doctor_6
+      name: UI Boxes_7
       rect:
         serializedVersion: 2
-        x: 7680
-        y: 0
-        width: 1280
-        height: 1360
+        x: 38
+        y: 80
+        width: 25
+        height: 7
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -271,20 +271,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5abd9a76bc7971c45aa0635bd1662f32
-      internalID: 1631959878
+      spriteID: 952392584279ee84bb1409c37d1303ba
+      internalID: 806286921
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kappa_doctor_7
+      name: UI Boxes_8
       rect:
         serializedVersion: 2
-        x: 8960
-        y: 0
-        width: 1280
-        height: 1360
+        x: 2
+        y: 71
+        width: 13
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -292,8 +292,92 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e40a0f56d4c77a64f9991f81aac7ffd5
-      internalID: 167226442
+      spriteID: 6cfbded14d3dfed4c94fd7bc98199d0d
+      internalID: -838043969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI Boxes_9
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 70
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce30c19d83d6bac449149c26d1560457
+      internalID: -1282424579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI Boxes_10
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 73
+        width: 24
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49663a841a0887546933acee2ee3a0d6
+      internalID: 137107689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI Boxes_11
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 57
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 744a7d1e51fcdf8489b068ae1981cd68
+      internalID: -1979424569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI Boxes_5
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 84
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43b6bf3f11a69e049bbad40fecbb125e
+      internalID: -1991320154
       vertices: []
       indices: 
       edges: []
@@ -309,14 +393,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Kappa_doctor_4: -558139954
-      Kappa_doctor_6: 1631959878
-      Kappa_doctor_3: 166780076
-      Kappa_doctor_5: 515792314
-      Kappa_doctor_1: -818451993
-      Kappa_doctor_0: -1164698150
-      Kappa_doctor_2: 1748600708
-      Kappa_doctor_7: 167226442
+      UI Boxes_11: -1979424569
+      UI Boxes_0: -1451424453
+      UI Boxes_3: 845211729
+      UI Boxes_2: -1500978361
+      UI Boxes_5: -1991320154
+      UI Boxes_6: 2133240447
+      UI Boxes_8: -838043969
+      UI Boxes_9: -1282424579
+      UI Boxes_10: 137107689
+      UI Boxes_1: 1375532031
+      UI Boxes_4: 355462875
+      UI Boxes_7: 806286921
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
