@@ -61,6 +61,11 @@ public class StudyObject : MonoBehaviour
     {
         selectionEnabled = false;
     }
+
+    public void MakeInvisible()
+    {
+
+    }
     #endregion
 
     #region Unity Methods

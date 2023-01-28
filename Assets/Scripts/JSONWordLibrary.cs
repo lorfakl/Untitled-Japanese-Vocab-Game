@@ -5,10 +5,16 @@ using Newtonsoft.Json;
 using Utilities;
 using System.IO;
 using System.Linq;
+using Utilities.Events;
 
 public class JSONWordLibrary : MonoBehaviour
 {
 
+    [SerializeField]
+    GameEvent removeWordFromSessionEvent;
+
+    [SerializeField]
+    GameEvent completedSessionListEvent;
     #region Public Variables
     public static List<JapaneseWord> WordsToStudy
     {
@@ -29,13 +35,28 @@ public class JSONWordLibrary : MonoBehaviour
     static List<JapaneseWord> wordsToStudy;
     #endregion
 
-#region Events
-#endregion
 
-#region Unity Events
-#endregion
+    #region Public Methods
 
-#region Public Methods
+    public void OnCorrectAnswerEvent_Handler(object s)
+    {
+        StudyObject studyObject = (StudyObject)s;
+        JapaneseWord wordTarget = JSONWordLibrary.WordsToStudy.Find(word => word.Kanji == studyObject.Word.Kanji);
+        bool wasRemoved = WordsToStudy.Remove(wordTarget);
+        if (wasRemoved)
+        {
+            removeWordFromSessionEvent.Raise(WordsToStudy.Count);
+            if(WordsToStudy.Count == 0)
+            {
+                completedSessionListEvent.Raise();
+            }
+        }
+        else
+        {
+            HelperFunctions.Warning(wordTarget + " was not successful removed");
+        }
+        HelperFunctions.Log("Words left to study: " + WordsToStudy.Count);
+    }
 
     public static JapaneseWord GetNewTargetWord()
     {
@@ -68,9 +89,9 @@ public class JSONWordLibrary : MonoBehaviour
         WordsToStudy = b;
     }
 
-#endregion
+    #endregion
 
-#region Unity Methods
+    #region Unity Methods
     void Awake()
     {
         LoadWordFromJSON();
@@ -90,9 +111,9 @@ public class JSONWordLibrary : MonoBehaviour
     {
         
     }
-#endregion
+    #endregion
 
-#region Private Methods
+    #region Private Methods
 
     void LoadWordFromJSON()
     {
@@ -151,6 +172,6 @@ public class JSONWordLibrary : MonoBehaviour
         File.WriteAllText(Application.dataPath + "//kana.json", allJson);
     }
 
-#endregion
+    #endregion
 }
 

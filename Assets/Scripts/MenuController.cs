@@ -35,7 +35,7 @@ public class MenuController : MonoBehaviour
     #region Public Methods
     public void StudyButtonClickHandler()
     {
-        SceneManager.LoadScene("SampleScene", LoadSceneMode.Single);
+        SceneManager.LoadScene("StudyScene", LoadSceneMode.Single);
 
     }
 

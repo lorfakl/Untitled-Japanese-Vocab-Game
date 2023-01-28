@@ -35,6 +35,11 @@ public class HeartController : MonoBehaviour
         HelperFunctions.Error(heart.gameObject.name + "Was not removed successfully");
     }
 
+    public void HeartGainEvent_Handler()
+    {
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {

@@ -66,33 +66,7 @@ public class Word
             }
         }
     }
-    #region Private Variables
-    #endregion
 
-    #region Events
-    #endregion
-
-    #region Unity Events
-    #endregion
-
-    #region Public Methods
-    #endregion
-
-    #region Unity Methods
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-#endregion
-
-    #region Private Methods
-#endregion
 }
 
 public class JapaneseWord : Word
