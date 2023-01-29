@@ -47,6 +47,10 @@ public class StudyObject : MonoBehaviour
     private TMP_Text text;
     private List<Vector3> positions = new List<Vector3>();
     private bool selectionEnabled;
+
+    [SerializeField]
+    ParticleSystem studyObjectParticleSystem;
+
     #endregion
 
     #region Events
@@ -64,7 +68,8 @@ public class StudyObject : MonoBehaviour
 
     public void MakeInvisible()
     {
-
+        text.enabled = false;
+        studyObjectParticleSystem.Play();
     }
     #endregion
 
@@ -87,7 +92,7 @@ public class StudyObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void FixedUpdate()

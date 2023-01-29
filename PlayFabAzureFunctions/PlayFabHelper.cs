@@ -29,7 +29,8 @@ public enum UserDataKey
 public enum TitleDataKeys
 {
     StarterWords,
-    CommonWords
+    CommonWords,
+    Kana
 }
 
 public enum StatisticName
@@ -362,6 +363,18 @@ public class ModifyTagParameter
     
     [JsonProperty]
     public List<string> TagNames { get; set; }
+}
+
+public class AddWordArgument
+{
+    [JsonProperty("NumToAdd")]
+    public int NumToAdd { get; set; }
+
+    [JsonProperty("Progess")]
+    public int Progress { get; set; }
+
+    [JsonProperty("IsKanjiStudyTopic")]
+    public bool IsKanjiStudyTopic { get; set; }
 }
 
 public static class PlayFabHelper

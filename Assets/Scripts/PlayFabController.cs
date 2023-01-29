@@ -41,6 +41,9 @@ public class PlayFabController : MonoBehaviour
     [SerializeField]
     LocalPlayFabData localData;
 
+    [SerializeField]
+    string customID;
+
     static string emptyLeitnerLevelData = @"{'Zero':[],'One':[],'Two':[],'Three':[],'Four':[],'Five':[]}";
     static string emptyProfeincyLevelData = @"{'One': [],'Two': [],'Three': [],'Four': [],'Five': [],'Six': [],'Seven': [],'Eight': []}";
     static TimeSpan twelveHours = new TimeSpan(12, 0, 0);
@@ -432,6 +435,10 @@ public class PlayFabController : MonoBehaviour
         {
             Playfab.Login(OnSuccessfulLogin, OnPlayFabError, useRandomAccounts);
         }
+        else if(!string.IsNullOrEmpty(customID))
+        {
+            Playfab.Login(customID, OnSuccessfulLogin, OnPlayFabError);
+        }
         else
         {
             Playfab.Login(OnSuccessfulLogin, OnPlayFabError);
@@ -490,11 +497,11 @@ public class PlayFabController : MonoBehaviour
         string l = "Detla Hours: " + deltaTime.Hours + "\n" + "Detla Minutes: " + deltaTime.Minutes + "\n" + "Detla Seconds: " + deltaTime.Seconds;
         HelperFunctions.Log(l);
         
-        if(deltaTime > twelveHours)
+        if(deltaTime < twelveHours)
         {
             Playfab.ExecuteFunction(new ExecuteFunctionRequest
             {
-                FunctionName = "SetLoginStatus",
+                FunctionName = CSFunctionNames.SetLoginStatus.ToString(),
                 GeneratePlayStreamEvent = true
             },
             (result) =>
@@ -523,9 +530,6 @@ public class PlayFabController : MonoBehaviour
                 HelperFunctions.Error("A CurrentUser was not created via file or on Login. There's an issue here");
             }
         }
-        
-
-
     }
 
 

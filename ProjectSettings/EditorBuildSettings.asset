@@ -5,28 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MenuScene.unity
     guid: ddc3ab1c402e22347a20562eb700820c
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: fa27b51f7abe98f4fa66c71455ef06ee
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Arcade Mode/ArcadeLeaderboard.unity
-    guid: e9156f6fb1f1fa6458170033d9824a7a
-  - enabled: 1
-    path: Assets/Scenes/Arcade Mode/ArcadeOpeningScene.unity
-    guid: 6d0c575612c07604caddee0fb0048a5e
-  - enabled: 1
-    path: Assets/Scenes/Arcade Mode/EnenraScene.unity
-    guid: 0f54883b9afae13448f56edecfb648b8
-  - enabled: 1
-    path: Assets/Scenes/Arcade Mode/ArcadeGameOver.unity
-    guid: 0fa65b00c6e486d4b8cf66a92ef1d3d2
+    path: Assets/Scenes/StudyScene.unity
+    guid: 90a0790357c0e0e45b6e6aad6d479748
   m_configObjects: {}

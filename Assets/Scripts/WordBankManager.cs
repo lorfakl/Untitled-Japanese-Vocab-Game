@@ -98,7 +98,7 @@ public class WordBankManager : MonoBehaviour
                 }
             }
 
-            HelperFunctions.Log(overlap);
+            HelperFunctions.Log("Kana Overlap: " + overlap);
             return overlap;
         }
         else

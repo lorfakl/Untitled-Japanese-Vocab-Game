@@ -6,6 +6,9 @@ using Utilities.PlayFabHelper;
 using Utilities.Events;
 using Utilities;
 using System.Linq;
+using Utilities.PlayFabHelper.CurrentUser;
+using Utilities.PlayFabHelper.CSArguments;
+using System;
 
 public enum ProficiencyLevels
 {
@@ -36,7 +39,8 @@ public class StudySystem : MonoBehaviour
 
     Dictionary<ProficiencyLevels, List<JapaneseWord>> sessionWordLeitnerLevel = new Dictionary<ProficiencyLevels, List<JapaneseWord>>();
     Dictionary<ProficiencyLevels, List<JapaneseWord>> sessionWordPrestigeLevel = new Dictionary<ProficiencyLevels, List<JapaneseWord>>();
-    
+    int studyProgress = 0;
+
     public Dictionary<ProficiencyLevels, List<JapaneseWord>> SessionWordLeitnerLevels
     {
         get { return sessionWordLeitnerLevel; }
@@ -60,7 +64,7 @@ public class StudySystem : MonoBehaviour
 
     public void ModifySessionList(JapaneseWord s)
     {
-        JapaneseWord wordTarget = sessionWords.Find(word => word.Kanji == s.Kanji);
+        //JapaneseWord wordTarget = sessionWords.Find(word => word.Kanji == s.Kanji);
         AddWordToLeitnerDict(s);
     }
     #endregion
@@ -77,14 +81,20 @@ public class StudySystem : MonoBehaviour
 
     void Start()
     {
-        /*for(int i = 0; i < Word.maxLeitnerLevel; i++)
+        for(int i = 0; i < Word.maxLeitnerLevel; i++)
         {
             if(!sessionWordLeitnerLevel.ContainsKey((ProficiencyLevels)i))
             {
                 sessionWordLeitnerLevel.Add((ProficiencyLevels)i, new List<JapaneseWord>());
             }
-        }*/
+        }
     }
+
+    private void OnDisable()
+    {
+        AddNewWords();
+    }
+
     #endregion
 
     #region Private Methods
@@ -102,7 +112,9 @@ public class StudySystem : MonoBehaviour
         }
         else
         {
-            PlayFabController.GetPlayerData(new List<string> { "LeitnerLevels", "PrestigeLevels", "NextSession" }, ParseReturnData);
+            PlayFabController.GetPlayerData(new List<string> {
+                UserDataKey.LeitnerLevels.ToString() , UserDataKey.PrestigeLevels.ToString() , UserDataKey.NextSession.ToString() , UserDataKey.WordsSeen.ToString() 
+            }, ParseReturnData);
         }
     }
 
@@ -113,7 +125,7 @@ public class StudySystem : MonoBehaviour
 
 
         List<JapaneseWord> sessionWords = JsonConvert.DeserializeObject<List<JapaneseWord>>(leitnerJson);
-
+        studyProgress = 20;
 
         HelperFunctions.Log("Printing return data: ");
         HelperFunctions.LogListContent(sessionWords);
@@ -127,9 +139,19 @@ public class StudySystem : MonoBehaviour
         string leitnerJson = data[UserDataKey.LeitnerLevels.ToString()];
         string prestigeJson = data[UserDataKey.PrestigeLevels.ToString()];
         string nextSessionJson = data[UserDataKey.NextSession.ToString()];
+        try
+        {
+            int parsedProgress = Int32.Parse(data[UserDataKey.WordsSeen.ToString()].ToString());
+            studyProgress = parsedProgress;
+        }
+        catch(Exception e)
+        {
+            HelperFunctions.CatchException(e);
+            HelperFunctions.Error($"Unable to cast WordsSeen value from PF. Returned value: {data[UserDataKey.WordsSeen.ToString()]}");
+        }
+        
 
         List<ProficiencyLevels> sessionKeys = JsonConvert.DeserializeObject<List<ProficiencyLevels>>(nextSessionJson);
-
         sessionWordLeitnerLevel = ParsePlayerProficiencyData(leitnerJson, sessionKeys);
         sessionWordPrestigeLevel = ParsePlayerProficiencyData(prestigeJson, sessionKeys);
         
@@ -202,6 +224,18 @@ public class StudySystem : MonoBehaviour
         }
 
         return convertedDict;
+    }
+    
+    void AddNewWords()
+    {
+        AddWordArgument addwordArg = new AddWordArgument
+        {
+            IsKanjiStudyTopic = StaticUserSettings.IsKanjiStudyTopic(),
+            NumToAdd = StaticUserSettings.GetNewWords(),
+            Progress = studyProgress
+        };
+
+        PlayFabController.ExecutionCSFunction(CSFunctionNames.AddNewWords, addwordArg);
     }
     #endregion
 }

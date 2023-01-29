@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using Utilities;
+using Utilities.PlayFabHelper;
 
 public enum TranslateDirection
 {
@@ -18,9 +19,9 @@ public enum TranslateDirection
 
 public enum MaxWordsPerSession
 {
-    Five = 5,
-    Ten = 10,
-    Fifteen = 15
+    Thirty = 30,
+    Forty = 40,
+    Fifty = 50
 }
 
 public enum StudyTopic
@@ -31,9 +32,10 @@ public enum StudyTopic
 
 public enum NewWordsPerSession
 {
-    Thirty = 30,
-    Forty = 40,
-    Fifty = 50
+    
+    Five = 5,
+    Ten = 10,
+    Fifteen = 15
 }
 
 public enum AudioTranslateDirection
@@ -116,6 +118,21 @@ public class UserSettingsData
         this.studyTopic = otherData.studyTopic;
         this.newWords = otherData.newWords;
         this.audioTranslateDirection = otherData.audioTranslateDirection;
+    }
+
+    public static UserSettingsData CreateDefaultSettings()
+    {
+        var settings = new UserSettingsData
+        {
+            IsAudioStudy = false,
+            MaxNewWords = NewWordsPerSession.Ten,
+            OwnerID = Playfab.PlayFabID,
+            StudyTopic = StudyTopic.Kanji,
+            TranslationDirection = TranslateDirection.Kanji2Kana,
+            TotalWordsPerSession = MaxWordsPerSession.Thirty
+        };
+
+        return settings;
     }
 
     public override string ToString()

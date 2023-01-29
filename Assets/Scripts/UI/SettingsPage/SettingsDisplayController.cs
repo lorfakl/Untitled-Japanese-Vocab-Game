@@ -145,8 +145,9 @@ public class SettingsDisplayController : MonoBehaviour
     private void DriveToggleSliders(UserSettingsData s)
     {
         int max = (int)s.MaxNewWords;
+        int total = (int)s.TotalWordsPerSession;
         _newWordsPerSession.DriveSlider(max.ToString());
-        _totalWordsPerSession.DriveSlider(s.TotalWordsPerSession.ToString());   
+        _totalWordsPerSession.DriveSlider(total.ToString());   
     }
     
     private void DriveArrowSelectors(UserSettingsData s)

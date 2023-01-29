@@ -142,6 +142,29 @@ namespace Utilities.PlayFabHelper
             
         }
 
+        public static void Login(string customID, Action<LoginResult> success, Action<PlayFabError> failure)
+        {
+            PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
+            {
+                TitleId = PlayFabSettings.TitleId,
+                CustomId = customID,
+                CreateAccount = true,
+                InfoRequestParameters = GetInfoRequest()
+
+            },
+            (result) =>
+            {
+                SetAuthenticatedUserDefaults(result);
+                success(result);
+
+            },
+            (error) =>
+            {
+                HandlePlayFabError(error);
+                failure(error);
+            });
+        }
+
         public static void Login(Action<LoginResult> success, Action<PlayFabError> failure)
         {
             Login(success, failure, false);
@@ -180,6 +203,7 @@ namespace Utilities.PlayFabHelper
                  new UpdateUserTitleDisplayNameRequest { DisplayName = name }, (result) => { }, onPlayFabError
                 );
         }
+
         public static void ExecuteFunction(ExecuteFunctionRequest rq, Action<ExecuteFunctionResult> success, Action<PlayFabError> failure)
         {
             //var cacheResult = CacheSystem.GetResponse(rq);

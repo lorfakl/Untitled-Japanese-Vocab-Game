@@ -17,8 +17,8 @@ namespace Utilities.Events
 
         private void Awake()
         {
+            _audioSource = GetComponent<AudioSource>();
             _audioSource.playOnAwake = false;
-            _audioSource = GetComponent<AudioSource>(); 
         }
     }
 }
