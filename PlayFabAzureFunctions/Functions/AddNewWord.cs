@@ -24,13 +24,12 @@ namespace PlayFabCloudScript.OnLogin
 
     public static class AddNewWord
     {
-        static string responseString = "";
         static string secretKey = "PlayFabSecretKey";
         static string titleID = "titleId";
         static string Id = "";
         static int numOfWordsToAdd = 0;
 
-        static int progress = 0;
+        static int progress;
         static int expectedListCount = 0;
         static readonly int numberOfKana = 92;
         static readonly int numberOfKanji = 1000;
@@ -39,11 +38,12 @@ namespace PlayFabCloudScript.OnLogin
 
         public static ILogger logger = null;
 
-        static List<string> listOfLogs = null;
+        static List<string> listOfLogs = new List<string>();
 
         [FunctionName("AddNewWords")]
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,ILogger log)
         {
+            listOfLogs.Clear();
 
             PlayFabSettings.staticSettings.TitleId = Environment.GetEnvironmentVariable(titleID);
             PlayFabSettings.staticSettings.DeveloperSecretKey = Environment.GetEnvironmentVariable(secretKey);
@@ -56,6 +56,7 @@ namespace PlayFabCloudScript.OnLogin
             
             try
             {
+                PlayFabHelper.LogInfo(context.FunctionArgument.ToString(), logger, listOfLogs);
                 args = JsonConvert.DeserializeObject<AddWordArgument>(context.FunctionArgument.ToString());
             }
             catch(Exception e)
@@ -70,33 +71,65 @@ namespace PlayFabCloudScript.OnLogin
             
 
             numOfWordsToAdd = args.NumToAdd;
-            progress = args.Progress;
+            try
+            {
+                progress = args.Progress;
+                PlayFabHelper.LogInfo($"Value of args.Progress: {args.Progress} ", logger, listOfLogs);
+                PlayFabHelper.LogInfo($"Value of Progress after At Arg grab: {progress} ", logger, listOfLogs);
+            }
+            catch(Exception e)
+            {
+                PlayFabHelper.CaptureException(e, logger);
+                PlayFabHelper.LogInfo(requestBody, logger, listOfLogs);
+            }
+            
+            if(progress == 0)
+            {
+                try
+                {
+                    dynamic prog = context.FunctionArgument["Progress"];
+                    PlayFabHelper.LogInfo($"Progress from context: {prog.ToString()}", logger, listOfLogs);
+                    progress = Int32.Parse(prog.ToString());
+                }
+                catch(Exception e)
+                {
+                    PlayFabHelper.CaptureException(e, logger);
+                }
+                
+            }
+            
             bool isKanjiStudy = args.IsKanjiStudyTopic;
 
         
-            logger.LogInformation("Calling GameServer/GetUserData for user: " + Id);
+            PlayFabHelper.LogInfo("Calling GameServer/GetUserData for user: " + Id, logger, listOfLogs);
 
 
             if(isKanjiStudy)
             {
+                PlayFabHelper.LogInfo("I hate CS", logger, listOfLogs);
                 wordSelection = TitleDataKeys.CommonWords;
                 expectedListCount = numberOfKanji;
             }
             else
             {
+                PlayFabHelper.LogInfo("supuer annoying to work with", logger, listOfLogs);
                 wordSelection = TitleDataKeys.Kana;
                 expectedListCount = numberOfKana;
             }
 
-            var getTitleDataTask = PlayFabHelper.GetTitleData(new List<string>{ wordSelection.ToString()});
+            PlayFabHelper.LogInfo("very black box", logger, listOfLogs);
+            var getTitleDataTask = PlayFabHelper.GetTitleData(new List<string>{ wordSelection.ToString()}, logger);
+            PlayFabHelper.LogInfo("Awaiting get title data", logger, listOfLogs);
             await getTitleDataTask;
+            PlayFabHelper.LogInfo("vgate that shitgasdfgfsd", logger, listOfLogs);
             var getUserDataTask = PlayFabHelper.GetUserData(Id, new List<string> {UserDataKey.LeitnerLevels.ToString()});
+            PlayFabHelper.LogInfo("Awaiting get user data", logger, listOfLogs);
             await getUserDataTask;
-            logger.LogInformation("Awaiting PF API calls");
+            PlayFabHelper.LogInfo("Awaiting PF API calls", logger, listOfLogs);
             //
             //
 
-            logger.LogInformation("Calling OnCompleteFor PF calls");
+            PlayFabHelper.LogInfo("Calling OnCompleteFor PF calls", logger, listOfLogs);
             OnComplete(getTitleDataTask.Result, getUserDataTask.Result);
 
             return new OkObjectResult(listOfLogs);
@@ -117,14 +150,18 @@ namespace PlayFabCloudScript.OnLogin
                     {
                         if(progress + numOfWordsToAdd < newWords.Count-1)
                         {
+                            PlayFabHelper.LogInfo($"Value of Progress BEFORE change: {progress} Value of WordsToAdd: {numOfWordsToAdd} vALUE of Word List Count: {newWords.Count}", logger, listOfLogs);
                             wordsToAdd = newWords.GetRange(progress, numOfWordsToAdd);
                             progress += numOfWordsToAdd;
+                            PlayFabHelper.LogInfo($"Value of Progress after change: {progress} Value of WordsToAdd: {numOfWordsToAdd}", logger, listOfLogs);
                         }
                         else if(progress < newWords.Count - 1)
                         {
+                            PlayFabHelper.LogInfo($"Value of Progress after change: {progress} Value of WordsToAdd: {numOfWordsToAdd}", logger, listOfLogs);
                             int maxIndex = newWords.Count - 1;
                             wordsToAdd = newWords.GetRange(progress, maxIndex - progress);
                             progress += maxIndex;
+                            PlayFabHelper.LogInfo($"Value of Progress after change: {progress} Value of WordsToAdd: {numOfWordsToAdd}", logger, listOfLogs);
                         }
                     }
                     else
@@ -145,6 +182,7 @@ namespace PlayFabCloudScript.OnLogin
                     string leitnerJson = userResult.Result.Data[UserDataKey.LeitnerLevels.ToString()].Value;
                     logger.LogInformation("GetUserDataResult: " + leitnerJson);
                     currentLeitnerDict = JsonConvert.DeserializeObject<Dictionary<string, List<JapaneseWord>>>(leitnerJson);
+                    PlayFabHelper.LogInfo($"Words being added: {HelperFunctions.PrintListContent(wordsToAdd)}", logger, listOfLogs);
                     currentLeitnerDict[ProficiencyLevels.Zero.ToString()].AddRange(wordsToAdd);
                 }
                 catch(Exception ex)
@@ -156,7 +194,7 @@ namespace PlayFabCloudScript.OnLogin
                 logger.LogInformation("Calling GameServer/UpdateUserData for user: " + Id);
                 string leitnerUpdate = JsonConvert.SerializeObject(currentLeitnerDict);
                 PlayFabHelper.LogInfo($"Adding Value: {progress} to User Key:{UserDataKey.WordsSeen.ToString()}", logger, listOfLogs);
-                PlayFabHelper.LogInfo($"Adding Value: {leitnerUpdate} to User Key:{UserDataKey.LeitnerLevels.ToString()}", logger, listOfLogs);
+                //PlayFabHelper.LogInfo($"Adding Value: {leitnerUpdate} to User Key:{UserDataKey.LeitnerLevels.ToString()}", logger, listOfLogs);
                 
                 var updateTask = PlayFabHelper.UpdateUserData(Id, new Dictionary<string, string>
                     {

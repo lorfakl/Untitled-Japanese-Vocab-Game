@@ -535,9 +535,10 @@ public class PlayFabController : MonoBehaviour
 
     static void FirstTimeLoginDataTransfer()
     {
+        HelperFunctions.Error("Currently Using TestWords change on like 554 too");
         GetTitleDataRequest rq = new GetTitleDataRequest
         {
-            Keys = new List<string> { TitleDataKeys.StarterWords.ToString() }
+            Keys = new List<string> { TitleDataKeys.TestWords.ToString() }
         };
 
         Playfab.GetTitleData(rq, OnSuccessfulFirstTimeTitleData, OnPlayFabError);
@@ -545,11 +546,12 @@ public class PlayFabController : MonoBehaviour
 
     static void OnSuccessfulFirstTimeTitleData(GetTitleDataResult result)
     {
+        
         Playfab.UpdateUserData(new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string> 
             {
-                {UserDataKey.SessionWords.ToString(), result.Data[TitleDataKeys.StarterWords.ToString()]},
+                {UserDataKey.SessionWords.ToString(), result.Data[TitleDataKeys.TestWords.ToString()]},
                 {UserDataKey.LeitnerLevels.ToString(), emptyLeitnerLevelData},
                 {UserDataKey.PrestigeLevels.ToString(), emptyProfeincyLevelData},
                 {UserDataKey.LoginCount.ToString(), "0" },

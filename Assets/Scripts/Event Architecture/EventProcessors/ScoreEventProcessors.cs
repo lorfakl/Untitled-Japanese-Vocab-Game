@@ -49,7 +49,7 @@ public class ScoreEventProcessors : MonoBehaviour
         float gravityMultipler = Mathf.Abs(9.81f / Physics.gravity.y);
         int score = (int)(baseScore * (averageFlightTime / correctAnswer.TimeInFlight) * gravityMultipler * comboCount);
         currentScore += score;
-        ScoreInterval = currentScore;
+        ScoreInterval += score;
         scoreText.text = currentScore.ToString();
         if(scoreUpdatedEvent != null)
         {

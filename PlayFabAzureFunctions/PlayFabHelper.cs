@@ -449,6 +449,18 @@ public static class PlayFabHelper
 
             return playfabHttpTask;
         }
+        
+        public static Task<PlayFabResult<GetTitleDataResult>> GetTitleData(List<string> keys, ILogger log)
+        {
+            log.LogInformation("Starting Request");
+            var playfabHttpTask = PlayFabServerAPI.GetTitleDataAsync( new GetTitleDataRequest 
+            {
+                Keys = keys
+            });
+            log.LogInformation("Request sent");
+            //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
+            return playfabHttpTask;
+        }
 
         public static Task<PlayFabResult<GetTitleDataResult>> GetTitleData(List<string> keys)
         {
