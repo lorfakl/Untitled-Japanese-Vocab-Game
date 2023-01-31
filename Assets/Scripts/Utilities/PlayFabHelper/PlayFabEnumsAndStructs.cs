@@ -33,10 +33,12 @@ namespace Utilities.PlayFabHelper
     public enum TitleDataKeys
     {
         StarterWords,
+        StarterKana,
         CommonWords,
-        TestWords,
         Kana,
-        StarterKana
+        TestWords,
+        TestKana,
+        
     }
 
     public enum StatisticName

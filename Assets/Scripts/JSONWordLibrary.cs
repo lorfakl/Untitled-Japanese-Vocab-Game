@@ -15,6 +15,13 @@ public class JSONWordLibrary : MonoBehaviour
 
     [SerializeField]
     GameEvent completedSessionListEvent;
+
+    [SerializeField]
+    TextAsset kanjiJsonFile;
+
+    [SerializeField]
+    TextAsset kanaJsonFile;
+
     #region Public Variables
     public static List<JapaneseWord> WordsToStudy
     {
@@ -31,7 +38,9 @@ public class JSONWordLibrary : MonoBehaviour
     }
 
     List<string> linesInFile;
-    static List<JapaneseWord> jsonWords;
+    static List<JapaneseWord> kanjiJsonObjs;
+    static List<JapaneseWord> kanaJsonObjs;
+    static List<JapaneseWord> workingWordBankList;
     static List<JapaneseWord> wordsToStudy;
     #endregion
 
@@ -56,19 +65,13 @@ public class JSONWordLibrary : MonoBehaviour
             HelperFunctions.Warning(wordTarget + " was not successful removed");
         }
         HelperFunctions.Log("Words left to study: " + WordsToStudy.Count);
+        HelperFunctions.LogListContent(wordsToStudy);
     }
 
     public static JapaneseWord GetNewTargetWord()
     {
         CurrentWord = GetNewRandomWord();
         return CurrentWord;
-    }
-
-    public static JapaneseWord GetNewRandomWord()
-    {
-        int randomIndex = Random.Range(0, WordsToStudy.Count);
-        JapaneseWord nextWord = WordsToStudy[randomIndex];
-        return nextWord;
     }
 
     public static List<JapaneseWord> GetWordBank()
@@ -95,7 +98,7 @@ public class JSONWordLibrary : MonoBehaviour
     void Awake()
     {
         LoadWordFromJSON();
-        //wordsToStudy = jsonWords.ToList();
+        //wordsToStudy = kanjiJsonObjs.ToList();
         //HelperFunctions.LogListContent(wordsToStudy);
     }
 
@@ -117,19 +120,35 @@ public class JSONWordLibrary : MonoBehaviour
 
     void LoadWordFromJSON()
     {
-        TextAsset jsonText = Resources.Load<TextAsset>("japaneseWords");
-        string jsonFile = jsonText.text;
-        jsonWords = JsonConvert.DeserializeObject<List<JapaneseWord>>(jsonFile);
-        //HelperFunctions.PrintListContent<JapaneseWord>(jsonWords);
+        string kanjiFile = kanjiJsonFile.text;
+        kanjiJsonObjs = JsonConvert.DeserializeObject<List<JapaneseWord>>(kanjiFile);
+        //HelperFunctions.PrintListContent<JapaneseWord>(kanjiJsonObjs);
+        string kanaFile = kanaJsonFile.text;
+        kanaJsonObjs = JsonConvert.DeserializeObject<List<JapaneseWord>>(kanaFile);
+
+        if(StaticUserSettings.IsKanjiStudyTopic())
+        {
+            workingWordBankList = kanjiJsonObjs;
+        }
+        else
+        {
+            workingWordBankList = kanaJsonObjs;
+        }
     }
 
     static JapaneseWord AddWordToWordBank(JapaneseWord currentWord)
     {
-        int randomIndex = Random.Range(0, jsonWords.Count);
-        JapaneseWord nextWord = jsonWords[randomIndex];
+        int randomIndex = Random.Range(0, workingWordBankList.Count);
+        JapaneseWord nextWord = workingWordBankList[randomIndex];
         return nextWord;
     }
 
+    private static JapaneseWord GetNewRandomWord()
+    {
+        int randomIndex = Random.Range(0, WordsToStudy.Count);
+        JapaneseWord nextWord = WordsToStudy[randomIndex];
+        return nextWord;
+    }
 
     void ReadTextFile()
     {
@@ -145,7 +164,7 @@ public class JSONWordLibrary : MonoBehaviour
 
     void ParseFileLines()
     {
-        jsonWords = new List<JapaneseWord>();
+        kanjiJsonObjs = new List<JapaneseWord>();
 
         foreach(string l in linesInFile)
         {
@@ -162,13 +181,13 @@ public class JSONWordLibrary : MonoBehaviour
 
             string jsonWordString = JsonConvert.SerializeObject(word);
             print(jsonWordString);
-            jsonWords.Add(word);
+            kanjiJsonObjs.Add(word);
         }
     }
 
     void WriteJsonFile()
     {
-        string allJson = JsonConvert.SerializeObject(jsonWords);
+        string allJson = JsonConvert.SerializeObject(kanjiJsonObjs);
         File.WriteAllText(Application.dataPath + "//kana.json", allJson);
     }
 

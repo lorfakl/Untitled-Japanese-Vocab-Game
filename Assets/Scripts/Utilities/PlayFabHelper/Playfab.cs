@@ -73,6 +73,13 @@ namespace Utilities.PlayFabHelper
             set;
         }
 
+        public static DateTime LastLogin
+        {
+            get;
+            private set;
+        }
+
+
         public static List<string> ActiveFileUploads
         {
             get;
@@ -196,11 +203,18 @@ namespace Utilities.PlayFabHelper
             
         }
 
-        public static void UpdateDisplayName(string name, Action<PlayFabError> onPlayFabError)
+        public static void UpdateDisplayName(string name, Action<PlayFabError> onPlayFabError, Action success = null)
         {
             PlayFabClientAPI.UpdateUserTitleDisplayName
                 (
-                 new UpdateUserTitleDisplayNameRequest { DisplayName = name }, (result) => { }, onPlayFabError
+                 new UpdateUserTitleDisplayNameRequest { DisplayName = name }, (result) => 
+                 { 
+                    if(success != null)
+                    {
+                        success();
+                    }
+                 }, 
+                 onPlayFabError
                 );
         }
 
@@ -499,10 +513,12 @@ namespace Utilities.PlayFabHelper
         {
             PlayFabID = result.PlayFabId;
             TitlePlayerID = result.EntityToken.Entity.Id;
+            DisplayName = result.InfoResultPayload.PlayerProfile.DisplayName;
             UserEntityKey = (UniversalEntityKey)result.EntityToken.Entity;
             SessionTicket = result.SessionTicket;
             EntityToken = result.EntityToken.EntityToken;
             TokenExpirationTime = (DateTime)result.EntityToken.TokenExpiration;
+            LastLogin = (DateTime)result.LastLoginTime;
             HelperFunctions.Log("Is this a new account: " + result.NewlyCreated);
             if (result.NewlyCreated)
             {

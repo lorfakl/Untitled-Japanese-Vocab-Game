@@ -8,13 +8,15 @@ using Utilities.PlayFabHelper;
 
 public enum TranslateDirection
 {
-    Kana2English = 7,
+    
     English2Kana = 14,
-    Kana2Kana = 3,
-    Kanji2Kana = 5,
+    English2Kanji = 12,
     Kana2Kanji = 10,
+    Kana2English = 7,
     Kanji2English = 6,
-    English2Kanji = 12
+    Kana2Kana = 3,
+    Kanji2Kana = 5
+
 }
 
 public enum MaxWordsPerSession

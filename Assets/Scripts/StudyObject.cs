@@ -51,6 +51,7 @@ public class StudyObject : MonoBehaviour
     [SerializeField]
     ParticleSystem studyObjectParticleSystem;
 
+    string _textToDisplay;
     #endregion
 
     #region Events
@@ -76,7 +77,9 @@ public class StudyObject : MonoBehaviour
     #region Unity Methods
     private void Awake()
     {
-        word = WordBankManager.WordBank.Dequeue();
+        var entry = WordBankManager.WordBank.Dequeue();
+        word = entry.Word;
+        _textToDisplay = entry.DisplayText;
         rb = GetComponent<Rigidbody>();
         text = GetComponent<TMP_Text>();
         selectionEnabled = true;
@@ -85,7 +88,7 @@ public class StudyObject : MonoBehaviour
 
     void Start()
     {
-        text.text = word.Kana;
+        text.text = _textToDisplay;
         TimeInFlight = 0;
     }
 

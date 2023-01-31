@@ -139,6 +139,7 @@ public class StudySystem : MonoBehaviour
         string leitnerJson = data[UserDataKey.LeitnerLevels.ToString()];
         string prestigeJson = data[UserDataKey.PrestigeLevels.ToString()];
         string nextSessionJson = data[UserDataKey.NextSession.ToString()];
+
         try
         {
             int parsedProgress = Int32.Parse(data[UserDataKey.WordsSeen.ToString()].ToString());

@@ -4,6 +4,13 @@ using UnityEngine;
 using TMPro;
 using Utilities;
 
+
+public struct WordBankObject
+{
+    public string DisplayText;
+    public JapaneseWord Word;
+}
+
 public class WordBankManager : MonoBehaviour
 {
 
@@ -14,12 +21,14 @@ public class WordBankManager : MonoBehaviour
         private set;
     }
 
-    public static Queue<JapaneseWord> WordBank = new Queue<JapaneseWord>();
+    public static Queue<WordBankObject> WordBank = new Queue<WordBankObject>();
     #endregion
 
     #region Private Variables
     [SerializeField]
     TMP_Text currentWordTarget;
+
+    WordBankSettingsInterpreter _settingsInterpreter;
     #endregion
 
     #region Events
@@ -41,7 +50,7 @@ public class WordBankManager : MonoBehaviour
     #region Unity Methods
     void Start()
     {
-        
+        _settingsInterpreter = new WordBankSettingsInterpreter(StaticUserSettings.GetTranslationDirection());
     }
 
     // Update is called once per frame
@@ -56,57 +65,161 @@ public class WordBankManager : MonoBehaviour
     void GetNewTargetWord()
     {
         NextWord = JSONWordLibrary.GetNewTargetWord();
-
-        if(NextWord.Kanji == "-1")
-        {
-            currentWordTarget.text = NextWord.English;
-        }
-        else
-        {
-            currentWordTarget.text = NextWord.Kanji;
-        }
-        
+        currentWordTarget.text = _settingsInterpreter.GetTargetText(NextWord); 
     }
 
     List<JapaneseWord> SendNewWordBank()
     {
         List<JapaneseWord> wordBank = JSONWordLibrary.GetWordBank();
-        string overlap = GetKanaOverlap(NextWord);
+        //string overlap = GetKanaOverlap(NextWord);
         foreach (var w in wordBank)
         {
             JapaneseWord word = new JapaneseWord(w);
-            if(word.Kanji != NextWord.Kanji)
+            /*if(word.Kanji != NextWord.Kanji)
             {
                 word.Kana += overlap;
-            }
-            WordBank.Enqueue(word);
+            }*/
+            WordBankObject entry = new WordBankObject
+            {
+                DisplayText = _settingsInterpreter.GetOptionText(word),
+                Word = word
+            };
+
+            WordBank.Enqueue(entry);
         }
         return wordBank;
     }
 
-    string GetKanaOverlap(JapaneseWord word)
+    
+
+    #endregion
+
+    private class WordBankSettingsInterpreter
     {
-        if(word.Kanji != "-1")
+        TranslationDirectionTransformer _wordTransformer;
+
+        public WordBankSettingsInterpreter(TranslateDirection currentSettings)
         {
-            string overlap = "";
-            //HelperFunctions.Log("Finding overlap for: " + word);
-            for (int i = word.Kanji.Length - 1; i > 0; i--)
+            _wordTransformer = new TranslationDirectionTransformer(currentSettings);
+        }
+
+        public string GetTargetText(JapaneseWord w)
+        {
+            _wordTransformer.SetDirection(w);
+            return _wordTransformer.Target;
+        }
+
+        public string GetOptionText(JapaneseWord w)
+        {
+            _wordTransformer.SetDirection(w);
+            if(10 % (int)_wordTransformer.Direction == 0)
             {
-                if (word.Kanji[i] == word.Kana[word.Kana.Length - 1])
+                
+            }
+            return _wordTransformer.Option;
+        }
+
+        private class TranslationDirectionTransformer
+        {
+            TranslateDirection _direction;
+            
+            public string Target { get; private set; }
+            public string Option { get; private set; }
+            public TranslateDirection Direction { get { return _direction; } }
+
+            public TranslationDirectionTransformer(TranslateDirection t)
+            {
+                _direction = t; 
+            }
+
+            public void SetDirection(JapaneseWord w)
+            {
+                switch(_direction)
                 {
-                    overlap += word.Kanji[i];
+                    case TranslateDirection.English2Kana:
+                        Target = w.English;
+                        Option = w.Kana;
+                        break;
+
+                    case TranslateDirection.English2Kanji:
+                        Target = w.English;
+                        Option = w.Kanji;
+                        break;
+
+                    case TranslateDirection.Kana2Kanji:
+                        Target = w.Kana;
+                        Option = w.Kanji;
+                        break;
+
+                    case TranslateDirection.Kana2English:
+                        Target = w.Kana;
+                        Option = w.English;
+                        break;
+
+                    case TranslateDirection.Kanji2English:
+                        Target = w.Kanji;
+                        Option = w.English;
+                        break;
+
+                    case TranslateDirection.Kanji2Kana:
+                        Target = w.Kanji;
+                        Option = w.Kana + GetKanaOverlap(w);
+                        break;
+
+                    case TranslateDirection.Kana2Kana:
+                        Target = w.Kana;
+                        Option = w.Kana;
+                        break;
+
+                    default:
+                        break;
+                }
+                ReplaceNullKanji(w);
+            }
+
+            void ReplaceNullKanji(JapaneseWord w)
+            {
+                string[] wordComponents = { w.Kanji, w.Kana, w.English };
+                if (Option == "-1" || Target == "-1")
+                {
+                    string replacement = "";
+                    for (int i = 0; i < wordComponents.Length; i++)
+                    {
+                        if (wordComponents[i] != Option && wordComponents[i] != Target)
+                        {
+                            replacement = wordComponents[i];
+                        }
+                    }
+
+                    if (Option == "-1")
+                        Option = replacement;
+                    if (Target == "-1")
+                        Target = replacement;
                 }
             }
 
-            HelperFunctions.Log("Kana Overlap: " + overlap);
-            return overlap;
-        }
-        else
-        {
-            return string.Empty;
-        }
-        
-    }
+            string GetKanaOverlap(JapaneseWord word)
+            {
+                if (word.Kanji == "-1")
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    string overlap = "";
+                    //HelperFunctions.Log("Finding overlap for: " + word);
+                    for (int i = word.Kanji.Length - 1; i > 0; i--)
+                    {
+                        if (word.Kanji[i] == word.Kana[word.Kana.Length - 1])
+                        {
+                            overlap += word.Kanji[i];
+                        }
+                    }
 
-    #endregion
+                    HelperFunctions.Log("Kana Overlap: " + overlap);
+                    return overlap;
+                }
+            }
+        }
+    }
 }

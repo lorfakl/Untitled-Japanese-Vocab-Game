@@ -209,9 +209,9 @@ TextureImporter:
       name: Japanese_UI-export_3
       rect:
         serializedVersion: 2
-        x: 1900
+        x: 1902
         y: 143
-        width: 841
+        width: 836
         height: 691
       alignment: 0
       pivot: {x: 0.5, y: 0.5}

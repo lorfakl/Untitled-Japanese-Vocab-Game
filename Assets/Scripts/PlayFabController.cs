@@ -71,9 +71,9 @@ public class PlayFabController : MonoBehaviour
     #endregion
 
     #region Public Methods
-    public static void DisplayName(string name)
+    public static void DisplayName(string name, Action success = null)
     {
-        Playfab.UpdateDisplayName(name,OnPlayFabError);
+        Playfab.UpdateDisplayName(name,OnPlayFabError, success);
     }
 
     public static void ArcadeLogin(string id, Action success)
@@ -535,23 +535,39 @@ public class PlayFabController : MonoBehaviour
 
     static void FirstTimeLoginDataTransfer()
     {
-        HelperFunctions.Error("Currently Using TestWords change on like 554 too");
+        HelperFunctions.Error("Currently Using TestWords on 541 and TestKana on 547");
+        string key = "";
+        
+        if(StaticUserSettings.IsKanjiStudyTopic())
+        {
+            key = TitleDataKeys.StarterWords.ToString();
+        }
+        else
+        {
+            key = TitleDataKeys.StarterKana.ToString();
+        }
+
         GetTitleDataRequest rq = new GetTitleDataRequest
         {
-            Keys = new List<string> { TitleDataKeys.TestWords.ToString() }
+            Keys = new List<string> { key }
         };
 
-        Playfab.GetTitleData(rq, OnSuccessfulFirstTimeTitleData, OnPlayFabError);
+        Playfab.GetTitleData(rq, 
+            (result)=>
+            {
+                OnSuccessfulFirstTimeTitleData(result, key); 
+            }, 
+            OnPlayFabError);
     }
 
-    static void OnSuccessfulFirstTimeTitleData(GetTitleDataResult result)
+    static void OnSuccessfulFirstTimeTitleData(GetTitleDataResult result, string key)
     {
         
         Playfab.UpdateUserData(new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string> 
             {
-                {UserDataKey.SessionWords.ToString(), result.Data[TitleDataKeys.TestWords.ToString()]},
+                {UserDataKey.SessionWords.ToString(), result.Data[key]},
                 {UserDataKey.LeitnerLevels.ToString(), emptyLeitnerLevelData},
                 {UserDataKey.PrestigeLevels.ToString(), emptyProfeincyLevelData},
                 {UserDataKey.LoginCount.ToString(), "0" },

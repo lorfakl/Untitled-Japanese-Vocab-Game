@@ -58,6 +58,7 @@ public class SettingsDisplayController : MonoBehaviour
     Vector3 _topArrowSelectLocalPosition;
     ArrowSelector _topSelector;
     ArrowSelector _otherSelector;
+
     (ArrowSelector first, ArrowSelector second) activeSelectors;
     // Start is called before the first frame update
     void Start()
@@ -76,16 +77,16 @@ public class SettingsDisplayController : MonoBehaviour
         }
         _swapBtn.onClick.AddListener(SwapSelectors);
         HelperFunctions.Log("Position of Top control " + _topArrowSelectLocalPosition);
-        
+        _studyTopicSlider.OnValueSelectedChanged.AddListener(UpdateViewOnTopicChange);
+
     }
 
     private void Update()
     {
-        if(!_isUIDriven)
+        if(!_isUIDriven) //this has to be done in Update for some forgotten reason. I believe it was related to Tweening
         {
             _isUIDriven = true;
             DriveSettingsDisplay(SettingsPageManager.CurrentSettings);
-
         }
     }
     private void InitializeUserSettings()
@@ -101,7 +102,6 @@ public class SettingsDisplayController : MonoBehaviour
         _studyTopicSlider.DriveSlider(currentSettings.StudyTopic.ToString());
         if(currentSettings.StudyTopic == StudyTopic.Kanji)
         {
-
             _kanaAndEnglish.gameObject.SetActive(false);
             _kanaAndKana.gameObject.SetActive(false);
             SetUpSelectorTuple(_kanjiAndEnglish, _kanaAndKanji);
@@ -170,5 +170,29 @@ public class SettingsDisplayController : MonoBehaviour
             activeSelectors.first.gameObject.SetActive(true);
             activeSelectors.second.gameObject.SetActive(false);
         }
+    }
+
+    private void UpdateViewOnTopicChange(string topic)
+    {
+        if (SettingsPageManager.ModifiedSettings.StudyTopic == StudyTopic.Kanji)
+        {
+            _kanaAndEnglish.gameObject.SetActive(false);
+            _kanaAndKana.gameObject.SetActive(false);
+            SetUpSelectorTuple(_kanjiAndEnglish, _kanaAndKanji);
+            _kanaAndKanji.gameObject.SetActive(true);
+            _kanjiAndEnglish.gameObject.SetActive(false);
+            SettingsPageManager.ModifiedSettings.TranslationDirection = TranslateDirection.Kanji2Kana;
+        }
+        else
+        {
+            _kanaAndKanji.gameObject.SetActive(false);
+            _kanjiAndEnglish.gameObject.SetActive(false);
+            _kanaAndKana.gameObject.SetActive(false);
+            SetUpSelectorTuple(_kanaAndEnglish, _kanaAndKana);
+            _kanaAndEnglish.gameObject.SetActive(true); 
+            SettingsPageManager.ModifiedSettings.TranslationDirection = TranslateDirection.Kana2English;
+        }
+
+        //ConfigureSelectors(SettingsPageManager.ModifiedSettings);
     }
 }

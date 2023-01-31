@@ -91,7 +91,6 @@ public class LaunchManager : MonoBehaviour
                 PrepNextLaunch(currentChunks[i].center);
             }
         }
-        
     }
 
     void PrepNextLaunch(float yPos)

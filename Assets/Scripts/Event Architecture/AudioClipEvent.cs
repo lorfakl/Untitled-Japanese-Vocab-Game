@@ -8,10 +8,14 @@ namespace Utilities.Events
     [RequireComponent(typeof(AudioSource))]
     public class AudioClipEvent : MonoBehaviour
     {
+        [SerializeField]
+        AudioClip clip;
+
         AudioSource _audioSource;
 
         public void PlayAudioClip()
         {
+            _audioSource.clip = clip;   
             _audioSource.PlayOneShot(_audioSource.clip);
         }
 

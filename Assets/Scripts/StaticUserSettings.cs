@@ -9,6 +9,8 @@ public static class StaticUserSettings
 {
     static UserSettingsData userSettingsData;
 
+    public static UserSettingsData Settings { get { return userSettingsData; } }
+
     public static bool IsKanjiStudyTopic()
     {
         LoadSettings();
@@ -20,6 +22,12 @@ public static class StaticUserSettings
         {
             return false;
         }
+    }
+
+    public static TranslateDirection GetTranslationDirection()
+    {
+        LoadSettings();
+        return userSettingsData.TranslationDirection;
     }
 
     public static int GetNewWords()
@@ -36,25 +44,23 @@ public static class StaticUserSettings
 
     static void LoadSettings()
     {
-        if(userSettingsData == null)
+        
+        if (CurrentAuthedPlayer.UserSettings == null)
         {
-            if (CurrentAuthedPlayer.UserSettings == null)
+            var settings = SaveSystem.Load<UserSettingsData>(DataCategory.Settings);
+            if (settings != default)
             {
-                var settings = SaveSystem.Load<UserSettingsData>(DataCategory.Settings);
-                if (settings != default)
-                {
-                    userSettingsData = settings;
-                }
-                else
-                {
-                    userSettingsData = UserSettingsData.CreateDefaultSettings();
-                    CurrentAuthedPlayer.UserSettings = userSettingsData;
-                }
+                userSettingsData = settings;
             }
             else
             {
-                userSettingsData = CurrentAuthedPlayer.UserSettings;
+                userSettingsData = UserSettingsData.CreateDefaultSettings();
+                CurrentAuthedPlayer.UserSettings = userSettingsData;
             }
+        }
+        else
+        {
+            userSettingsData = CurrentAuthedPlayer.UserSettings;
         }
 
         HelperFunctions.Log("Loaded Settings: " + userSettingsData);

@@ -2742,6 +2742,7 @@ GameObject:
   - component: {fileID: 1419740497}
   - component: {fileID: 1419740495}
   - component: {fileID: 1419740491}
+  - component: {fileID: 1419740500}
   - component: {fileID: 1419740489}
   - component: {fileID: 1419740494}
   - component: {fileID: 1419740493}
@@ -2775,7 +2776,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1419740486}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 467.4953, y: 537.1981, z: -168.82568}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2841,6 +2842,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1419740500}
+        m_TargetAssemblyTypeName: Utilities.Events.AudioClipEvent, Assembly-CSharp
+        m_MethodName: PlayAudioClip
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   ResponseWithData:
     m_PersistentCalls:
       m_Calls: []
@@ -2874,7 +2887,7 @@ MonoBehaviour:
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1419740498}
         m_TargetAssemblyTypeName: Utilities.Events.AudioClipEvent, Assembly-CSharp
         m_MethodName: PlayAudioClip
         m_Mode: 1
@@ -2961,6 +2974,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   removeWordFromSessionEvent: {fileID: 11400000, guid: ab3d91d3102582e48ae8208157b26e38, type: 2}
   completedSessionListEvent: {fileID: 11400000, guid: 5cdc1f70fd1a3e44e8c24841cb0e6fa8, type: 2}
+  kanjiJsonFile: {fileID: 4900000, guid: d2c9078e608a17c4aad1e7c1a562b7ab, type: 3}
+  kanaJsonFile: {fileID: 4900000, guid: 935a9d6df890fc743b159b8ec002b32a, type: 3}
 --- !u!114 &1419740498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2973,6 +2988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d5d16b633e88ee4789e9396d451baf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: aae37ddeaa1ccb04397a5cb66bf6482d, type: 3}
 --- !u!82 &1419740499
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2983,7 +2999,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: aae37ddeaa1ccb04397a5cb66bf6482d, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3069,6 +3085,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1419740500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419740486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5d16b633e88ee4789e9396d451baf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: bbb712fd9bc862f44a23f548ffa449c8, type: 3}
 --- !u!1 &1443003310
 GameObject:
   m_ObjectHideFlags: 0
