@@ -213,7 +213,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7985547454227901500, guid: f280af3c18d707241968d117f85b348b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7985547454227901501, guid: f280af3c18d707241968d117f85b348b, type: 3}
       propertyPath: m_Pivot.x
@@ -301,11 +301,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7985547455218396156, guid: f280af3c18d707241968d117f85b348b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7985547455247946185, guid: f280af3c18d707241968d117f85b348b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
@@ -581,7 +581,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 259.5, y: 412.9}
+  m_AnchoredPosition: {x: 328, y: 599}
   m_SizeDelta: {x: 350, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &368355311
@@ -660,7 +660,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -226739078, guid: d3c534359dca5a54abbda7a8ebcfeb44, type: 3}
+  m_Sprite: {fileID: -1126606543, guid: c60c829801208ee49996c38a49f6c6f6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2581,7 +2581,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -278.3, y: 412.9}
+  m_AnchoredPosition: {x: -351, y: 599}
   m_SizeDelta: {x: 428.7, y: 217.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1354849271
@@ -2660,7 +2660,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2074188221, guid: d3c534359dca5a54abbda7a8ebcfeb44, type: 3}
+  m_Sprite: {fileID: -1868057117, guid: c60c829801208ee49996c38a49f6c6f6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2899,7 +2899,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2106166302
 RectTransform:
   m_ObjectHideFlags: 0
