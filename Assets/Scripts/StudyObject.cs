@@ -47,6 +47,11 @@ public class StudyObject : MonoBehaviour
     private TMP_Text text;
     private List<Vector3> positions = new List<Vector3>();
     private bool selectionEnabled;
+
+    [SerializeField]
+    ParticleSystem studyObjectParticleSystem;
+
+    string _textToDisplay;
     #endregion
 
     #region Events
@@ -61,12 +66,20 @@ public class StudyObject : MonoBehaviour
     {
         selectionEnabled = false;
     }
+
+    public void MakeInvisible()
+    {
+        text.enabled = false;
+        studyObjectParticleSystem.Play();
+    }
     #endregion
 
     #region Unity Methods
     private void Awake()
     {
-        word = WordBankManager.WordBank.Dequeue();
+        var entry = WordBankManager.WordBank.Dequeue();
+        word = entry.Word;
+        _textToDisplay = entry.DisplayText;
         rb = GetComponent<Rigidbody>();
         text = GetComponent<TMP_Text>();
         selectionEnabled = true;
@@ -75,14 +88,14 @@ public class StudyObject : MonoBehaviour
 
     void Start()
     {
-        text.text = word.Kana;
+        text.text = _textToDisplay;
         TimeInFlight = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void FixedUpdate()

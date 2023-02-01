@@ -49,12 +49,6 @@ public class LaunchManager : MonoBehaviour
     List<chunkRangePoints> currentChunks = new List<chunkRangePoints>();
     #endregion
 
-    #region Events
-    #endregion
-
-    #region Unity Events
-    #endregion
-
     #region Public Methods
     /// <summary>
     /// Next Word Pressed Game Event Scriptable Object
@@ -63,6 +57,7 @@ public class LaunchManager : MonoBehaviour
     public void NextWordButtonClickedEvent()
     {
         BeginLaunchSequence();
+        HelperFunctions.Log("Best unity tip");
     }
     #endregion
 
@@ -96,7 +91,6 @@ public class LaunchManager : MonoBehaviour
                 PrepNextLaunch(currentChunks[i].center);
             }
         }
-        
     }
 
     void PrepNextLaunch(float yPos)

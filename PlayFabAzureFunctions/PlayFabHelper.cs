@@ -29,7 +29,8 @@ public enum UserDataKey
 public enum TitleDataKeys
 {
     StarterWords,
-    CommonWords
+    CommonWords,
+    Kana
 }
 
 public enum StatisticName
@@ -364,6 +365,18 @@ public class ModifyTagParameter
     public List<string> TagNames { get; set; }
 }
 
+public class AddWordArgument
+{
+    [JsonProperty("NumToAdd")]
+    public int NumToAdd { get; set; }
+
+    [JsonProperty("Progess")]
+    public int Progress { get; set; }
+
+    [JsonProperty("IsKanjiStudyTopic")]
+    public bool IsKanjiStudyTopic { get; set; }
+}
+
 public static class PlayFabHelper
     {
         #region PlayFab Custom Event Name Enums
@@ -434,6 +447,18 @@ public static class PlayFabHelper
                 Keys = keys
             });
 
+            return playfabHttpTask;
+        }
+        
+        public static Task<PlayFabResult<GetTitleDataResult>> GetTitleData(List<string> keys, ILogger log)
+        {
+            log.LogInformation("Starting Request");
+            var playfabHttpTask = PlayFabServerAPI.GetTitleDataAsync( new GetTitleDataRequest 
+            {
+                Keys = keys
+            });
+            log.LogInformation("Request sent");
+            //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
             return playfabHttpTask;
         }
 

@@ -25,7 +25,6 @@ namespace PlayFabCloudScript.OnLogin
 
     public static class AddGroupMembers
     {
-        static string responseString = "";
         static string secretKey = "PlayFabSecretKey";
         static string titleID = "titleId";
         static string Id = "";

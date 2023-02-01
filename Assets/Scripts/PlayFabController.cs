@@ -41,6 +41,9 @@ public class PlayFabController : MonoBehaviour
     [SerializeField]
     LocalPlayFabData localData;
 
+    [SerializeField]
+    string customID;
+
     static string emptyLeitnerLevelData = @"{'Zero':[],'One':[],'Two':[],'Three':[],'Four':[],'Five':[]}";
     static string emptyProfeincyLevelData = @"{'One': [],'Two': [],'Three': [],'Four': [],'Five': [],'Six': [],'Seven': [],'Eight': []}";
     static TimeSpan twelveHours = new TimeSpan(12, 0, 0);
@@ -68,9 +71,9 @@ public class PlayFabController : MonoBehaviour
     #endregion
 
     #region Public Methods
-    public static void DisplayName(string name)
+    public static void DisplayName(string name, Action success = null)
     {
-        Playfab.UpdateDisplayName(name,OnPlayFabError);
+        Playfab.UpdateDisplayName(name,OnPlayFabError, success);
     }
 
     public static void ArcadeLogin(string id, Action success)
@@ -432,6 +435,10 @@ public class PlayFabController : MonoBehaviour
         {
             Playfab.Login(OnSuccessfulLogin, OnPlayFabError, useRandomAccounts);
         }
+        else if(!string.IsNullOrEmpty(customID))
+        {
+            Playfab.Login(customID, OnSuccessfulLogin, OnPlayFabError);
+        }
         else
         {
             Playfab.Login(OnSuccessfulLogin, OnPlayFabError);
@@ -490,11 +497,11 @@ public class PlayFabController : MonoBehaviour
         string l = "Detla Hours: " + deltaTime.Hours + "\n" + "Detla Minutes: " + deltaTime.Minutes + "\n" + "Detla Seconds: " + deltaTime.Seconds;
         HelperFunctions.Log(l);
         
-        if(deltaTime > twelveHours)
+        if(deltaTime < twelveHours)
         {
             Playfab.ExecuteFunction(new ExecuteFunctionRequest
             {
-                FunctionName = "SetLoginStatus",
+                FunctionName = CSFunctionNames.SetLoginStatus.ToString(),
                 GeneratePlayStreamEvent = true
             },
             (result) =>
@@ -523,29 +530,44 @@ public class PlayFabController : MonoBehaviour
                 HelperFunctions.Error("A CurrentUser was not created via file or on Login. There's an issue here");
             }
         }
-        
-
-
     }
 
 
     static void FirstTimeLoginDataTransfer()
     {
+        HelperFunctions.Error("Currently Using TestWords on 541 and TestKana on 547");
+        string key = "";
+        
+        if(StaticUserSettings.IsKanjiStudyTopic())
+        {
+            key = TitleDataKeys.StarterWords.ToString();
+        }
+        else
+        {
+            key = TitleDataKeys.StarterKana.ToString();
+        }
+
         GetTitleDataRequest rq = new GetTitleDataRequest
         {
-            Keys = new List<string> { TitleDataKeys.StarterWords.ToString() }
+            Keys = new List<string> { key }
         };
 
-        Playfab.GetTitleData(rq, OnSuccessfulFirstTimeTitleData, OnPlayFabError);
+        Playfab.GetTitleData(rq, 
+            (result)=>
+            {
+                OnSuccessfulFirstTimeTitleData(result, key); 
+            }, 
+            OnPlayFabError);
     }
 
-    static void OnSuccessfulFirstTimeTitleData(GetTitleDataResult result)
+    static void OnSuccessfulFirstTimeTitleData(GetTitleDataResult result, string key)
     {
+        
         Playfab.UpdateUserData(new UpdateUserDataRequest
         {
             Data = new Dictionary<string, string> 
             {
-                {UserDataKey.SessionWords.ToString(), result.Data[TitleDataKeys.StarterWords.ToString()]},
+                {UserDataKey.SessionWords.ToString(), result.Data[key]},
                 {UserDataKey.LeitnerLevels.ToString(), emptyLeitnerLevelData},
                 {UserDataKey.PrestigeLevels.ToString(), emptyProfeincyLevelData},
                 {UserDataKey.LoginCount.ToString(), "0" },

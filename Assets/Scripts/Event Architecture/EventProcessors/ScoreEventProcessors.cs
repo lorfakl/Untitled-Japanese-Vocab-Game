@@ -24,6 +24,8 @@ public class ScoreEventProcessors : MonoBehaviour
 
         }
     }
+
+    public static int ScoreInterval { get; private set; }
     #endregion
 
     #region Private Variables
@@ -47,11 +49,17 @@ public class ScoreEventProcessors : MonoBehaviour
         float gravityMultipler = Mathf.Abs(9.81f / Physics.gravity.y);
         int score = (int)(baseScore * (averageFlightTime / correctAnswer.TimeInFlight) * gravityMultipler * comboCount);
         currentScore += score;
+        ScoreInterval += score;
         scoreText.text = currentScore.ToString();
         if(scoreUpdatedEvent != null)
         {
             scoreUpdatedEvent.Raise();
         }
+    }
+
+    public void ResetScoreIntervalEvent_Handler()
+    {
+        ScoreInterval = 0;
     }
 
     public void IncorrectAnswerEventHandlerRemoveCombo()

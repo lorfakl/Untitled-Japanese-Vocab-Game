@@ -73,6 +73,13 @@ namespace Utilities.PlayFabHelper
             set;
         }
 
+        public static DateTime LastLogin
+        {
+            get;
+            private set;
+        }
+
+
         public static List<string> ActiveFileUploads
         {
             get;
@@ -142,6 +149,29 @@ namespace Utilities.PlayFabHelper
             
         }
 
+        public static void Login(string customID, Action<LoginResult> success, Action<PlayFabError> failure)
+        {
+            PlayFabClientAPI.LoginWithCustomID(new LoginWithCustomIDRequest()
+            {
+                TitleId = PlayFabSettings.TitleId,
+                CustomId = customID,
+                CreateAccount = true,
+                InfoRequestParameters = GetInfoRequest()
+
+            },
+            (result) =>
+            {
+                SetAuthenticatedUserDefaults(result);
+                success(result);
+
+            },
+            (error) =>
+            {
+                HandlePlayFabError(error);
+                failure(error);
+            });
+        }
+
         public static void Login(Action<LoginResult> success, Action<PlayFabError> failure)
         {
             Login(success, failure, false);
@@ -173,13 +203,21 @@ namespace Utilities.PlayFabHelper
             
         }
 
-        public static void UpdateDisplayName(string name, Action<PlayFabError> onPlayFabError)
+        public static void UpdateDisplayName(string name, Action<PlayFabError> onPlayFabError, Action success = null)
         {
             PlayFabClientAPI.UpdateUserTitleDisplayName
                 (
-                 new UpdateUserTitleDisplayNameRequest { DisplayName = name }, (result) => { }, onPlayFabError
+                 new UpdateUserTitleDisplayNameRequest { DisplayName = name }, (result) => 
+                 { 
+                    if(success != null)
+                    {
+                        success();
+                    }
+                 }, 
+                 onPlayFabError
                 );
         }
+
         public static void ExecuteFunction(ExecuteFunctionRequest rq, Action<ExecuteFunctionResult> success, Action<PlayFabError> failure)
         {
             //var cacheResult = CacheSystem.GetResponse(rq);
@@ -475,10 +513,12 @@ namespace Utilities.PlayFabHelper
         {
             PlayFabID = result.PlayFabId;
             TitlePlayerID = result.EntityToken.Entity.Id;
+            DisplayName = result.InfoResultPayload.PlayerProfile.DisplayName;
             UserEntityKey = (UniversalEntityKey)result.EntityToken.Entity;
             SessionTicket = result.SessionTicket;
             EntityToken = result.EntityToken.EntityToken;
             TokenExpirationTime = (DateTime)result.EntityToken.TokenExpiration;
+            LastLogin = (DateTime)result.LastLoginTime;
             HelperFunctions.Log("Is this a new account: " + result.NewlyCreated);
             if (result.NewlyCreated)
             {
