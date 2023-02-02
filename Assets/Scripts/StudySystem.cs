@@ -40,6 +40,7 @@ public class StudySystem : MonoBehaviour
     Dictionary<ProficiencyLevels, List<JapaneseWord>> sessionWordLeitnerLevel = new Dictionary<ProficiencyLevels, List<JapaneseWord>>();
     Dictionary<ProficiencyLevels, List<JapaneseWord>> sessionWordPrestigeLevel = new Dictionary<ProficiencyLevels, List<JapaneseWord>>();
     int studyProgress = 0;
+    bool shouldNewWordsBeAdded = false;
 
     public Dictionary<ProficiencyLevels, List<JapaneseWord>> SessionWordLeitnerLevels
     {
@@ -49,8 +50,9 @@ public class StudySystem : MonoBehaviour
     #region Public Methods
     public void OnCompletedSessionWords_Handler() //Save Progress to PlayFab
     {
+        shouldNewWordsBeAdded = true;
         SavePlayerDataToPlayFab();
-        HelperFunctions.LoadScene(ProjectSpecificGlobals.SceneNames.MenuScene);
+        //HelperFunctions.LoadScene(ProjectSpecificGlobals.SceneNames.MenuScene);
     }
 
     public void OnRemovedFromSessionList_Handler()
@@ -92,7 +94,10 @@ public class StudySystem : MonoBehaviour
 
     private void OnDisable()
     {
-        AddNewWords();
+        if(shouldNewWordsBeAdded)
+        {
+            AddNewWords();
+        }
     }
 
     #endregion
@@ -160,10 +165,10 @@ public class StudySystem : MonoBehaviour
         HelperFunctions.LogListContent(sessionWords);
         JSONWordLibrary.SetWordsToStudy(sessionWords.ToList());
 
-        foreach(var key in sessionWordLeitnerLevel.Keys)
+        /*foreach(var key in sessionWordLeitnerLevel.Keys)
         {
             sessionWordLeitnerLevel[key].Clear();
-        }
+        }*/
     }
 
     void SavePlayerDataToPlayFab()
@@ -200,12 +205,12 @@ public class StudySystem : MonoBehaviour
     void AddWordToLeitnerDict(JapaneseWord word)
     {
         //remove from previous level list
-        //sessionWordLeitnerLevel[(ProficiencyLevels)word.PreviousLeitnerLevel].Remove(word);
+        sessionWordLeitnerLevel[(ProficiencyLevels)word.PreviousLeitnerLevel].Remove(word);
         sessionWordLeitnerLevel[(ProficiencyLevels)word.LeitnerLevel].Add(word);
-        HelperFunctions.Log("Previous Lienter Level: " + word.PreviousLeitnerLevel);
+        /*HelperFunctions.Log("Previous Lienter Level: " + word.PreviousLeitnerLevel);
         HelperFunctions.Log("Current Lienter Level: " + word.LeitnerLevel);
         HelperFunctions.Log(sessionWordLeitnerLevel.Count);
-        HelperFunctions.Log(sessionWordLeitnerLevel[(ProficiencyLevels)word.LeitnerLevel].Count);
+        HelperFunctions.Log(sessionWordLeitnerLevel[(ProficiencyLevels)word.LeitnerLevel].Count);*/
         //HelperFunctions.LogListContent(sessionWordLeitnerLevel.ToList());
 
     }

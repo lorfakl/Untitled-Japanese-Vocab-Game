@@ -16,6 +16,7 @@ using PlayFab.Internal;
 using Utilities.SaveOperations;
 using System.Text;
 using System.Threading.Tasks;
+using PlayFab.EventsModels;
 
 namespace Utilities.PlayFabHelper
 {
@@ -79,6 +80,11 @@ namespace Utilities.PlayFabHelper
             private set;
         }
 
+        public static DateTime CurrentLoginTime
+        {
+            get;
+            private set;
+        }
 
         public static List<string> ActiveFileUploads
         {
@@ -470,7 +476,18 @@ namespace Utilities.PlayFabHelper
                 success(items);
             }, error);
         }
-        //public static void ()
+        
+        public static void WriteTelemetryEvents(WriteEventsRequest rq, Action<PlayFabError> error, Action success = null)
+        {
+            PlayFabEventsAPI.WriteTelemetryEvents(rq,
+                (result) =>
+                {
+                    if (success != null)
+                    {
+                        success();
+                    }
+                }, error);
+        }
         //public static void ()
         //public static void ()
         //public static void ()
@@ -513,12 +530,11 @@ namespace Utilities.PlayFabHelper
         {
             PlayFabID = result.PlayFabId;
             TitlePlayerID = result.EntityToken.Entity.Id;
-            DisplayName = result.InfoResultPayload.PlayerProfile.DisplayName;
+            CurrentLoginTime = DateTime.UtcNow;
             UserEntityKey = (UniversalEntityKey)result.EntityToken.Entity;
             SessionTicket = result.SessionTicket;
             EntityToken = result.EntityToken.EntityToken;
             TokenExpirationTime = (DateTime)result.EntityToken.TokenExpiration;
-            LastLogin = (DateTime)result.LastLoginTime;
             HelperFunctions.Log("Is this a new account: " + result.NewlyCreated);
             if (result.NewlyCreated)
             {
@@ -527,6 +543,12 @@ namespace Utilities.PlayFabHelper
             else
             {
                 WasUserJustCreated = false;
+                LastLogin = (DateTime)result.LastLoginTime;
+                if (result.InfoResultPayload.PlayerProfile.DisplayName != null)
+                {
+                    DisplayName = result.InfoResultPayload.PlayerProfile.DisplayName;
+                }
+                    
             }
             
             BasicProfile b = new BasicProfile(result.InfoResultPayload.PlayerProfile);

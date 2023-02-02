@@ -57,7 +57,6 @@ public class LaunchManager : MonoBehaviour
     public void NextWordButtonClickedEvent()
     {
         BeginLaunchSequence();
-        HelperFunctions.Log("Best unity tip");
     }
     #endregion
 

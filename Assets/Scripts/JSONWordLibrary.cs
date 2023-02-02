@@ -44,20 +44,26 @@ public class JSONWordLibrary : MonoBehaviour
     static List<JapaneseWord> wordsToStudy;
     #endregion
 
-
+    List<JapaneseWord> removedWords = new List<JapaneseWord>();
+    static Dictionary<JapaneseWord, bool> wasAnsweredDict = new Dictionary<JapaneseWord, bool>();
     #region Public Methods
 
     public void OnCorrectAnswerEvent_Handler(object s)
     {
         StudyObject studyObject = (StudyObject)s;
         JapaneseWord wordTarget = JSONWordLibrary.WordsToStudy.Find(word => word.Kanji == studyObject.Word.Kanji);
+        wasAnsweredDict.Add(wordTarget, true);
+        HelperFunctions.Log($"Correctly Translated: {studyObject.Word}");
         bool wasRemoved = WordsToStudy.Remove(wordTarget);
         if (wasRemoved)
         {
             removeWordFromSessionEvent.Raise(WordsToStudy.Count);
+            removedWords.Add(wordTarget);
+
             if(WordsToStudy.Count == 0)
             {
                 completedSessionListEvent.Raise();
+
             }
         }
         else
@@ -90,6 +96,7 @@ public class JSONWordLibrary : MonoBehaviour
     public static void SetWordsToStudy(List<JapaneseWord> b)
     {
         WordsToStudy = b;
+        RemoveCopies(WordsToStudy);
     }
 
     #endregion
@@ -147,7 +154,31 @@ public class JSONWordLibrary : MonoBehaviour
     {
         int randomIndex = Random.Range(0, WordsToStudy.Count);
         JapaneseWord nextWord = WordsToStudy[randomIndex];
+        if(wasAnsweredDict.ContainsKey(nextWord))
+        {
+            throw new System.Exception($"{nextWord} was not properly removed kinda sucks");
+        }
         return nextWord;
+    }
+
+    private static void RemoveCopies(List<JapaneseWord> words)
+    {
+        List<JapaneseWord> copies = new List<JapaneseWord>();
+        for(int i = 0; i < words.Count; i++)
+        {
+            for(int j = i+1; j < words.Count; j++)
+            {
+                if(words[j].Kana == words[i].Kana)
+                {
+                    HelperFunctions.Log("Found some copies");
+                    copies.Add(words[i]);
+                    HelperFunctions.LogListContent(copies);
+                }
+            }
+        }
+
+        HelperFunctions.Log("Found some copies");
+        HelperFunctions.LogListContent(copies);
     }
 
     void ReadTextFile()

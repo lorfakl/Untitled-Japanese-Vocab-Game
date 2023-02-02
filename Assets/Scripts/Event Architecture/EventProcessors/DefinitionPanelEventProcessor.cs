@@ -23,6 +23,20 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
     #endregion
 
     #region Unity Events
+    public void OnSessionComplete(object r)
+    {
+        definitionText.text = string.Empty;
+        StudyRecord studyRecord = r as StudyRecord;
+        var reportDict = studyRecord.GenerateRecordReport();
+        foreach(var key in reportDict.Keys)
+        {
+            definitionText.text += reportDict[key] + "\n";
+        }
+
+        definitionText.text += "Total Score Gained: " + ScoreEventProcessors.Score + "\n";
+
+        
+    }
     public void StudyObjectClickedEventHandler()
     {
         definitionText.text = WordBankManager.NextWord.PrintAnswer();

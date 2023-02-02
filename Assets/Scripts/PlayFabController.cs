@@ -14,6 +14,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
+using PlayFab.EventsModels;
 
 public delegate void IsAuthenticatedNotification();
 
@@ -389,7 +390,18 @@ public class PlayFabController : MonoBehaviour
     {
         Playfab.GetCatalogItems(success, OnPlayFabError);
     }
-    //public static void ()
+    
+    public static void WriteTelemetryEvents(List<TelemetryWrapper> events, Action success = null)
+    {
+        List<EventContents> eventContents = new List<EventContents>();
+        foreach(var e in events)
+        {
+            eventContents.Add(e);
+        }
+
+        WriteEventsRequest rq = new WriteEventsRequest{ Events = eventContents };
+        Playfab.WriteTelemetryEvents(rq, OnPlayFabError, success);
+    }
     //public static void ()
     //public static void ()
     //public static void ()

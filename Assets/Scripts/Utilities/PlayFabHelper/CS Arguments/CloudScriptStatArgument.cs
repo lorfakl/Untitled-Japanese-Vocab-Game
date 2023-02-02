@@ -31,7 +31,7 @@ namespace Utilities.PlayFabHelper
         private string EncodeStatisticValue(int value)
         {
 
-            HelperFunctions.Log("Convert to Byte Array: ");
+            //HelperFunctions.Log("Convert to Byte Array: ");
             byte[] intBytes = BitConverter.GetBytes(value);
             string byteString = "";
             foreach (byte b in intBytes)

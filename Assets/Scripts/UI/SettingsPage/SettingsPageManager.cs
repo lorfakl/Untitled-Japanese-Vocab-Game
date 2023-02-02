@@ -96,7 +96,11 @@ public class SettingsPageManager : MonoBehaviour
         {
             HelperFunctions.Log("Settings file not found");
             settingsLoadedEvent.Raise();
-            MessageBoxFactory.Create(MessageBoxType.Message, "Settings File Not found", "Unable to Get Settings").DisplayMessageBox(null);
+            if(Playfab.WasUserJustCreated == false)
+            {
+                MessageBoxFactory.Create(MessageBoxType.Message, "Settings File Not found", "Unable to Get Settings").DisplayMessageBox(null);
+            }
+            
             UseDefaultSettings = true;
             return;
         }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Utilities;
-
+using System.Linq;
+using System;
 
 public struct WordBankObject
 {
@@ -41,7 +42,7 @@ public class WordBankManager : MonoBehaviour
     public List<JapaneseWord> SetUpWordBank()
     {
         GetNewTargetWord();
-        HelperFunctions.Log(NextWord);
+        //HelperFunctions.Log(NextWord);
         currentWordTarget.color = Color.white;
         return SendNewWordBank();
     }
@@ -71,14 +72,24 @@ public class WordBankManager : MonoBehaviour
     List<JapaneseWord> SendNewWordBank()
     {
         List<JapaneseWord> wordBank = JSONWordLibrary.GetWordBank();
-        //string overlap = GetKanaOverlap(NextWord);
+        string overlap = GetKanaOverlap(NextWord);
+
+        if(_settingsInterpreter.TranslateDirection == TranslateDirection.Kanji2Kana)
+        {
+            overlap = GetKanaOverlap(NextWord);
+        }
+        else
+        {
+            overlap = "";
+        }
+
         foreach (var w in wordBank)
         {
             JapaneseWord word = new JapaneseWord(w);
-            /*if(word.Kanji != NextWord.Kanji)
+            if(word.Kanji != NextWord.Kanji)
             {
                 word.Kana += overlap;
-            }*/
+            }
             WordBankObject entry = new WordBankObject
             {
                 DisplayText = _settingsInterpreter.GetOptionText(word),
@@ -90,7 +101,33 @@ public class WordBankManager : MonoBehaviour
         return wordBank;
     }
 
-    
+    string GetKanaOverlap(JapaneseWord word)
+    {
+        if (word.Kanji == "-1")
+        {
+            return string.Empty;
+        }
+        else
+        {
+            string overlap = "";
+            int decrementCount = 0;
+            //HelperFunctions.Log("Finding overlap for: " + word);
+            for (int i = word.Kanji.Length - 1; i > 0; i--) //In order to track all exposed kana in the kanji the kanaIndex needs to keep pace with i
+            {
+                int kanaIndex = word.Kana.Length - (1 + decrementCount);
+                if (word.Kanji[i] == word.Kana[kanaIndex])
+                {
+                    overlap += word.Kanji[i];
+                }
+                decrementCount++;   
+            }
+
+            char[] overlapChar = overlap.ToCharArray();
+            Array.Reverse(overlapChar);
+            overlap = new string(overlapChar);
+            return overlap;
+        }
+    }
 
     #endregion
 
@@ -98,9 +135,16 @@ public class WordBankManager : MonoBehaviour
     {
         TranslationDirectionTransformer _wordTransformer;
 
+        public TranslateDirection TranslateDirection
+        {
+            get;
+            private set;
+        }
+
         public WordBankSettingsInterpreter(TranslateDirection currentSettings)
         {
             _wordTransformer = new TranslationDirectionTransformer(currentSettings);
+            TranslateDirection = currentSettings;
         }
 
         public string GetTargetText(JapaneseWord w)
@@ -163,7 +207,7 @@ public class WordBankManager : MonoBehaviour
 
                     case TranslateDirection.Kanji2Kana:
                         Target = w.Kanji;
-                        Option = w.Kana + GetKanaOverlap(w);
+                        Option = w.Kana;
                         break;
 
                     case TranslateDirection.Kana2Kana:
@@ -198,28 +242,7 @@ public class WordBankManager : MonoBehaviour
                 }
             }
 
-            string GetKanaOverlap(JapaneseWord word)
-            {
-                if (word.Kanji == "-1")
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    string overlap = "";
-                    //HelperFunctions.Log("Finding overlap for: " + word);
-                    for (int i = word.Kanji.Length - 1; i > 0; i--)
-                    {
-                        if (word.Kanji[i] == word.Kana[word.Kana.Length - 1])
-                        {
-                            overlap += word.Kanji[i];
-                        }
-                    }
-
-                    HelperFunctions.Log("Kana Overlap: " + overlap);
-                    return overlap;
-                }
-            }
+            
         }
     }
 }

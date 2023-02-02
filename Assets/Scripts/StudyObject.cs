@@ -47,6 +47,7 @@ public class StudyObject : MonoBehaviour
     private TMP_Text text;
     private List<Vector3> positions = new List<Vector3>();
     private bool selectionEnabled;
+    private bool shouldCountFlightTime;
 
     [SerializeField]
     ParticleSystem studyObjectParticleSystem;
@@ -65,6 +66,7 @@ public class StudyObject : MonoBehaviour
     public void DisableSelection()
     {
         selectionEnabled = false;
+        shouldCountFlightTime = false;
     }
 
     public void MakeInvisible()
@@ -100,8 +102,11 @@ public class StudyObject : MonoBehaviour
 
     private void FixedUpdate()
     {
-        positions.Add(gameObject.transform.position);
-        TimeInFlight += Time.fixedDeltaTime;
+        if(shouldCountFlightTime)
+        {
+            positions.Add(gameObject.transform.position);
+            TimeInFlight += Time.fixedDeltaTime;
+        }
     }
 
     private void OnMouseDown()

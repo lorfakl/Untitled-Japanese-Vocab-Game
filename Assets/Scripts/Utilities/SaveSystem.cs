@@ -19,7 +19,8 @@ namespace Utilities.SaveOperations
         Inventory,
         VirtualCurrency,
         Avatar,
-        Settings
+        Settings,
+        StatisticRecord
     }
 
     public static class SaveSystem
