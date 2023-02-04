@@ -1,8 +1,10 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class Word
 {
     public static int maxLeitnerLevel = 6;
@@ -69,6 +71,7 @@ public class Word
 
 }
 
+[Serializable]
 public class JapaneseWord : Word
 {
     [JsonProperty]
@@ -92,8 +95,17 @@ public class JapaneseWord : Word
 
     public string PrintAnswer()
     {
-        return "Kanji: " + Kanji + "\n" + "Kana: " + Kana +
-            "\n" + "English: " + English;
+        if(Kanji == "-1")
+        {
+            return "Kana: " + Kana +
+            "\n" + "Meaning: " + English;
+        }
+        else
+        {
+            return "Kanji: " + Kanji + "\n" + "Kana: " + Kana +
+            "\n" + "Meaning: " + English;
+        }
+        
     }
     public override string ToString()
     {

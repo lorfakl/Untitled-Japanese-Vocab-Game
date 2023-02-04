@@ -9,7 +9,12 @@ public static class StaticUserSettings
 {
     static UserSettingsData userSettingsData;
 
-    public static UserSettingsData Settings { get { return userSettingsData; } }
+    public static UserSettingsData Settings 
+    { get 
+        { LoadSettings(); 
+          return userSettingsData; 
+        } 
+    }
 
     public static bool IsKanjiStudyTopic()
     {

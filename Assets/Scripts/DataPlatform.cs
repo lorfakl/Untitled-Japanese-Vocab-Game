@@ -14,7 +14,7 @@ public class DataPlatform : MonoBehaviour
     GameEvent statReportReady;
 
 
-    StudyRecord StudyRecord = new StudyRecord();
+    static StudyRecord StudyRecord = new StudyRecord();
     public void OnStudyObjectSelected(object s)
     {
         StudyObject studyObject = (StudyObject)s;
@@ -40,7 +40,8 @@ public class DataPlatform : MonoBehaviour
         }
         else
         {
-            HelperFunctions.Error("Something has gone Horribly wrong");
+            StudyRecord.Record.Add(key, new UserStudyData(studyObject));
+            StudyRecord.Record[key].TimesCorrect++;
         }
     }
 
@@ -51,6 +52,7 @@ public class DataPlatform : MonoBehaviour
 
         foreach (var key in StudyRecord.Record.Keys)
         {
+
             TelemetryWrapper t = new TelemetryWrapper
             {
                 Entity = Playfab.UserEntityKey,
@@ -58,11 +60,28 @@ public class DataPlatform : MonoBehaviour
                 Namespace = EventNamespace.UserStudyData,
                 PayloadJSON = JsonConvert.SerializeObject(StudyRecord.Record[key])
             };
+            telemtry.Add(t);
         }
         PlayFabController.WriteTelemetryEvents(telemtry);
         SaveSystem.Save(StudyRecord, DataCategory.StatisticRecord);
 
         statReportReady.Raise(new StudyRecord(StudyRecord));
+    }
+
+    public static StudyRecord GetStudyRecord()
+    {
+        var data = SaveSystem.Load<StudyRecord>(DataCategory.StatisticRecord);
+        if (data == default)
+        {
+            HelperFunctions.Warning("No data no problem....probably");
+            return new StudyRecord();
+        }
+        else
+        {
+            StudyRecord = data;
+            return new StudyRecord(data);
+        }
+        
     }
 
     // Start is called before the first frame update
@@ -125,7 +144,7 @@ public class UserStudyData
     public UserStudyData(StudyObject s)
     {
         Word = s.Word;
-        TimesSeen = 1;
+        TimesSeen = 0;
         TimesCorrect = 0;
         TimeInFlight = s.TimeInFlight;
     }
@@ -152,6 +171,11 @@ public class StudyRecord
 
     public StudyRecord(StudyRecord s)
     {
+        if(s == null)
+        {
+            new StudyRecord();
+        }
+
         this.Record = new Dictionary<string, UserStudyData>();
         this.CurrentStreak = s.CurrentStreak;
         this.LongestStreak = s.LongestStreak;
@@ -163,11 +187,16 @@ public class StudyRecord
 
     public Dictionary<string, string> GenerateRecordReport()
     {
+        if(Record.Count == 0)
+        {
+            return new Dictionary<string, string>();
+        }
+
         Dictionary<string, string> report = new Dictionary<string, string>();
-        report.Add("Average Answer Speed", CalculateAverageFlightTime().ToString());
+        report.Add("Average Answer Speed", CalculateAverageFlightTime().ToString() + "s");
         report.Add("Number of words known", CalculateNumberOfKnownWords().ToString());
-        report.Add("Current Streak: ", this.CurrentStreak.ToString());
-        report.Add("Longest Streak: ", this.LongestStreak.ToString());
+        report.Add("Current Streak", this.CurrentStreak.ToString());
+        report.Add("Longest Streak", this.LongestStreak.ToString());
         return report;
 
     }
@@ -188,11 +217,19 @@ public class StudyRecord
         int knownCount = 0;
         foreach (KeyValuePair<string, UserStudyData> pair in Record)
         {
-            float recognitionPercentage = pair.Value.TimesCorrect / pair.Value.TimesSeen;
-            if(recognitionPercentage > 0.75f)
+            try
             {
-                knownCount++;
+                float recognitionPercentage = pair.Value.TimesCorrect / pair.Value.TimesSeen;
+                if (recognitionPercentage > 0.75f)
+                {
+                    knownCount++;
+                }
             }
+            catch(DivideByZeroException)
+            {
+                return 0;
+            }
+            
         }
         return knownCount;
     }

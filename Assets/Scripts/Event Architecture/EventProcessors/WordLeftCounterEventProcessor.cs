@@ -24,7 +24,7 @@ public class WordLeftCounterEventProcessor : MonoBehaviour
     {
         wordsRemoved++;
         int currentCount = (int)count;
-        wordsLeftInSessionCounter.text = wordsRemoved + " / " + (currentCount + wordsRemoved);
+        wordsLeftInSessionCounter.text = wordsRemoved + "/" + (currentCount + wordsRemoved);
     }
     #endregion
 

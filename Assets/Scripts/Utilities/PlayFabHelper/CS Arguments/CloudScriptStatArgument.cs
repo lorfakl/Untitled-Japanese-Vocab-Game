@@ -65,9 +65,9 @@ namespace Utilities.PlayFabHelper
             byte[] properArray = bytes.ToArray();
 
 
-            int i = BitConverter.ToInt32(properArray, 0);
+            long i = BitConverter.ToInt64(properArray, 0);
 
-            return i;
+            return (int)i;
 
         }
 

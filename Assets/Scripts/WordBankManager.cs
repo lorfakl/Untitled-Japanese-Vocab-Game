@@ -156,10 +156,6 @@ public class WordBankManager : MonoBehaviour
         public string GetOptionText(JapaneseWord w)
         {
             _wordTransformer.SetDirection(w);
-            if(10 % (int)_wordTransformer.Direction == 0)
-            {
-                
-            }
             return _wordTransformer.Option;
         }
 
@@ -216,6 +212,8 @@ public class WordBankManager : MonoBehaviour
                         break;
 
                     default:
+                        Target = w.Kanji;
+                        Option = w.Kana;
                         break;
                 }
                 ReplaceNullKanji(w);

@@ -23,6 +23,37 @@ namespace Utilities
         {
             return new MessageBox(messageBoxType, message, title, closingEvent, parent);
         }
+
+        public static MessageBox CreateLoadingBox(string title, string message, GameEvent closingEvent = null, Action continueCallback=null, Transform parent = null, bool useAltParent = false)
+        {
+            MessageBox msgBox = new MessageBox(MessageBoxType.Loading, message, title, closingEvent, parent);
+            msgBox.DisplayLoadingMessageBox(continueCallback, useAltParent);
+            return msgBox;
+        }
+
+        public static MessageBox CreateConfirmationBox(string title, string message, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
+        {
+            MessageBox msgBox = new MessageBox(MessageBoxType.Confirmation, message, title, closingEvent, parent);
+            msgBox.DisplayLoadingMessageBox(msgBox.AutoDestroyMessageBox, useAltParent);
+            return msgBox;
+        }
+
+        public static MessageBox CreateToolTip(string title, string message, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
+        {
+            throw new NotImplementedException();
+            MessageBox msgBox = new MessageBox(MessageBoxType.Confirmation, message, title, closingEvent, parent);
+            msgBox.DisplayLoadingMessageBox(msgBox.AutoDestroyMessageBox, useAltParent);
+            return msgBox;
+        }
+
+        public static MessageBox CreateErrorBox(string title, string message, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
+        {
+            throw new NotImplementedException();
+            MessageBox msgBox = new MessageBox(MessageBoxType.Confirmation, message, title, closingEvent, parent);
+            msgBox.DisplayLoadingMessageBox(msgBox.AutoDestroyMessageBox, useAltParent);
+            return msgBox;
+        }
+
     }
 
     public class MessageBox

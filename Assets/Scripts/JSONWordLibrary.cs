@@ -45,14 +45,14 @@ public class JSONWordLibrary : MonoBehaviour
     #endregion
 
     List<JapaneseWord> removedWords = new List<JapaneseWord>();
-    static Dictionary<JapaneseWord, bool> wasAnsweredDict = new Dictionary<JapaneseWord, bool>();
+    static Dictionary<string, bool> wasAnsweredDict = new Dictionary<string, bool>();
     #region Public Methods
 
     public void OnCorrectAnswerEvent_Handler(object s)
     {
         StudyObject studyObject = (StudyObject)s;
         JapaneseWord wordTarget = JSONWordLibrary.WordsToStudy.Find(word => word.Kanji == studyObject.Word.Kanji);
-        wasAnsweredDict.Add(wordTarget, true);
+        wasAnsweredDict.Add(wordTarget.ToString(), true);
         HelperFunctions.Log($"Correctly Translated: {studyObject.Word}");
         bool wasRemoved = WordsToStudy.Remove(wordTarget);
         if (wasRemoved)
@@ -154,7 +154,7 @@ public class JSONWordLibrary : MonoBehaviour
     {
         int randomIndex = Random.Range(0, WordsToStudy.Count);
         JapaneseWord nextWord = WordsToStudy[randomIndex];
-        if(wasAnsweredDict.ContainsKey(nextWord))
+        if(wasAnsweredDict.ContainsKey(nextWord.ToString()))
         {
             throw new System.Exception($"{nextWord} was not properly removed kinda sucks");
         }

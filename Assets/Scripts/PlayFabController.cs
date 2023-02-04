@@ -47,7 +47,7 @@ public class PlayFabController : MonoBehaviour
 
     static string emptyLeitnerLevelData = @"{'Zero':[],'One':[],'Two':[],'Three':[],'Four':[],'Five':[]}";
     static string emptyProfeincyLevelData = @"{'One': [],'Two': [],'Three': [],'Four': [],'Five': [],'Six': [],'Seven': [],'Eight': []}";
-    static TimeSpan twelveHours = new TimeSpan(12, 0, 0);
+    static TimeSpan twelveHours = new TimeSpan(5, 0, 0);
     static TimeSpan twoMinutes = new TimeSpan(0, 2, 0);
     private static PlayFabController _instance;
     public PlayFabController Instance
@@ -509,7 +509,7 @@ public class PlayFabController : MonoBehaviour
         string l = "Detla Hours: " + deltaTime.Hours + "\n" + "Detla Minutes: " + deltaTime.Minutes + "\n" + "Detla Seconds: " + deltaTime.Seconds;
         HelperFunctions.Log(l);
         
-        if(deltaTime < twelveHours)
+        if(deltaTime > twelveHours)
         {
             Playfab.ExecuteFunction(new ExecuteFunctionRequest
             {
@@ -547,7 +547,7 @@ public class PlayFabController : MonoBehaviour
 
     static void FirstTimeLoginDataTransfer()
     {
-        HelperFunctions.Error("Currently Using TestWords on 541 and TestKana on 547");
+        //HelperFunctions.Error("Currently Using TestWords on 541 and TestKana on 547");
         string key = "";
         
         if(StaticUserSettings.IsKanjiStudyTopic())

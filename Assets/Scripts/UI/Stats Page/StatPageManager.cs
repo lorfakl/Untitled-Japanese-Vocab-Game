@@ -9,6 +9,7 @@ using Utilities.PlayFabHelper;
 using Utilities;
 using PlayFab.ClientModels;
 using System.Threading.Tasks;
+using TMPro;
 
 public class StatPageManager : MonoBehaviour
 {
@@ -26,6 +27,18 @@ public class StatPageManager : MonoBehaviour
     [SerializeField]
     LocalPlayFabData LocalPlayFabData;
 
+    [SerializeField]
+    TMP_Text averageSpeed;
+
+    [SerializeField]
+    TMP_Text wordsKnown;
+
+    [SerializeField]
+    TMP_Text longestStreak;
+
+    [SerializeField]
+    TMP_Text currentStreak;
+
     Leaderboard playerLeaderboardEntries;
     
     bool isGrouped = false;
@@ -42,6 +55,11 @@ public class StatPageManager : MonoBehaviour
     #endregion
 
     #region Public Methods
+    public void OnStatReportReady(object r)
+    {
+        StudyRecord studyRecord = r as StudyRecord;
+
+    }
     #endregion
 
     #region Unity Methods
@@ -57,7 +75,7 @@ public class StatPageManager : MonoBehaviour
     void Start()
     {
         PlayFabController.IsAuthedEvent += InitializeStatsPage;
-
+        DisplayRecord();
     }
 
     // Update is called once per frame
@@ -121,7 +139,7 @@ public class StatPageManager : MonoBehaviour
                 CurrentAuthedPlayer.CurrentUser.UpdateGroup(new PlayFabGroup(eKey, "PrimaryGroup"));
                 PlayFabController.GetGroupMembers(eKey, GenerateLeaderboardView);
             }
-            
+            //LeaderboardManager.CreateLeaderboard(StatisticName.LeagueSP, leaderboardEntryPrefab, leaderboardPanelContent.transform, )
             
             
         }
@@ -168,65 +186,120 @@ public class StatPageManager : MonoBehaviour
         PlayFabController.ExecutionCSFunction(CSFunctionNames.AddMembers, parameter);
     }
 
-
     private void GenerateLeaderboardView(List<BasicProfile> profiles)
     {
         if(!hasLoadedFromFile)
         {
             CurrentAuthedPlayer.CurrentUser.Groups[0].Add(profiles);
         }
-        
-        List<LeaderboardEntry> leaderboard = new List<LeaderboardEntry>();
-        try
-        {
-            profiles = profiles.OrderBy(x => x.Statistics[StatisticName.LeagueSP].value).ToList();
-        }
-        catch(KeyNotFoundException e)
-        {
-            HelperFunctions.CatchException(e);
-            foreach(var p in profiles)
-            {
-                if(p.Statistics.Count < 2)
-                {
-                    HelperFunctions.Log(p.PlayFabID);
-                    HelperFunctions.LogDictContent(p.Statistics);   
-                }
-            }
-        }
 
-        foreach(BasicProfile profile in profiles)
+        List<LeaderboardEntry> leaderboard = new List<LeaderboardEntry>();
+        playerLeaderboardEntries = new Leaderboard();
+
+        foreach (var profile in profiles)
         {
-            if(profile.PlayFabID == Playfab.PlayFabID)
+            try
+            {
+                var le = new LeaderboardEntry
+                {
+                    displayName = profile.DisplayName,
+                    playfabID = profile.PlayFabID,
+                    score = Int32.Parse(profile.Statistics[StatisticName.LeagueSP].value),
+                    rank = (profiles.IndexOf(profile) + 1)
+                };
+
+                le.Print();
+                //playerLeaderboardEntries.EntryQueue.Enqueue(le);
+                playerLeaderboardEntries.AddEntry(le);
+            }
+            catch (KeyNotFoundException e)
+            {
+                HelperFunctions.CatchException(e);
+                HelperFunctions.Log("Missing KEY!?!?!!");
+                HelperFunctions.Log(profile.PlayFabID);
+                HelperFunctions.LogDictContent(profile.Statistics);
+            }
+
+            
+            //playerLeaderboardEntries.Or
+
+            /*if (profile.PlayFabID == Playfab.PlayFabID)
             {
                 playerLeaderboardEntries.EntryQueue.Enqueue(new LeaderboardEntry
                 {
                     displayName = "YOU",
                     playfabID = profile.PlayFabID,
-                    score = ScoreEventProcessors.Score,
+                    score = Int32.Parse(profile.Statistics[StatisticName.LeagueSP].value),
                     rank = (profiles.IndexOf(profile) + 1)
 
                 });
             }
             else
             {
-                playerLeaderboardEntries.EntryQueue.Enqueue(new LeaderboardEntry
+                try
                 {
-                    displayName = profile.DisplayName,
-                    playfabID = profile.PlayFabID,
-                    score = profile.Statistics[StatisticName.LeagueSP].DecodeStatisticValue(),
-                    rank = (profiles.IndexOf(profile) + 1)
-                });
-            }
-            
+                    HelperFunctions.Log("sTATS: " + profile.Statistics[StatisticName.LeagueSP].value);
+                    var le = new LeaderboardEntry
+                    {
+                        displayName = profile.DisplayName,
+                        playfabID = profile.PlayFabID,
+                        score = Int32.Parse(profile.Statistics[StatisticName.LeagueSP].value),
+                        rank = (profiles.IndexOf(profile) + 1)
+                    };
+
+                    le.Print();
+                    playerLeaderboardEntries.EntryQueue.Enqueue(le);
+                    playerLeaderboardEntries.AddEntry(le);
+                }
+                catch (KeyNotFoundException e)
+                {
+                    HelperFunctions.CatchException(e);
+                    HelperFunctions.Log("Missing KEY!?!?!!");
+                    HelperFunctions.Log(profile.PlayFabID);
+                    HelperFunctions.LogDictContent(profile.Statistics);
+                }
+
+            }*/
         }
 
-        foreach (BasicProfile entry in profiles)
+
+        LeaderboardEntry[] ordered = playerLeaderboardEntries.GetOrderArray();
+
+        foreach (var entry in ordered)
         {
+            playerLeaderboardEntries.EntryQueue.Enqueue(entry);
             LeaderboardEntryController c = GameObject.Instantiate(leaderboardEntryPrefab, leaderboardPanelContent.transform).GetComponent<LeaderboardEntryController>();
             c.SetLeaderboardHost(playerLeaderboardEntries);
 
         }
 
+    }
+
+    private void DisplayRecord()
+    {
+        var r = DataPlatform.GetStudyRecord();
+        if(r.Record.Count == 0)
+        {
+            averageSpeed.text += " " + "N/A";
+            wordsKnown.text += " " + "N/A";
+            currentStreak.text += " " + "N/A";
+            longestStreak.text += " " + "N/A";
+            return;
+        }
+
+        var report = r.GenerateRecordReport();
+
+
+        List<string> reportData = new List<string>();
+
+        foreach(string key in report.Keys)
+        {
+            reportData.Add(report[key]);
+        }
+        averageSpeed.text += reportData[0];
+        wordsKnown.text += " " + reportData[reportData.Count - 3];
+        currentStreak.text += " " + reportData[reportData.Count - 2];
+        longestStreak.text += " " + reportData[reportData.Count - 1];
     }
     #endregion
 }

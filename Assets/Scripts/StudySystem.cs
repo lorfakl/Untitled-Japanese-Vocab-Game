@@ -134,7 +134,17 @@ public class StudySystem : MonoBehaviour
 
         HelperFunctions.Log("Printing return data: ");
         HelperFunctions.LogListContent(sessionWords);
-        JSONWordLibrary.SetWordsToStudy(sessionWords.ToList());
+        var newList = SetTotalWords(sessionWords);
+
+        if(newList.Count == StaticUserSettings.GetTotalWords())
+        {
+            JSONWordLibrary.SetWordsToStudy(newList.ToList());
+        }
+        else
+        {
+            JSONWordLibrary.SetWordsToStudy(sessionWords.ToList());
+        }
+        
     }
 
     void ParseReturnData(Dictionary<string, string> data)
@@ -163,12 +173,16 @@ public class StudySystem : MonoBehaviour
         
         HelperFunctions.Log("Printing return data: ");
         HelperFunctions.LogListContent(sessionWords);
-        JSONWordLibrary.SetWordsToStudy(sessionWords.ToList());
+        var newList = SetTotalWords(sessionWords);
 
-        /*foreach(var key in sessionWordLeitnerLevel.Keys)
+        if (newList.Count == StaticUserSettings.GetTotalWords() && newList.Count > 0)
         {
-            sessionWordLeitnerLevel[key].Clear();
-        }*/
+            JSONWordLibrary.SetWordsToStudy(newList.ToList());
+        }
+        else
+        {
+            JSONWordLibrary.SetWordsToStudy(sessionWords.ToList());
+        }
     }
 
     void SavePlayerDataToPlayFab()
@@ -242,6 +256,24 @@ public class StudySystem : MonoBehaviour
         };
 
         PlayFabController.ExecutionCSFunction(CSFunctionNames.AddNewWords, addwordArg);
+    }
+
+    List<JapaneseWord> SetTotalWords(List<JapaneseWord> l)
+    {
+        int totalWords = StaticUserSettings.GetTotalWords();
+        List<JapaneseWord> shortenedList = new List<JapaneseWord>();
+        if (l.Count > totalWords)
+        {
+            shortenedList.Capacity = totalWords;
+            for(int i = 0; i < shortenedList.Capacity; i++)
+            {
+                int randIndex = UnityEngine.Random.Range(0, l.Count);
+                shortenedList.Add(l[randIndex]);
+                l.RemoveAt(randIndex);
+            }
+        }
+
+        return shortenedList;
     }
     #endregion
 }

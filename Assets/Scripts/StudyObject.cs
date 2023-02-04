@@ -85,6 +85,7 @@ public class StudyObject : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         text = GetComponent<TMP_Text>();
         selectionEnabled = true;
+        shouldCountFlightTime=true;
         
     }
 

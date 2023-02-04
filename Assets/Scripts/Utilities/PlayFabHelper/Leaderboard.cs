@@ -90,7 +90,7 @@ namespace Utilities.PlayFabHelper
                 _entryDict.Add(e.playfabID, e);
                 _entries.Add(e);
             }
-            OrderListByScore();
+            OrderListByScoreDescending();
             
         }
 
@@ -115,9 +115,10 @@ namespace Utilities.PlayFabHelper
             _isLocal = isLocal;
             _leaderboardSetUpCallback = callBack;
             PlayFabController.GetLeadboard(isLocal, s, GenerateLeaderboardView);
-
-
         }
+
+        public Leaderboard()
+        { }
 
         async void GenerateLeaderboardView(List<PlayerLeaderboardEntry> pfLb)
         {
@@ -170,13 +171,25 @@ namespace Utilities.PlayFabHelper
             }
         }
 
-        void OrderListByScore()
+        public LeaderboardEntry[] GetOrderArray()
         {
-            List<LeaderboardEntry> ordered = _entries.OrderBy(entry => entry.score).ToList();
-            foreach(var e in ordered)
+            List<LeaderboardEntry> ordered = _entries.OrderByDescending(entry => entry.score).ToList();
+            LeaderboardEntry[] orderedArray = ordered.ToArray();
+            for (int i = 0; i < orderedArray.Length; i++)
             {
-                HelperFunctions.Log("Index: " + ordered.IndexOf(e));
-                e.Print();
+                orderedArray[i].rank = i + 1;
+            }
+            _entries = orderedArray.ToList();
+            return orderedArray;
+        }
+
+        private void OrderListByScoreDescending()
+        {
+            List<LeaderboardEntry> ordered = _entries.OrderByDescending(entry => entry.score).ToList();
+            LeaderboardEntry[] orderedArray = ordered.ToArray();
+            for (int i = 0; i < orderedArray.Length; i++)
+            {
+                orderedArray[i].rank = i + 1;
             }
         }
 

@@ -51,6 +51,12 @@ public class SettingsPageManager : MonoBehaviour
             if(CurrentSettings == default)
             {
                 LoadSettingsFromPlayFab();
+                if(UseDefaultSettings)
+                {
+                    CurrentSettings = StaticUserSettings.Settings;
+                    ModifiedSettings = new UserSettingsData(CurrentSettings);
+                    return;
+                }
             }
             else
             {
