@@ -56,8 +56,8 @@ public class DataPlatform : MonoBehaviour
             TelemetryWrapper t = new TelemetryWrapper
             {
                 Entity = Playfab.UserEntityKey,
-                EventName = EventName.StudyObjectSelectionMade,
-                Namespace = EventNamespace.UserStudyData,
+                EventName = Utilities.Logging.EventName.study_object_selection_made,
+                Namespace = Utilities.Logging.EventNamespace.UserStudyData,
                 PayloadJSON = JsonConvert.SerializeObject(StudyRecord.Record[key])
             };
             telemtry.Add(t);

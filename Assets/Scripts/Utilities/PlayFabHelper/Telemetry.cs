@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System;
+using Utilities.Logging;
 
 namespace Utilities.PlayFabHelper
 {
@@ -20,6 +21,21 @@ namespace Utilities.PlayFabHelper
         [JsonProperty("Entity")]
         public UniversalEntityKey Entity { get; set; }
 
+        public DateTime TimeStamp { get; private set; }
+
+        public TelemetryWrapper() 
+        {
+            TimeStamp = DateTime.Now;
+        }
+
+        public TelemetryWrapper(EventNamespace @namespace, EventName eventName, string payloadJSON)
+        {
+            Namespace = @namespace;
+            EventName = eventName;
+            PayloadJSON = payloadJSON;
+            Entity = Playfab.UserEntityKey;
+            TimeStamp = DateTime.UtcNow;
+        }
 
         public static implicit operator PlayFab.EventsModels.EventContents(TelemetryWrapper k)
         {
@@ -29,8 +45,8 @@ namespace Utilities.PlayFabHelper
                 PayloadJSON = k.PayloadJSON,
                 EventNamespace = "custom." + k.Namespace.ToString(),
                 Name = k.EventName.ToString(),
-                OriginalId = k.GetHashCode().ToString(),
-                OriginalTimestamp = DateTime.UtcNow
+                OriginalId = Guid.NewGuid().ToString("N"),
+                OriginalTimestamp = k.TimeStamp
             };
         }
 

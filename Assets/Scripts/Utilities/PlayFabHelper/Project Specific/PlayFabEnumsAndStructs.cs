@@ -38,7 +38,8 @@ namespace Utilities.PlayFabHelper
         Kana,
         TestWords,
         TestKana,
-        
+        ClientConfiguration,
+
     }
 
     public enum StatisticName
@@ -81,25 +82,6 @@ namespace Utilities.PlayFabHelper
         HasPlayedThisMonth
     }
 
-    public enum EventNamespace
-    {
-        example,
-        UserStudyData,
-        StoreData,
-        ProfileData
-    }
-
-    public enum EventName
-    {
-        something_happened,
-        StudyObjectSelectionMade,
-        EnteredStore,
-        LeftStore,
-        PurchaseMade,
-        EnteredProfile,
-        LeftProfile,
-        AvatarItemEquipped
-
-    }
+    
 
 }

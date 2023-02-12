@@ -62,7 +62,7 @@ public class OpeningPageManager : MonoBehaviour
 
         if(Playfab.LastLogin != System.DateTime.MinValue)
         {
-            _lastStudiedText.text = "Last Studied: " + Playfab.LastLogin.Date;
+            _lastStudiedText.text = "Last Studied: " + Playfab.LastLogin.ToLocalTime().ToShortDateString();
         }
         else
         {

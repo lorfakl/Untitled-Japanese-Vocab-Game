@@ -28,8 +28,14 @@ namespace Utilities.PlayFabHelper
 
         public static bool ArePlayStreamEventsGenerated
         {
-            get { return true; }
-            private set { }
+            get;
+            private set;
+        }
+
+        public static bool VerboseModeEnabled
+        {
+            get;
+            private set;
         }
 
         public static string TitleID
@@ -226,21 +232,14 @@ namespace Utilities.PlayFabHelper
 
         public static void ExecuteFunction(ExecuteFunctionRequest rq, Action<ExecuteFunctionResult> success, Action<PlayFabError> failure)
         {
-            //var cacheResult = CacheSystem.GetResponse(rq);
-            //if (cacheResult == null)
-            //{
-                PlayFabCloudScriptAPI.ExecuteFunction(rq, 
-                    (suc)=>
-                    {
-                        CacheSystem.Add(rq, suc);
-                        success(suc);
-                    }, failure);
-            //}
-            /*else
-            {
-                ExecuteFunctionResult cached = (ExecuteFunctionResult)cacheResult;
-                success(cached);
-            }*/
+
+            rq.GeneratePlayStreamEvent = ArePlayStreamEventsGenerated;
+            PlayFabCloudScriptAPI.ExecuteFunction(rq, 
+                (suc)=>
+                {
+                    CacheSystem.Add(rq, suc);
+                    success(suc);
+                }, failure);
         }
 
         public static void GetUserData(GetUserDataRequest rq, Action<GetUserDataResult> success, Action<PlayFabError> failure)
@@ -514,6 +513,8 @@ namespace Utilities.PlayFabHelper
                 GetUserAccountInfo = true,
                 GetUserInventory = true,
                 GetUserVirtualCurrency = true,
+                GetTitleData = true,
+                TitleDataKeys = new List<string>{ TitleDataKeys.ClientConfiguration.ToString() },
                 ProfileConstraints = new PlayerProfileViewConstraints
                 {
                     ShowAvatarUrl = true,
@@ -563,8 +564,10 @@ namespace Utilities.PlayFabHelper
             {
                 user = new PlayFabUser(PlayFabID, null, (UniversalEntityKey)result.EntityToken.Entity, b, pfInventory);
             }
-            
 
+            ClientConfiguration config = JsonConvert.DeserializeObject<ClientConfiguration>(result.InfoResultPayload.TitleData[TitleDataKeys.ClientConfiguration.ToString()]);
+            ArePlayStreamEventsGenerated = config.publishCloudScriptEvents;
+            VerboseModeEnabled = config.verboseModeEnabled;
             CurrentAuthedPlayer.SetCurrentUser(user);
         }
         
@@ -591,6 +594,14 @@ namespace Utilities.PlayFabHelper
             HelperFunctions.Error(fullErrorDetails);
         }
 
+        private class ClientConfiguration
+        {
+            [JsonProperty("PublishCloudScriptEvents")]
+            public bool publishCloudScriptEvents;
+
+            [JsonProperty("VerboseModeEnabled")]
+            public bool verboseModeEnabled;
+        }
         
     }
 

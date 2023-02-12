@@ -9,6 +9,7 @@ using System.Reflection;
 //using PlayFab;
 using System.Collections;
 using ProjectSpecificGlobals;
+using Utilities.PlayFabHelper;
 
 namespace ProjectSpecificGlobals
 {
@@ -150,7 +151,12 @@ namespace Utilities
         public static string Log<T>(T msg)
         {
             string msgStr = DateTime.Now + ": " + msg.ToString();
-            Debug.Log(msgStr);
+            
+            if (Playfab.VerboseModeEnabled)
+            {
+                Debug.Log(msgStr);
+            }
+            
             return msgStr;
         }
 
@@ -175,6 +181,28 @@ namespace Utilities
                 dictContents += $"Key = {key.ToString()}, Value = {dict[key].ToString()}"+"\n";
             }
             Log(dictContents);
+        }
+
+        public static string PrintDictContent<Tkey, TVal>(IDictionary<Tkey, TVal> dict)
+        {
+            string dictContents = "";
+            foreach (Tkey key in dict.Keys)
+            {
+                //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                dictContents += $"Key = {key.ToString()}, Value = {dict[key].ToString()}" + "\n";
+            }
+            return dictContents;
+        }
+
+        public static string PrintDictContent(IDictionary dict)
+        {
+            string dictContents = "";
+            foreach (var key in dict.Keys)
+            {
+                //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                dictContents += $"Key = {key.ToString()}, Value = {dict[key].ToString()}" + "\n";
+            }
+            return dictContents;
         }
 
         public static string PrintListContent<T>(List<T> list)

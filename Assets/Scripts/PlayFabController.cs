@@ -597,7 +597,8 @@ public class PlayFabController : MonoBehaviour
     static void OnPlayFabError(PlayFab.PlayFabError error)
     {
         //Pass to Retry Engine
-        HelperFunctions.Log(error.ApiEndpoint + " " + error.GenerateErrorReport());
+        HelperFunctions.Error(error.ApiEndpoint + " " + error.GenerateErrorReport());
+
     }
 
     static void OnHTTPError(string error)
