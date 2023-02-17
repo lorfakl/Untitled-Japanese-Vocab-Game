@@ -6,6 +6,7 @@ using Utilities;
 using System.IO;
 using System.Linq;
 using Utilities.Events;
+using System;
 
 public class JSONWordLibrary : MonoBehaviour
 {
@@ -51,8 +52,18 @@ public class JSONWordLibrary : MonoBehaviour
     public void OnCorrectAnswerEvent_Handler(object s)
     {
         StudyObject studyObject = (StudyObject)s;
-        JapaneseWord wordTarget = JSONWordLibrary.WordsToStudy.Find(word => word.Kanji == studyObject.Word.Kanji);
-        wasAnsweredDict.Add(wordTarget.ToString(), true);
+        JapaneseWord wordTarget = WordsToStudy.Find(word => word.PrintAnswer() == studyObject.Word.PrintAnswer());
+        
+        try
+        {
+            wasAnsweredDict.Add(wordTarget.ToString(), true);
+        }
+        catch(Exception e)
+        {
+            HelperFunctions.CatchException(e);
+            return;
+        }
+        
         HelperFunctions.Log($"Correctly Translated: {studyObject.Word}");
         bool wasRemoved = WordsToStudy.Remove(wordTarget);
         if (wasRemoved)
@@ -82,7 +93,7 @@ public class JSONWordLibrary : MonoBehaviour
 
     public static List<JapaneseWord> GetWordBank()
     {
-        int wordBankCount = Random.Range(4, 9);
+        int wordBankCount = UnityEngine.Random.Range(4, 9);
         List<JapaneseWord> wordBank = new List<JapaneseWord>();
         for(int i = 0; i < wordBankCount; i++)
         {
@@ -145,14 +156,14 @@ public class JSONWordLibrary : MonoBehaviour
 
     static JapaneseWord AddWordToWordBank(JapaneseWord currentWord)
     {
-        int randomIndex = Random.Range(0, workingWordBankList.Count);
+        int randomIndex = UnityEngine.Random.Range(0, workingWordBankList.Count);
         JapaneseWord nextWord = workingWordBankList[randomIndex];
         return nextWord;
     }
 
     private static JapaneseWord GetNewRandomWord()
     {
-        int randomIndex = Random.Range(0, WordsToStudy.Count);
+        int randomIndex = UnityEngine.Random.Range(0, WordsToStudy.Count);
         JapaneseWord nextWord = WordsToStudy[randomIndex];
         if(wasAnsweredDict.ContainsKey(nextWord.ToString()))
         {

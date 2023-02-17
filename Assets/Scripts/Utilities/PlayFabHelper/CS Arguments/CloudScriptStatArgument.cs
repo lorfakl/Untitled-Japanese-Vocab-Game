@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utilities.PlayFabHelper
+namespace Utilities.PlayFabHelper.CSArguments
 {
     [Serializable]
     public class CloudScriptStatArgument

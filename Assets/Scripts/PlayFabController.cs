@@ -188,9 +188,9 @@ public class PlayFabController : MonoBehaviour
             }, OnPlayFabError);
     }
     
-    public static void CreateGroup(string grpName, Action<PlayFab.GroupsModels.CreateGroupResponse> success)
+    public static void CreateGroup(string grpName, Action<CreateGroupResponse> success)
     {
-        PlayFab.GroupsModels.CreateGroupRequest rq = new PlayFab.GroupsModels.CreateGroupRequest
+        CreateGroupRequest rq = new CreateGroupRequest
         {
             GroupName = grpName
         };
@@ -245,7 +245,7 @@ public class PlayFabController : MonoBehaviour
         Playfab.ListGroupMembers(rq, (result) =>
         {
             List<UniversalEntityKey> memberKeys = new List<UniversalEntityKey>();
-        List<string> memberPfIds = new List<string>();
+            List<string> memberPfIds = new List<string>();
             foreach (EntityMemberRole role in result.Members)
             {
                 foreach (EntityWithLineage member in role.Members)
@@ -402,8 +402,33 @@ public class PlayFabController : MonoBehaviour
         WriteEventsRequest rq = new WriteEventsRequest{ Events = eventContents };
         Playfab.WriteTelemetryEvents(rq, OnPlayFabError, success);
     }
-    //public static void ()
-    //public static void ()
+    
+    public static void ListGroupMembership(Action<List<PlayFabGroup>> success = null)
+    {
+        Playfab.ListGroupMembership(OnPlayFabError, success);
+    }
+
+    public static void DeleteAllGroups()
+    {
+        Playfab.ListGroupMembership(OnPlayFabError, 
+            (groups) => 
+            { 
+                foreach(var group in groups)
+                {
+                    DeleteGroup(group);
+                }
+            });
+    }
+
+    public static void DeleteGroup(PlayFabGroup g)
+    {
+        DeleteGroupRequest rq = new DeleteGroupRequest
+        {
+            Group = g.EntityKey
+        };
+
+        Playfab.DeleteGroup(rq, OnPlayFabError);
+    }
     //public static void ()
     //public static void ()
     //public static void ()
@@ -549,7 +574,8 @@ public class PlayFabController : MonoBehaviour
     {
         //HelperFunctions.Error("Currently Using TestWords on 541 and TestKana on 547");
         string key = "";
-        
+
+        //Debug.LogError("Using TestWords right now");
         if(StaticUserSettings.IsKanjiStudyTopic())
         {
             key = TitleDataKeys.StarterWords.ToString();
@@ -597,8 +623,10 @@ public class PlayFabController : MonoBehaviour
     static void OnPlayFabError(PlayFab.PlayFabError error)
     {
         //Pass to Retry Engine
-        HelperFunctions.Error(error.ApiEndpoint + " " + error.GenerateErrorReport());
-
+        Utilities.Logging.PlayFabErrorLog errorLog = new Utilities.Logging.PlayFabErrorLog(error);
+        Logger.LogPlayFabError(errorLog);
+        HelperFunctions.Log(errorLog);
+        //RetrySystem.Retry(error, error.)
     }
 
     static void OnHTTPError(string error)

@@ -23,8 +23,19 @@ public class Logger : MonoBehaviour
         Application.logMessageReceivedThreaded -= UnityLogMessageReceived_Handler;
         Application.logMessageReceived -= UnityLogMessageReceived_Handler;
         AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledExceptionHandler;
+        PublishTelemtry();
     }
-    
+    public static void LogGeneralDebug(GeneralLogBody e)
+    {
+
+    }
+
+    public static void LogPlayFabError(PlayFabErrorLog e)
+    {
+        TelemetryWrapper t = new TelemetryWrapper(EventNamespace.ProfileData, EventName.playfab_api_error, JsonConvert.SerializeObject(e));
+        logEvents.Add(t);
+    }
+
     private void UnityLogMessageReceived_Handler(string condition, string stackTrace, LogType type)
     {
         bool immediatePublish = false;

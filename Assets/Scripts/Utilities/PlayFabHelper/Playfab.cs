@@ -487,8 +487,35 @@ namespace Utilities.PlayFabHelper
                     }
                 }, error);
         }
-        //public static void ()
-        //public static void ()
+        
+        public static void ListGroupMembership(Action<PlayFabError> error, Action<List<PlayFabGroup>> success=null)
+        {
+            ListMembershipRequest rq = new ListMembershipRequest();
+            rq.Entity = UserEntityKey; 
+            PlayFabGroupsAPI.ListMembership(rq, 
+                (result) => 
+                { 
+                    if(success != null)
+                    {
+                        List<PlayFabGroup> membership = new List<PlayFabGroup>();
+                        foreach(var g in result.Groups)
+                        {
+                            membership.Add(new PlayFabGroup((UniversalEntityKey)g.Group, g.GroupName));
+                        }
+                        success(membership);
+                    }
+                }, 
+                (failure) => 
+                { 
+                    error(failure);
+                });
+        }
+
+        public static void DeleteGroup(DeleteGroupRequest rq, Action<PlayFabError> error)
+        {
+            PlayFabGroupsAPI.DeleteGroup(rq, (result) => { }, error);
+        }
+
         //public static void ()
         //public static void ()
         //public static void ()
@@ -568,7 +595,21 @@ namespace Utilities.PlayFabHelper
             ClientConfiguration config = JsonConvert.DeserializeObject<ClientConfiguration>(result.InfoResultPayload.TitleData[TitleDataKeys.ClientConfiguration.ToString()]);
             ArePlayStreamEventsGenerated = config.publishCloudScriptEvents;
             VerboseModeEnabled = config.verboseModeEnabled;
+
+            var u = SaveSystem.Load<PlayFabUser>(DataCategory.User);
+            if(u != default)
+            {
+                if(u.PlayFabID == PlayFabID)
+                {
+                    foreach (var g in u.Groups)
+                    {
+                        user.UpdateGroup(g);
+                    }
+                }
+            }
+
             CurrentAuthedPlayer.SetCurrentUser(user);
+
         }
         
         private static void HandlePlayFabError(PlayFabError error)

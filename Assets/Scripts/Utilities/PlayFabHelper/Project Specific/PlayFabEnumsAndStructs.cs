@@ -71,7 +71,8 @@ namespace Utilities.PlayFabHelper
         AddMembers,
         ModifyTag, 
         GetRivalAvatars,
-        CompletePurchase
+        CompletePurchase,
+        GetOtherStatistics
     }
 
     public enum PlayerTags

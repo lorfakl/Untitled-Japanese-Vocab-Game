@@ -83,7 +83,7 @@ public class StudySystem : MonoBehaviour
 
     void Start()
     {
-        for(int i = 0; i < Word.maxLeitnerLevel; i++)
+        for(int i = 0; i <= Word.maxLeitnerLevel; i++)
         {
             if(!sessionWordLeitnerLevel.ContainsKey((ProficiencyLevels)i))
             {
@@ -134,17 +134,8 @@ public class StudySystem : MonoBehaviour
 
         HelperFunctions.Log("Printing return data: ");
         HelperFunctions.LogListContent(sessionWords);
-        var newList = SetTotalWords(sessionWords);
-
-        if(newList.Count == StaticUserSettings.GetTotalWords())
-        {
-            JSONWordLibrary.SetWordsToStudy(newList.ToList());
-        }
-        else
-        {
-            JSONWordLibrary.SetWordsToStudy(sessionWords.ToList());
-        }
         
+        JSONWordLibrary.SetWordsToStudy(sessionWords.ToList());
     }
 
     void ParseReturnData(Dictionary<string, string> data)
@@ -218,9 +209,18 @@ public class StudySystem : MonoBehaviour
     
     void AddWordToLeitnerDict(JapaneseWord word)
     {
+        try
+        {
+            sessionWordLeitnerLevel[(ProficiencyLevels)word.PreviousLeitnerLevel].Remove(word);
+            sessionWordLeitnerLevel[(ProficiencyLevels)word.LeitnerLevel].Add(word);
+        }
+        catch(KeyNotFoundException e)
+        {
+            HelperFunctions.CatchException(e);
+
+        }
         //remove from previous level list
-        sessionWordLeitnerLevel[(ProficiencyLevels)word.PreviousLeitnerLevel].Remove(word);
-        sessionWordLeitnerLevel[(ProficiencyLevels)word.LeitnerLevel].Add(word);
+        
         /*HelperFunctions.Log("Previous Lienter Level: " + word.PreviousLeitnerLevel);
         HelperFunctions.Log("Current Lienter Level: " + word.LeitnerLevel);
         HelperFunctions.Log(sessionWordLeitnerLevel.Count);

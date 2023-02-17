@@ -13,6 +13,7 @@ using PlayFab.AuthenticationModels;
 using PlayFabCloudScript.OnLogin;
 using Newtonsoft.Json;
 using Utilities;
+using Newtonsoft.Json.Converters;
 
 public enum UserDataKey
 {
@@ -134,6 +135,14 @@ public class UniversalEntityKey
         {
             get;
             set;
+        }
+        
+        public UniversalEntityKey(){}
+
+        public UniversalEntityKey(string Id, EntityTypes t)
+        {
+            ID = Id;
+            Type = t.ToString();
         }
 
         public static implicit operator PlayFab.AuthenticationModels.EntityKey(UniversalEntityKey k)
@@ -358,10 +367,10 @@ public class CompletePurchaseArg
 
 public class ModifyTagParameter
 {
-    [JsonProperty]
+    [JsonProperty("Operation")]
     public string Operation { get; set; }
     
-    [JsonProperty]
+    [JsonProperty("TagName")]
     public List<string> TagNames { get; set; }
 }
 
@@ -377,329 +386,414 @@ public class AddWordArgument
     public bool IsKanjiStudyTopic { get; set; }
 }
 
+public class GetOtherPlayerStatisticArgument
+{
+    [JsonProperty("OtherPlayers")]
+    public List<string> playFabIDs { get; set; }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonProperty("StatisticName")]
+    public StatisticName StatisticName { get; set; }
+}
+
+public class GetOtherPlayerStatisticsResult
+{
+    [JsonProperty("Rank")]
+    public int Rank { get; set; }
+
+    [JsonProperty("ID")]
+    public string ID { get; set; }
+
+    [JsonProperty("Value")]
+    public int Value { get; set; }
+}
+
 public static class PlayFabHelper
+{
+    #region PlayFab Custom Event Name Enums
+    public enum CustomEventNames
     {
-        #region PlayFab Custom Event Name Enums
-        public enum CustomEventNames
+        
+    }
+    #endregion
+
+    public static string TitleID
+    {
+        get;
+        private set;
+    }
+
+    public static string PlayFabID
+    {
+        get;
+        private set;
+    }
+
+    public static string EntityToken
+    {
+        get;
+        private set;
+    }
+
+    public static string SessionTicket
+    {
+        get;
+        private set;
+    }
+
+
+    public static void WritePlayStreamEvent(WriteServerPlayerEventRequest eventData)
+    {
+        
+    }
+
+    public static void DeleteGroup(PlayFab.GroupsModels.EntityKey e)
+    {
+        //await GetEntityToken();
+        DeleteGroupRequest rq = new DeleteGroupRequest
         {
-            
-        }
-        #endregion
+            Group = e
+        };
+        var deleteGpTask = PlayFabGroupsAPI.DeleteGroupAsync(rq);
+    }
 
-        public static string TitleID
+    public static Task<PlayFabResult<PlayFab.GroupsModels.ListMembershipResponse>> ListMembership(string id, ILogger l)
+    {
+        UniversalEntityKey key = new UniversalEntityKey{
+            ID = id,
+            Type = EntityTypes.master_player_account.ToString()
+        };
+
+        ListMembershipRequest rq = new ListMembershipRequest
         {
-            get;
-            private set;
-        }
+            Entity =key
+        };
+        var memTask = PlayFabGroupsAPI.ListMembershipAsync(rq);
+        l.LogInformation($"List Membership API for ID: {id} ");
+        return memTask;
+    }
 
-        public static string PlayFabID
+    public static Task<PlayFabResult<PlayFab.GroupsModels.EmptyResponse>> AddMembers(PlayFab.GroupsModels.EntityKey groupKey, List<PlayFab.GroupsModels.EntityKey> members, ILogger log)
+    {
+        AddMembersRequest rq = new AddMembersRequest
         {
-            get;
-            private set;
-        }
+            Group = groupKey,
+            Members = members
+        };
 
-        public static string EntityToken
+        var playfabHttpTask = PlayFabGroupsAPI.AddMembersAsync(rq);
+        log.LogInformation("Add Group Request Made ");
+        return playfabHttpTask;
+    }
+
+    public static Task<PlayFabResult<GetPlayerProfileResult>> GetPlayerProfile(string id, PlayerProfileViewConstraints constraint, ILogger log)
+    {
+        var playfabHttpTask = PlayFabServerAPI.GetPlayerProfileAsync( new GetPlayerProfileRequest {
+            PlayFabId = id,
+            ProfileConstraints = constraint
+        });
+        log.LogInformation("Specific request made: " + id + " " + constraint.ToString());
+        return playfabHttpTask;
+    }
+    
+    public static Task<PlayFabResult<GetUserDataResult>> GetUserData(string id, List<string> keys)
+    {
+        var playfabHttpTask = PlayFabServerAPI.GetUserDataAsync( new GetUserDataRequest 
         {
-            get;
-            private set;
-        }
+            PlayFabId = id,
+            Keys = keys
+        });
 
-        public static string SessionTicket
+        return playfabHttpTask;
+    }
+    
+    public static Task<PlayFabResult<GetTitleDataResult>> GetTitleData(List<string> keys, ILogger log)
+    {
+        log.LogInformation("Starting Request");
+        var playfabHttpTask = PlayFabServerAPI.GetTitleDataAsync( new GetTitleDataRequest 
         {
-            get;
-            private set;
-        }
+            Keys = keys
+        });
+        log.LogInformation("Request sent");
+        //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
+        return playfabHttpTask;
+    }
 
-
-        public static void WritePlayStreamEvent(WriteServerPlayerEventRequest eventData)
+    public static Task<PlayFabResult<GetTitleDataResult>> GetTitleData(List<string> keys)
+    {
+        var playfabHttpTask = PlayFabServerAPI.GetTitleDataAsync( new GetTitleDataRequest 
         {
-            
-        }
+            Keys = keys
+        });
 
-        public static Task<PlayFabResult<PlayFab.GroupsModels.EmptyResponse>> AddMembers(PlayFab.GroupsModels.EntityKey groupKey, List<PlayFab.GroupsModels.EntityKey> members, ILogger log)
+        //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
+        return playfabHttpTask;
+    }
+
+    public static Task<PlayFabResult<AddPlayerTagResult>> AddPlayerTag(string pfID, string tagName, ILogger log)
+    {
+        var addTagRq = new AddPlayerTagRequest 
         {
-            AddMembersRequest rq = new AddMembersRequest
-            {
-                Group = groupKey,
-                Members = members
-            };
+            PlayFabId = pfID,
+            TagName = tagName
+        };
+        var playfabHttpTask = PlayFabServerAPI.AddPlayerTagAsync(addTagRq);
+        log.LogInformation( "PlayFabID" + addTagRq.PlayFabId + "TagName" + addTagRq.TagName);
+        //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
+        return playfabHttpTask;
+    }
 
-            var playfabHttpTask = PlayFabGroupsAPI.AddMembersAsync(rq);
-            log.LogInformation("Add Group Request Made ");
-            return playfabHttpTask;
-        }
-
-        public static Task<PlayFabResult<GetPlayerProfileResult>> GetPlayerProfile(string id, PlayerProfileViewConstraints constraint, ILogger log)
+    public static Task<PlayFabResult<GetEntityTokenResponse>> GetEntityToken(UniversalEntityKey key = null)
+    {
+        GetEntityTokenRequest rq = new GetEntityTokenRequest{};
+        if(key != null)
         {
-            var playfabHttpTask = PlayFabServerAPI.GetPlayerProfileAsync( new GetPlayerProfileRequest {
-                PlayFabId = id,
-                ProfileConstraints = constraint
-            });
-            log.LogInformation("Specific request made: " + id + " " + constraint.ToString());
-            return playfabHttpTask;
+            rq.Entity = key;
         }
         
-        public static Task<PlayFabResult<GetUserDataResult>> GetUserData(string id, List<string> keys)
-        {
-            var playfabHttpTask = PlayFabServerAPI.GetUserDataAsync( new GetUserDataRequest 
-            {
-                PlayFabId = id,
-                Keys = keys
-            });
+        return PlayFabAuthenticationAPI.GetEntityTokenAsync(rq);
+    }
 
-            return playfabHttpTask;
-        }
-        
-        public static Task<PlayFabResult<GetTitleDataResult>> GetTitleData(List<string> keys, ILogger log)
+    public static Task<PlayFabResult<RemovePlayerTagResult>> RemovePlayerTag(string pfID, string tagName, ILogger log)
+    {
+        var removeTagRq = new RemovePlayerTagRequest 
         {
-            log.LogInformation("Starting Request");
-            var playfabHttpTask = PlayFabServerAPI.GetTitleDataAsync( new GetTitleDataRequest 
-            {
-                Keys = keys
-            });
-            log.LogInformation("Request sent");
+            PlayFabId = pfID,
+            TagName = tagName
+        };
+        try
+        {
+            var playfabHttpTask = PlayFabServerAPI.RemovePlayerTagAsync(removeTagRq);
+            log.LogInformation( "Remove Tag for PlayFabID " + removeTagRq.PlayFabId + " TagName " + removeTagRq.TagName);
             //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
             return playfabHttpTask;
         }
-
-        public static Task<PlayFabResult<GetTitleDataResult>> GetTitleData(List<string> keys)
+        catch(Exception e)
         {
-            var playfabHttpTask = PlayFabServerAPI.GetTitleDataAsync( new GetTitleDataRequest 
-            {
-                Keys = keys
-            });
-
-            //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
-            return playfabHttpTask;
-        }
-
-        public static Task<PlayFabResult<AddPlayerTagResult>> AddPlayerTag(string pfID, string tagName, ILogger log)
-        {
-            var addTagRq = new AddPlayerTagRequest 
-            {
-                PlayFabId = pfID,
-                TagName = tagName
-            };
-            var playfabHttpTask = PlayFabServerAPI.AddPlayerTagAsync(addTagRq);
-            log.LogInformation( "PlayFabID" + addTagRq.PlayFabId + "TagName" + addTagRq.TagName);
-            //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
-            return playfabHttpTask;
-        }
-
-        public static Task<PlayFabResult<GetEntityTokenResponse>> GetEntityToken()
-        {
-            GetEntityTokenRequest rq = new GetEntityTokenRequest{};
-            return PlayFabAuthenticationAPI.GetEntityTokenAsync(rq);
-        }
-
-        public static Task<PlayFabResult<RemovePlayerTagResult>> RemovePlayerTag(string pfID, string tagName, ILogger log)
-        {
-            var removeTagRq = new RemovePlayerTagRequest 
-            {
-                PlayFabId = pfID,
-                TagName = tagName
-            };
-            try
-            {
-                var playfabHttpTask = PlayFabServerAPI.RemovePlayerTagAsync(removeTagRq);
-                log.LogInformation( "PlayFabID" + removeTagRq.PlayFabId + "TagName" + removeTagRq.TagName);
-                //playfabHttpTask.ContinueWith(ProcessPlayFabRequest);
-                return playfabHttpTask;
-            }
-            catch(Exception e)
-            {
-                log.LogError(e.Message + "\n" + e.StackTrace + "\n Inner Exception: " + e.InnerException);
-                return default(Task<PlayFabResult<RemovePlayerTagResult>>);
-            }
-            
+            log.LogError(e.Message + "\n" + e.StackTrace + "\n Inner Exception: " + e.InnerException);
+            return default(Task<PlayFabResult<RemovePlayerTagResult>>);
         }
         
-        /*public static Task<PlayFabResult<GetPlayersInSegmentResult>> GetPlayersInSegment()
-        {
-            var segmentRequest = new GetPlayersInSegmentRequest
-            {
-                SegmentId
-            }
-        }*/
+    }
 
-        public static Task<PlayFabResult<GetCatalogItemsResult>> GetCatalogItem(ILogger log = null, List<string> logList = null)
+    public static Task<PlayFabResult<GetPlayerStatisticsResult>> GetPlayerStatisitic(string id, StatisticName s, ILogger log)
+    {
+        GetPlayerStatisticsRequest rq = new GetPlayerStatisticsRequest
         {
-            GetCatalogItemsRequest rq = new GetCatalogItemsRequest();
-            var catalogRgTask = PlayFabServerAPI.GetCatalogItemsAsync(rq);
-            return catalogRgTask;
+            PlayFabId = id,
+            StatisticNames = new List<string> {s.ToString()}
+        };
+
+        var statRequest = PlayFabServerAPI.GetPlayerStatisticsAsync(rq);
+        log.LogInformation($"Requested {s.ToString()} value for user: {id}");
+        return statRequest;
+    }
+    
+    /*public static Task<PlayFabResult<GetPlayersInSegmentResult>> GetPlayersInSegment()
+    {
+        var segmentRequest = new GetPlayersInSegmentRequest
+        {
+            SegmentId
+        }
+    }*/
+
+    public static Task<PlayFabResult<GetCatalogItemsResult>> GetCatalogItem(ILogger log = null, List<string> logList = null)
+    {
+        GetCatalogItemsRequest rq = new GetCatalogItemsRequest();
+        var catalogRgTask = PlayFabServerAPI.GetCatalogItemsAsync(rq);
+        return catalogRgTask;
+    }
+
+    public static Task<PlayFabResult<GrantItemsToUserResult>> GrantItemsToUser(string id, List<string> itemIds, ILogger log = null, List<string> logList = null)
+    {
+        GrantItemsToUserRequest rq = new GrantItemsToUserRequest
+        {
+            PlayFabId = id,
+            ItemIds = itemIds
+        };
+
+        if(log != null && logList != null)
+        {
+            LogInfo($"Request Parameters: ID - {id} \n Item IDs: {Utilities.HelperFunctions.PrintListContent(itemIds)}", log, logList);
         }
 
-        public static Task<PlayFabResult<GrantItemsToUserResult>> GrantItemsToUser(string id, List<string> itemIds, ILogger log = null, List<string> logList = null)
+        var grantTask = PlayFabServerAPI.GrantItemsToUserAsync(rq);
+        return grantTask;
+    }
+
+    public static Task<PlayFabResult<ModifyUserVirtualCurrencyResult>> SubTractUserVC(int amount, string id, string vc, ILogger log = null, List<string> logList = null)
+    {
+        SubtractUserVirtualCurrencyRequest rq = new SubtractUserVirtualCurrencyRequest
         {
-            GrantItemsToUserRequest rq = new GrantItemsToUserRequest
-            {
-                PlayFabId = id,
-                ItemIds = itemIds
-            };
+            PlayFabId = id,
+            Amount = amount,
+            VirtualCurrency = vc
+        };
 
-            if(log != null && logList != null)
-            {
-                LogInfo($"Request Parameters: ID - {id} \n Item IDs: {Utilities.HelperFunctions.PrintListContent(itemIds)}", log, logList);
-            }
-
-            var grantTask = PlayFabServerAPI.GrantItemsToUserAsync(rq);
-            return grantTask;
+        if(log != null && logList != null)
+        {
+            LogInfo($"Request Parameters: ID - {id} \n Amount to Subtract: {amount} \n VC: {vc}", log, logList);
         }
 
-        public static Task<PlayFabResult<ModifyUserVirtualCurrencyResult>> SubTractUserVC(int amount, string id, string vc, ILogger log = null, List<string> logList = null)
+        var subtractTask = PlayFabServerAPI.SubtractUserVirtualCurrencyAsync(rq);
+        return subtractTask;
+    }
+
+    public static Task<PlayFabResult<GetFilesResponse>> GetEntityFiles(UniversalEntityKey e, ILogger log = null, List<string> logList = null)
+    {
+        GetFilesRequest rq = new GetFilesRequest
         {
-            SubtractUserVirtualCurrencyRequest rq = new SubtractUserVirtualCurrencyRequest
-            {
-                PlayFabId = id,
-                Amount = amount,
-                VirtualCurrency = vc
-            };
-
-            if(log != null && logList != null)
-            {
-                LogInfo($"Request Parameters: ID - {id} \n Amount to Subtract: {amount} \n VC: {vc}", log, logList);
-            }
-
-            var subtractTask = PlayFabServerAPI.SubtractUserVirtualCurrencyAsync(rq);
-            return subtractTask;
+            Entity = e
+        };
+        var getFilesRequest = PlayFabDataAPI.GetFilesAsync(rq);
+        if(log != null && logList != null)
+        {
+            LogInfo("Request Entity: " + e.ToString(), log, logList);
         }
 
-        public static Task<PlayFabResult<GetFilesResponse>> GetEntityFiles(UniversalEntityKey e, ILogger log = null, List<string> logList = null)
+        return getFilesRequest;
+    }
+
+    public static Task<PlayFabResult<UpdatePlayerStatisticsResult>> UpdateUserStatistic(string id, List<CloudScriptStatArgument> updates, ILogger log)
+    {
+        List<StatisticUpdate> statisticUpdates = new List<StatisticUpdate>();
+        foreach(CloudScriptStatArgument st in updates)
         {
-            GetFilesRequest rq = new GetFilesRequest
+            int v = DecodeStringValue(st.value);
+            statisticUpdates.Add( new StatisticUpdate 
             {
-                Entity = e
-            };
-            var getFilesRequest = PlayFabDataAPI.GetFilesAsync(rq);
-            if(log != null && logList != null)
-            {
-                LogInfo("Request Entity: " + e.ToString(), log, logList);
-            }
-
-            return getFilesRequest;
-        }
-
-        public static Task<PlayFabResult<UpdatePlayerStatisticsResult>> UpdateUserStatistic(string id, List<CloudScriptStatArgument> updates, ILogger log)
-        {
-            List<StatisticUpdate> statisticUpdates = new List<StatisticUpdate>();
-            foreach(CloudScriptStatArgument st in updates)
-            {
-                int v = DecodeStringValue(st.value);
-                statisticUpdates.Add( new StatisticUpdate 
-                {
-                    StatisticName = st.statName,
-                    Value = v
-                });
-            }
-
-            var updateStatRq = new UpdatePlayerStatisticsRequest
-            {
-                PlayFabId = id,
-                Statistics = statisticUpdates
-            };
-
-            log.LogInformation("ID: " + id + " " + "Statistic Values " + HelperFunctions.PrintListContent(updates));
-            var statisticUpdateTask = PlayFabServerAPI.UpdatePlayerStatisticsAsync(updateStatRq);
-            return statisticUpdateTask;
-        }
-
-        public static Task<PlayFabResult<UpdateUserDataResult>> UpdateUserData(string id, Dictionary<string, string> dict)
-        {
-            AddNewWord.logger.LogInformation("Attempting to call GameServer/UpdateUserData on ID: " + id);
-            var playfabHttpTask = PlayFabServerAPI.UpdateUserDataAsync( new UpdateUserDataRequest 
-            {
-                PlayFabId = id,
-                Data = dict
+                StatisticName = st.statName,
+                Value = v
             });
-
-            return playfabHttpTask;
         }
 
-        public static void ProcessPlayFabRequest<T>(PlayFabResult<T> playFabResult, Action<PlayFabResult<T>> callback, ILogger log) where T : PlayFab.Internal.PlayFabResultCommon
+        var updateStatRq = new UpdatePlayerStatisticsRequest
         {
-            if(playFabResult.Error == null)
-            {
-                callback(playFabResult);
-            }
-            else
-            {
-                CapturePlayFabError(playFabResult.Error, log);
-            }
+            PlayFabId = id,
+            Statistics = statisticUpdates
+        };
+
+        log.LogInformation("ID: " + id + " " + "Statistic Values " + HelperFunctions.PrintListContent(updates));
+        var statisticUpdateTask = PlayFabServerAPI.UpdatePlayerStatisticsAsync(updateStatRq);
+        return statisticUpdateTask;
+    }
+
+    public static Task<PlayFabResult<UpdateUserDataResult>> UpdateUserData(string id, Dictionary<string, string> dict)
+    {
+        AddNewWord.logger.LogInformation("Attempting to call GameServer/UpdateUserData on ID: " + id);
+        var playfabHttpTask = PlayFabServerAPI.UpdateUserDataAsync( new UpdateUserDataRequest 
+        {
+            PlayFabId = id,
+            Data = dict
+        });
+
+        return playfabHttpTask;
+    }
+
+    public static void ProcessPlayFabRequest<T>(PlayFabResult<T> playFabResult, Action<PlayFabResult<T>> callback, ILogger log) where T : PlayFab.Internal.PlayFabResultCommon
+    {
+        if(playFabResult.Error == null)
+        {
+            callback(playFabResult);
         }
-
-        public static bool WasPlayFabCallSuccessful<T>(PlayFabResult<T> playFabResult, ILogger log) where T : PlayFab.Internal.PlayFabResultCommon
+        else
         {
-            if(playFabResult.Error == null)
-            {
-                log.LogInformation("API call was successful");
-                return true;
-            }
-            else
-            {
-                log.LogInformation("An Error has occured");
-                CapturePlayFabError(playFabResult.Error, log);
-                return false;
-            }
-        }
-
-        private static int DecodeStringValue(string value)
-        {
-            List<byte> bytes = new List<byte>();
-
-            foreach (string b in value.Split(','))
-            {
-                if(!String.IsNullOrEmpty(b))
-                {
-                    bytes.Add(Convert.ToByte(b));
-                }
-            }
-
-            //Console.WriteLine(");
-            foreach (byte b in bytes)
-            {
-                Console.Write(b.ToString() + ", ");
-                
-            }
-
-            byte[] properArray = bytes.ToArray();
-
-
-            int i = BitConverter.ToInt32(properArray, 0);
-
-            return i;
-
-        }
-
-        public static string CaptureException(Exception ex, ILogger log)
-        {
-            string err = ex.ToString();
-            log.Log(LogLevel.Error, err);
-            GetModifiedProfileData.errorStrings.Add(err);
-            return err;
-        }
-
-        public static void CapturePlayFabError(PlayFabError error, ILogger log)
-        {
-            string errorDetails = "";
-            try
-            {
-                errorDetails += "Error in PlayFab API: " + error.RequestId;
-                errorDetails += "\n" + "Error: " + error.Error.ToString();
-                errorDetails += "\n" + "Error Message: " + error.ErrorMessage;
-                errorDetails += "\n" + "Error Details: " + error.ErrorDetails.ToString();
-                log.Log(LogLevel.Error, errorDetails);
-            }
-            catch(Exception e)
-            {
-                CaptureException(e, log);
-                log.LogInformation("Error information before exception: " + errorDetails);
-            }
-            
-        }
-
-        public static void LogInfo(string message, ILogger log, List<string> listOfLogs)
-        {
-            log.LogInformation(message);
-            listOfLogs.Add(DateTime.UtcNow + ": " + message);
+            CapturePlayFabError(playFabResult.Error, log);
         }
     }
+
+    public static bool WasPlayFabCallSuccessful<T>(PlayFabResult<T> playFabResult, ILogger log) where T : PlayFab.Internal.PlayFabResultCommon
+    {
+        if(playFabResult.Error == null)
+        {
+            log.LogInformation("API call was successful");
+            return true;
+        }
+        else
+        {
+            log.LogInformation("An Error has occured");
+            CapturePlayFabError(playFabResult.Error, log);
+            return false;
+        }
+    }
+
+    public static bool WasPlayFabCallSuccessful<T>(PlayFabResult<T> playFabResult, ILogger log, List<string> listofLogs) where T : PlayFab.Internal.PlayFabResultCommon
+    {
+        if(playFabResult.Error == null)
+        {
+            log.LogInformation("API call was successful");
+            return true;
+        }
+        else
+        {
+            string val = "An Error has occured";
+            log.LogInformation(val);
+            listofLogs.Add(val);
+            val = CapturePlayFabError(playFabResult.Error, log);
+            listofLogs.Add(val);
+            return false;
+        }
+    }
+
+    private static int DecodeStringValue(string value)
+    {
+        List<byte> bytes = new List<byte>();
+
+        foreach (string b in value.Split(','))
+        {
+            if(!String.IsNullOrEmpty(b))
+            {
+                bytes.Add(Convert.ToByte(b));
+            }
+        }
+
+        //Console.WriteLine(");
+        foreach (byte b in bytes)
+        {
+            Console.Write(b.ToString() + ", ");
+            
+        }
+
+        byte[] properArray = bytes.ToArray();
+
+
+        int i = BitConverter.ToInt32(properArray, 0);
+
+        return i;
+
+    }
+
+    public static string CaptureException(Exception ex, ILogger log)
+    {
+        string err = ex.ToString();
+        log.Log(LogLevel.Error, err);
+        GetModifiedProfileData.errorStrings.Add(err);
+        return err;
+    }
+
+    public static string CapturePlayFabError(PlayFabError error, ILogger log)
+    {
+        string errorDetails = "";
+        try
+        {
+            errorDetails += "Error in PlayFab API: " + error.RequestId;
+            errorDetails += "\n" + "Error: " + error.Error.ToString();
+            errorDetails += "\n" + "Error Message: " + error.ErrorMessage;
+            errorDetails += "\n" + "Error Details: " + error.ErrorDetails.ToString();
+            log.Log(LogLevel.Error, errorDetails);
+        }
+        catch(Exception e)
+        {
+            CaptureException(e, log);
+            log.LogInformation("Error information before exception: " + errorDetails);
+        }
+        
+        return errorDetails;
+    }
+
+    public static void LogInfo(string message, ILogger log, List<string> listOfLogs)
+    {
+        log.LogInformation(message);
+        listOfLogs.Add(DateTime.UtcNow + ": " + message);
+    }
+}

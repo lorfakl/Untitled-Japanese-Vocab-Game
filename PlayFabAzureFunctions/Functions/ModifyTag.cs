@@ -30,11 +30,11 @@ namespace PlayFabCloudScript.OnLogin
         static string titleID = "titleId";
         static string Id = "";
         public static ILogger logger = null;
-
+        public static List<string> listOfLogs = new List<string>();
         [FunctionName("ModifyTag")]
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,ILogger log)
         {
-            List<string> listOfLogs = new List<string>();
+            listOfLogs.Clear();
             log.LogInformation("We have started");
             PlayFabSettings.staticSettings.TitleId = Environment.GetEnvironmentVariable(titleID);
             PlayFabSettings.staticSettings.DeveloperSecretKey = Environment.GetEnvironmentVariable(secretKey);
@@ -53,6 +53,7 @@ namespace PlayFabCloudScript.OnLogin
             try
             {
                 param = JsonConvert.DeserializeObject<ModifyTagParameter>(context.FunctionArgument.ToString());
+                log.LogInformation($"The rquest as a string: {context.FunctionArgument.ToString()}");
             }
             catch(Exception e)
             {
@@ -63,76 +64,50 @@ namespace PlayFabCloudScript.OnLogin
             
             if(param != null)
             {
-                foreach(string t in param.TagNames)
+                log.LogInformation($"Param is not null");
+
+                try
                 {
-                    log.LogInformation($"Parsed tag number {param.TagNames.IndexOf(t)} : {t}");
+                    foreach(string t in param.TagNames)
+                    {
+                        log.LogInformation($"Parsed tag number {param.TagNames.IndexOf(t)} : {t}");
+                    }
+                }
+                catch(Exception e)
+                {
+                    log.LogInformation("Exception Thrown");
+                    listOfLogs.Add(PlayFabHelper.CaptureException(e, logger));
                 }
 
-                if(param.Operation.Contains("add"))
-                {
-                    foreach(string i in param.TagNames)
+                
+                    logger.LogInformation("Checking the operation type");
+                    if(param.Operation.Contains("add"))
                     {
-                        var addPlayerTagTask = PlayFabHelper.AddPlayerTag(Id, i, logger);
-                        await addPlayerTagTask;
-                        PlayFabHelper.LogInfo(OnComplete(addPlayerTagTask.Result), log, listOfLogs);
+                        logger.LogInformation("Checking the operation type");
+                        foreach(string i in param.TagNames)
+                        {
+                            var addPlayerTagTask = PlayFabHelper.AddPlayerTag(Id, i, logger);
+                            await addPlayerTagTask;
+                            PlayFabHelper.LogInfo(OnComplete(addPlayerTagTask.Result), log, listOfLogs);
+                        }
                     }
-                }
-                else
-                {
-                    foreach(string i in param.TagNames)
+                    else
                     {
-                        var removePlayerTagTask = PlayFabHelper.RemovePlayerTag(Id, i, logger);
-                        await removePlayerTagTask;
-                        PlayFabHelper.LogInfo(OnComplete(removePlayerTagTask.Result), log, listOfLogs);
+                        foreach(string i in param.TagNames)
+                        {
+                            var removePlayerTagTask = PlayFabHelper.RemovePlayerTag(Id, i, logger);
+                            PlayFabHelper.LogInfo(OnComplete(removePlayerTagTask.Result), log, listOfLogs);
+                        }
                     }
-                }
+                
+                
 
                 return new OkObjectResult(listOfLogs);
-
-            }
-
-            /*log.LogInformation($"Parsed first tag {param.TagNames[0]}");
-
-            dynamic operation = null;
-            if (args != null && args["Operation"] != null)
-            {
-                operation = args["Operation"];
-            }
-
-            log.LogInformation($"Parsed Second parameter {param.TagNames[1]}");
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            log.LogInformation($"RequestBody: {requestBody}");
-            PlayFabHelper.LogInfo($"RequestBody: {requestBody}", log, listOfLogs);
-
-            if(operation.ToString().Contains("add"))
-            {
-                logger.LogInformation("Calling GameServer/SetTag for user: " + Id);
-                PlayFabHelper.LogInfo($"Calling GameServer/SetTag for user: {Id}", log, listOfLogs);
-                var addPlayerTagTask = PlayFabHelper.AddPlayerTag(Id, tag.ToString(), logger);
-                await addPlayerTagTask;
-
-                logger.LogInformation("Awaiting PF API calls");
-                //
-                //
-
-                logger.LogInformation("Calling OnCompleteFor PF calls");
-                OnComplete(addPlayerTagTask.Result);
             }
             else
             {
-                logger.LogInformation("Calling GameServer/RemoveTag for user: " + Id);
-                PlayFabHelper.LogInfo($"Calling GameServer/RemoveTag for user: {Id}", log, listOfLogs);
-                var removePlayerTagTask = PlayFabHelper.RemovePlayerTag(Id, tag.ToString(), logger);
-                await removePlayerTagTask;
-
-                logger.LogInformation("Awaiting PF API calls");
-                //
-                //
-
-                logger.LogInformation("Calling OnCompleteFor PF calls");
-                OnComplete(removePlayerTagTask.Result);
-            }*/
+                log.LogInformation($"Param object is infact null");
+            }
             
 
             return new OkObjectResult(listOfLogs);
@@ -164,6 +139,21 @@ namespace PlayFabCloudScript.OnLogin
             else
             {
                 return "RemovePlayerTag Failed";
+            }
+        }
+
+        public static void OnComplete(PlayFabResult<PlayFab.GroupsModels.ListMembershipResponse> listMembershipResponse)
+        {
+            PlayFabHelper.LogInfo("Checking List Membership API Status", logger, listOfLogs);
+            if(PlayFabHelper.WasPlayFabCallSuccessful<PlayFab.GroupsModels.ListMembershipResponse>(listMembershipResponse, logger, listOfLogs))
+            {
+                logger.LogInformation("List Membership call success");
+                logger.LogInformation($"List Membership Response: {JsonConvert.SerializeObject(listMembershipResponse.Result)}");
+                foreach(var g in listMembershipResponse.Result.Groups)
+                {
+                    PlayFabHelper.DeleteGroup(g.Group);
+                }
+                logger.LogInformation($"Looped through all {listMembershipResponse.Result.Groups.Count} Groups for User {Id}");
             }
         }
     }

@@ -39,6 +39,9 @@ public class StatPageManager : MonoBehaviour
     [SerializeField]
     TMP_Text currentStreak;
 
+    [SerializeField]
+    TMP_Text goStudyText;
+
     Leaderboard playerLeaderboardEntries;
     
     bool isGrouped = false;
@@ -146,7 +149,7 @@ public class StatPageManager : MonoBehaviour
         else if(hasPlayed)
         {
             HelperFunctions.Log("Creating the group");
-            LeaderboardManager.CreateLeaderboard(StatisticName.TotalSP, leaderboardEntryPrefab, leaderboardPanelContent.transform, ConvertToTitlePlayerIDsAsync);
+            LeaderboardManager.CreateLeaderboard(StatisticName.LeagueSP, leaderboardEntryPrefab, leaderboardPanelContent.transform, ConvertToTitlePlayerIDsAsync);
             PlayFabController.CreateGroup(Guid.NewGuid().ToString(), (success) => 
             {
                 LocalPlayFabData.GroupID = success.Group.Id;
@@ -155,6 +158,7 @@ public class StatPageManager : MonoBehaviour
         else
         {
             HelperFunctions.Log("Go study then come back to get Rivals");
+            goStudyText.enabled = true;
         }
     }
 
@@ -219,47 +223,6 @@ public class StatPageManager : MonoBehaviour
                 HelperFunctions.Log(profile.PlayFabID);
                 HelperFunctions.LogDictContent(profile.Statistics);
             }
-
-            
-            //playerLeaderboardEntries.Or
-
-            /*if (profile.PlayFabID == Playfab.PlayFabID)
-            {
-                playerLeaderboardEntries.EntryQueue.Enqueue(new LeaderboardEntry
-                {
-                    displayName = "YOU",
-                    playfabID = profile.PlayFabID,
-                    score = Int32.Parse(profile.Statistics[StatisticName.LeagueSP].value),
-                    rank = (profiles.IndexOf(profile) + 1)
-
-                });
-            }
-            else
-            {
-                try
-                {
-                    HelperFunctions.Log("sTATS: " + profile.Statistics[StatisticName.LeagueSP].value);
-                    var le = new LeaderboardEntry
-                    {
-                        displayName = profile.DisplayName,
-                        playfabID = profile.PlayFabID,
-                        score = Int32.Parse(profile.Statistics[StatisticName.LeagueSP].value),
-                        rank = (profiles.IndexOf(profile) + 1)
-                    };
-
-                    le.Print();
-                    playerLeaderboardEntries.EntryQueue.Enqueue(le);
-                    playerLeaderboardEntries.AddEntry(le);
-                }
-                catch (KeyNotFoundException e)
-                {
-                    HelperFunctions.CatchException(e);
-                    HelperFunctions.Log("Missing KEY!?!?!!");
-                    HelperFunctions.Log(profile.PlayFabID);
-                    HelperFunctions.LogDictContent(profile.Statistics);
-                }
-
-            }*/
         }
 
 

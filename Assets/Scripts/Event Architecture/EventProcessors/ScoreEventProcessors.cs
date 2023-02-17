@@ -7,6 +7,7 @@ using Utilities.Events;
 using TMPro;
 using Utilities.PlayFabHelper;
 using Utilities.PlayFabHelper.CurrentUser;
+using Utilities.PlayFabHelper.CSArguments;
 
 public class ScoreEventProcessors : MonoBehaviour
 {

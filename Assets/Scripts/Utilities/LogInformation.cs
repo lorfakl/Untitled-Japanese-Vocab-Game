@@ -68,7 +68,7 @@ namespace Utilities.Logging
             hresult = e.HResult.ToString();
         }
     }
-    
+
     public class GeneralLogBody : LogBody
     {
         [JsonProperty("Class")]
@@ -101,5 +101,63 @@ namespace Utilities.Logging
         }
     }
 
+    public class PlayFabErrorLog : LogBody
+    {
+        [JsonProperty("Endpoint")]
+        public string apiEndpoint;
+
+        [JsonProperty("Message")]
+        public string message;
+
+        [JsonProperty("Error Summary")]
+        public string errorSummary;
+
+        [JsonProperty("PlayFab ErrorCode")]
+        public string errorCode;
+
+        [JsonProperty("HTTP Code")]
+        public string httpCode;
+
+        [JsonProperty("HTTP Status")]
+        public string httpStatus;
+
+        [JsonProperty("Error Details")]
+        public string errorDetails;
+
+        public PlayFabErrorLog(PlayFab.PlayFabError error)
+        {
+            apiEndpoint = error.ApiEndpoint;
+            message = error.ErrorMessage;
+            errorSummary = error.GenerateErrorReport();
+            httpCode = error.HttpCode.ToString();
+            httpStatus = error.HttpStatus;
+            errorDetails = "";
+            if(error.ErrorDetails != null)
+            {
+                foreach (var k in error.ErrorDetails.Keys)
+                {
+                    List<string> l = error.ErrorDetails[k];
+                    foreach (var v in l)
+                    {
+                        errorDetails += v + "\n";
+                    }
+                }
+            }
+  
+            int specificCode = (int)error.Error;
+            errorCode = specificCode.ToString() + " " + error.Error.ToString();
+        }
+
+        public override string ToString()
+        {
+            return $"Endpoint: {apiEndpoint} \n" +
+                $"Message: {message} \n" +
+                $"Error Summary: {errorSummary} \n" +
+                $"PlayFab ErrorCode: {errorCode} \n" +
+                $"HTTP Code: {httpCode} \n" +
+                $"HTTP Status: {httpStatus} \n" +
+                $"Error Details: {errorDetails}";
+        }
+    }
 }
 
