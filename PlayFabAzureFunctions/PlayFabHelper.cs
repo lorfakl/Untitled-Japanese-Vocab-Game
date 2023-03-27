@@ -406,6 +406,9 @@ public class GetOtherPlayerStatisticsResult
 
     [JsonProperty("Value")]
     public int Value { get; set; }
+
+    [JsonProperty("DisplayName")]
+    public string DisplayName { get; set; }
 }
 
 public static class PlayFabHelper
@@ -574,6 +577,18 @@ public static class PlayFabHelper
             return default(Task<PlayFabResult<RemovePlayerTagResult>>);
         }
         
+    }
+
+    public static Task<PlayFabResult<GetPlayerCombinedInfoResult>> GetPlayerInfo(GetPlayerCombinedInfoRequestParams param, string id, ILogger log)
+    {
+        GetPlayerCombinedInfoRequest rq = new GetPlayerCombinedInfoRequest
+        {
+            PlayFabId = id,
+            InfoRequestParameters = param
+        };
+        var infoRquest = PlayFabServerAPI.GetPlayerCombinedInfoAsync(rq);
+        log.LogInformation($"Requested Info: {JsonConvert.SerializeObject(rq)} for ID: {id}");
+        return infoRquest;
     }
 
     public static Task<PlayFabResult<GetPlayerStatisticsResult>> GetPlayerStatisitic(string id, StatisticName s, ILogger log)

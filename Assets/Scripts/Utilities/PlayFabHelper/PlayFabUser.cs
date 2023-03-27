@@ -65,11 +65,11 @@ namespace Utilities.PlayFabHelper.CurrentUser
         string _playFabID;
         
 
-        public List<PlayFabGroup> Groups
+        public PlayFabGroup Group
         {
             get { return _groups; }
         }
-        List<PlayFabGroup> _groups = new List<PlayFabGroup>();
+        PlayFabGroup _groups = new PlayFabGroup();
         
 
         public List<PlayerTags> Tags
@@ -110,7 +110,7 @@ namespace Utilities.PlayFabHelper.CurrentUser
 
         public void UpdateGroup(PlayFabGroup g)
         {
-            _groups.Insert(0, g);
+            _groups = g;
         }
 
         

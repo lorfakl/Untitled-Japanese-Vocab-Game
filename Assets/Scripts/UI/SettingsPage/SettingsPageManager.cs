@@ -22,12 +22,8 @@ public class SettingsPageManager : MonoBehaviour
 
     private void Awake()
     {
-        ModifiedSettings = new UserSettingsData();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        if(PlayFabController.IsAuthenticated)
+        HelperFunctions.Log("Is this called Settings Awake");
+        if (PlayFabController.IsAuthenticated)
         {
             OnAuthenticated();
         }
@@ -35,6 +31,11 @@ public class SettingsPageManager : MonoBehaviour
         {
             PlayFabController.IsAuthedEvent += OnAuthenticated;
         }
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
@@ -50,13 +51,10 @@ public class SettingsPageManager : MonoBehaviour
             CurrentSettings = SaveSystem.Load<UserSettingsData>(DataCategory.Settings);
             if(CurrentSettings == default)
             {
-                LoadSettingsFromPlayFab();
-                if(UseDefaultSettings)
-                {
-                    CurrentSettings = StaticUserSettings.Settings;
-                    ModifiedSettings = new UserSettingsData(CurrentSettings);
-                    return;
-                }
+                CurrentSettings = StaticUserSettings.Settings;
+                ModifiedSettings = new UserSettingsData(CurrentSettings);
+                return;
+  
             }
             else
             {

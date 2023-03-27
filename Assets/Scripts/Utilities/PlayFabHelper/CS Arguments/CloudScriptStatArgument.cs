@@ -15,10 +15,13 @@ namespace Utilities.PlayFabHelper.CSArguments
         [JsonProperty("value")]
         public string value { get; set; }
 
+        public int InteralValue { get; private set; }
+
         public CloudScriptStatArgument(StatisticName n, int val)
         {
             statName = n.ToString();
             value = EncodeStatisticValue(val);
+            InteralValue = val;
         }
 
         [JsonConstructor]
@@ -26,6 +29,7 @@ namespace Utilities.PlayFabHelper.CSArguments
         {
             statName = n;
             value = val.ToString();
+            InteralValue = val;
         }
 
         private string EncodeStatisticValue(int value)
@@ -46,7 +50,7 @@ namespace Utilities.PlayFabHelper.CSArguments
         public int DecodeStatisticValue()
         {
             List<byte> bytes = new List<byte>();
-
+            HelperFunctions.Log(value);
             foreach (string b in value.Split(','))
             {
                 if (!String.IsNullOrEmpty(b))
@@ -55,19 +59,12 @@ namespace Utilities.PlayFabHelper.CSArguments
                 }
             }
 
-            //Console.WriteLine(");
-            foreach (byte b in bytes)
-            {
-                Console.Write(b.ToString() + ", ");
-
-            }
 
             byte[] properArray = bytes.ToArray();
 
-
-            long i = BitConverter.ToInt64(properArray, 0);
-
-            return (int)i;
+            int p = BitConverter.ToInt32(properArray);
+            
+            return p;
 
         }
 

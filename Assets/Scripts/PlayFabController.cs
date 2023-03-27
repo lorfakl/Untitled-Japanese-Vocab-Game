@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using PlayFab.EventsModels;
+using PlayFab;
 
 public delegate void IsAuthenticatedNotification();
 
@@ -72,9 +73,17 @@ public class PlayFabController : MonoBehaviour
     #endregion
 
     #region Public Methods
-    public static void DisplayName(string name, Action success = null)
+    public static void DisplayName(string name, Action success = null, Action<PlayFabError> error = null)
     {
-        Playfab.UpdateDisplayName(name,OnPlayFabError, success);
+        Playfab.UpdateDisplayName(name,
+            (failure)=> 
+            { 
+                if(error != null)
+                {
+                    error(failure);
+                }
+                OnPlayFabError(failure); 
+            }, success);
     }
 
     public static void ArcadeLogin(string id, Action success)
@@ -142,7 +151,7 @@ public class PlayFabController : MonoBehaviour
         Playfab.ExecuteFunction(new ExecuteFunctionRequest
         {
             FunctionName = functionName.ToString(),
-            FunctionParameter = parameter,
+            FunctionParameter = JsonConvert.SerializeObject(parameter),
             GeneratePlayStreamEvent = Playfab.ArePlayStreamEventsGenerated
         }, (result) =>
         {
@@ -204,10 +213,7 @@ public class PlayFabController : MonoBehaviour
                 ExecutionCSFunction(CSFunctionNames.UpdateTag, parameterDict, Playfab.ArePlayStreamEventsGenerated);
                 HelperFunctions.Log("Group Entity Key ID: " + result.Group.Id);
                 HelperFunctions.Log("Group Entity Key Type: " + result.Group.Type);
-                CurrentAuthedPlayer.CurrentUser.Groups.Add
-                (
-                    new PlayFabGroup((UniversalEntityKey)result.Group, grpName)
-                );
+                CurrentAuthedPlayer.CurrentUser.UpdateGroup(new PlayFabGroup((UniversalEntityKey)result.Group, grpName));
                 success(result);
             }, OnPlayFabError);
     }
@@ -230,8 +236,8 @@ public class PlayFabController : MonoBehaviour
         //Playfab.AddMembers(rq, SaveGroupMembers,  OnPlayFabError);
     }
 
-        
-    public static void GetGroupMembers(UniversalEntityKey groupKey, Action<List<BasicProfile>> callback)
+    
+    public static void GetGroupMembers(UniversalEntityKey groupKey, Action<List<BasicProfile>> callback, Action<PlayFabError> error = null)
     {
         HelperFunctions.Log("Group ID from CU: " + groupKey.ID);
         ListGroupMembersRequest rq = new ListGroupMembersRequest
@@ -295,7 +301,15 @@ public class PlayFabController : MonoBehaviour
                 callback(profileLeaderboard);
                    
             }, OnPlayFabError);
-        }, OnPlayFabError);
+        }, 
+        (failure)=> 
+        { 
+            if(error != null)
+            {
+                error(failure);
+            }
+            OnPlayFabError(failure);
+        });
             
     }
     public static void InitiateFileUploads(UniversalEntityKey e, string fileName)
@@ -494,6 +508,7 @@ public class PlayFabController : MonoBehaviour
     private void OnDisable()
     {
         SaveSystem.Save(CurrentAuthedPlayer.CurrentUser, DataCategory.User);
+        SaveSystem.Save(CurrentAuthedPlayer.CurrentUser.Group, DataCategory.Group);
     }
 
     #endregion
@@ -516,7 +531,7 @@ public class PlayFabController : MonoBehaviour
     }
     static void SaveGroupMembers(List<BasicProfile> basicProfiles)
     {
-        CurrentAuthedPlayer.CurrentUser.Groups[0].Add(basicProfiles);
+        CurrentAuthedPlayer.CurrentUser.Group.Add(basicProfiles);
     }
 
     static void OnSuccessfulLogin(LoginResult result)
@@ -533,8 +548,8 @@ public class PlayFabController : MonoBehaviour
         HelperFunctions.Log("Delta time since last login" + deltaTime);
         string l = "Detla Hours: " + deltaTime.Hours + "\n" + "Detla Minutes: " + deltaTime.Minutes + "\n" + "Detla Seconds: " + deltaTime.Seconds;
         HelperFunctions.Log(l);
-        
-        if(deltaTime > twelveHours)
+        HelperFunctions.Error("PlayFabCOntroller LoginStatis is set every login NOT FOR PROD");
+        if(deltaTime < twelveHours)
         {
             Playfab.ExecuteFunction(new ExecuteFunctionRequest
             {

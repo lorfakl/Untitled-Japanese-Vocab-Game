@@ -10,6 +10,7 @@ using Utilities;
 using PlayFab.ClientModels;
 using System.Threading.Tasks;
 using TMPro;
+using Utilities.Events;
 
 public class StatPageManager : MonoBehaviour
 {
@@ -115,32 +116,95 @@ public class StatPageManager : MonoBehaviour
                 hasPlayed = true;
             }
         }
-
+        GameEvent loadingLeaderboardComplete = ScriptableObject.CreateInstance<GameEvent>();
         HelperFunctions.Warning("Ranking needs to take place in the Leaderboard Entry Controller");
+        var leaderboardLoading = MessageBoxFactory.Create(MessageBoxType.Loading, "Grabbing updated Leaderboard Info. Please Wait...", "Loading Leaderboard Info", loadingLeaderboardComplete, averageSpeed.transform.parent);
+        leaderboardLoading.DisplayMessageBox(leaderboardLoading.AutoDestroyMessageBox, true);
 
         if (isGrouped)
         {
             HelperFunctions.Log("Grab playfab group data");
             try
             {
-                if (CurrentAuthedPlayer.CurrentUser?.Groups[0]?.MembersList?.Count > 0)
-                {
+                if (CurrentAuthedPlayer.CurrentUser?.Group?.MembersList?.Count > 0) 
+                { //we have group members just grab member data
                     HelperFunctions.Log("Skipped CS call using cache");
                     hasLoadedFromFile = true;
-                    GenerateLeaderboardView(CurrentAuthedPlayer.CurrentUser?.Groups[0]?.MembersList);
+                    
+
+                    GetOtherPlayerStatisticArgument otherStats = new GetOtherPlayerStatisticArgument
+                    {
+                        playFabIDs = CurrentAuthedPlayer.CurrentUser?.Group.GetMemberIDs(),
+                        StatisticName = StatisticName.LeagueSP
+                    };
+                    HelperFunctions.Log(JsonConvert.SerializeObject(otherStats));
+                    PlayFabController.ExecutionCSFunction(CSFunctionNames.GetOtherStatistics, otherStats, 
+                        (csResult) => 
+                        {
+                            List<GetOtherPlayerStatisticsResult> csResponse = JsonConvert.DeserializeObject<List<GetOtherPlayerStatisticsResult>>(csResult.FunctionResult.ToString());
+                            List<BasicProfile> members = new List<BasicProfile>();
+                            foreach(var r in csResponse)
+                            {
+                                members.Add(new BasicProfile(r, StatisticName.LeagueSP));
+                            }
+
+                            CurrentAuthedPlayer.CurrentUser?.Group.OverWriteMembers(members);
+                            GenerateLeaderboardView(CurrentAuthedPlayer.CurrentUser?.Group?.MembersList);
+                            loadingLeaderboardComplete.Raise();
+                        });
+                    
                 }
                 else
-                {
-                    PlayFabController.GetGroupMembers(CurrentAuthedPlayer.CurrentUser.Groups[0].EntityKey, GenerateLeaderboardView);
+                {//no members just groupID
+                    PlayFabController.GetGroupMembers(CurrentAuthedPlayer.CurrentUser.Group.EntityKey, 
+                        (result)=> 
+                        {
+                            GenerateLeaderboardView(result);
+                            loadingLeaderboardComplete.Raise();
+                        },
+                        (error)=>
+                        {
+                            PlayFabController.ListGroupMembership(
+                                (result) =>
+                                {
+                                    foreach (var g in result)
+                                    {
+                                        PlayFabController.GetGroupMembers(CurrentAuthedPlayer.CurrentUser.Group.EntityKey,
+                                        (result) =>
+                                        {
+                                            GenerateLeaderboardView(result);
+                                            loadingLeaderboardComplete.Raise();
+                                        });
+                                    }
+                                });
+                        });
                 }
             }
             catch(Exception e)
-            {
+            {//no group data at all
                 HelperFunctions.CatchException(e);
-                var eKey = new UniversalEntityKey(LocalPlayFabData.GroupID, EntityTypes.group.ToString());
-                HelperFunctions.Log("File reading failed");
-                CurrentAuthedPlayer.CurrentUser.UpdateGroup(new PlayFabGroup(eKey, "PrimaryGroup"));
-                PlayFabController.GetGroupMembers(eKey, GenerateLeaderboardView);
+                PlayFabController.ListGroupMembership( //get group membership
+                    (groupList) =>
+                    {
+                        if (groupList.Count > 0)
+                        {
+                            var g = groupList[0];
+                            CurrentAuthedPlayer.CurrentUser.UpdateGroup(g);
+                            PlayFabController.GetGroupMembers(g.EntityKey, (result) => //get member data
+                            {
+                                CurrentAuthedPlayer.CurrentUser.Group.OverWriteMembers(result);
+                                GenerateLeaderboardView(result);
+                                loadingLeaderboardComplete.Raise();
+                            }); 
+                        }
+                        else
+                        {
+                            HelperFunctions.Log("Go study then come back to get Rivals");
+                            goStudyText.enabled = true;
+                            
+                            loadingLeaderboardComplete.Raise();
+                        }
+                    });
             }
             //LeaderboardManager.CreateLeaderboard(StatisticName.LeagueSP, leaderboardEntryPrefab, leaderboardPanelContent.transform, )
             
@@ -154,11 +218,14 @@ public class StatPageManager : MonoBehaviour
             {
                 LocalPlayFabData.GroupID = success.Group.Id;
             });
+            loadingLeaderboardComplete.Raise();
         }
         else
         {
+            loadingLeaderboardComplete.Raise();
             HelperFunctions.Log("Go study then come back to get Rivals");
             goStudyText.enabled = true;
+            PlayFabController.DeleteAllGroups();
         }
     }
 
@@ -194,7 +261,7 @@ public class StatPageManager : MonoBehaviour
     {
         if(!hasLoadedFromFile)
         {
-            CurrentAuthedPlayer.CurrentUser.Groups[0].Add(profiles);
+            CurrentAuthedPlayer.CurrentUser.Group.OverWriteMembers(profiles);
         }
 
         List<LeaderboardEntry> leaderboard = new List<LeaderboardEntry>();
@@ -208,7 +275,7 @@ public class StatPageManager : MonoBehaviour
                 {
                     displayName = profile.DisplayName,
                     playfabID = profile.PlayFabID,
-                    score = Int32.Parse(profile.Statistics[StatisticName.LeagueSP].value),
+                    score = profile.Statistics[StatisticName.LeagueSP].InteralValue,
                     rank = (profiles.IndexOf(profile) + 1)
                 };
 
@@ -238,6 +305,7 @@ public class StatPageManager : MonoBehaviour
 
     }
 
+    
     private void DisplayRecord()
     {
         var r = DataPlatform.GetStudyRecord();

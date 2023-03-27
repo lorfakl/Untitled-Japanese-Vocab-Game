@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utilities.PlayFabHelper.CurrentUser;
 
 namespace Utilities.PlayFabHelper
 {
@@ -62,6 +63,28 @@ namespace Utilities.PlayFabHelper
         {
             this.ModifyMemberDict(members);
         }
+
+        public void OverWriteMembers(List<BasicProfile> members)
+        {
+            _members.Clear();
+            foreach(var b in members)
+            {
+                _members.Add(b.PlayFabID, b);
+            }
+        }
+
+        public List<string> GetMemberIDs()
+        {
+            List<string> IDs = new List<string>();
+
+            foreach (var member in MembersList)
+            {
+                IDs.Add(member.PlayFabID);
+            }
+
+            return IDs;
+        }
+
     
         private void ModifyMemberDict(List<BasicProfile> m)
         {

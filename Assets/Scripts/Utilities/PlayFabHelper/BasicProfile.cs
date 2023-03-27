@@ -23,6 +23,21 @@ namespace Utilities.PlayFabHelper
 
         public BasicProfile() { }
 
+        public BasicProfile(GetOtherPlayerStatisticsResult res, StatisticName s)
+        {
+            this.PlayFabID = res.ID;
+            this.Statistics = new Dictionary<StatisticName, CloudScriptStatArgument>();
+            this.Statistics.Add(s, new CloudScriptStatArgument(s, res.Value));
+            if(String.IsNullOrEmpty(res.DisplayName))
+            {
+                this.DisplayName = PlayFabID;
+            }
+            else
+            {
+                this.DisplayName = res.DisplayName;
+            }
+            
+        }
         public BasicProfile(PlayFab.ClientModels.PlayerProfileModel p)
         {
             if(p == null)

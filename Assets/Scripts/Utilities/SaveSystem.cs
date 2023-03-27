@@ -75,7 +75,7 @@ namespace Utilities.SaveOperations
                 }
                 else
                 {
-                    HelperFunctions.Error("File path: " + path + " does NOT exist...idiot");
+                    HelperFunctions.Log("File path: " + path + " does NOT exist...idiot");
                     //file.Close();
                     return default(T);
                 }
@@ -95,9 +95,10 @@ namespace Utilities.SaveOperations
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             using(MemoryStream ms = new MemoryStream(data))
             {
-                object obj = binaryFormatter.Deserialize(ms);
+                
                 try
                 {
+                    object obj = binaryFormatter.Deserialize(ms);
                     return (T)obj;
                 }
                 catch(Exception e)

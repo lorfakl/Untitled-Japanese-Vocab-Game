@@ -27,6 +27,11 @@ namespace Utilities.PlayFabHelper.CSArguments
         [JsonProperty("Value")]
         public int Value { get; set; }
 
+        [JsonProperty("DisplayName")]
+        public string DisplayName { get; set; }
+
+
+
     }
 
 }

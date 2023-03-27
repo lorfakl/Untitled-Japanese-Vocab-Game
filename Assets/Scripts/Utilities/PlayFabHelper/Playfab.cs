@@ -225,6 +225,7 @@ namespace Utilities.PlayFabHelper
                     {
                         success();
                     }
+                     DisplayName = name;
                  }, 
                  onPlayFabError
                 );
@@ -359,7 +360,11 @@ namespace Utilities.PlayFabHelper
         
         public static void ListGroupMembers(ListGroupMembersRequest r, Action<ListGroupMembersResponse> success, Action<PlayFabError> error)
         {
-            PlayFabGroupsAPI.ListGroupMembers(r, success, error);
+            PlayFabGroupsAPI.ListGroupMembers(r, success,
+                (failure) => 
+                { 
+                    
+                });
         }
         
         public static void GetProfiles(GetEntityProfilesRequest r, Action<GetEntityProfilesResponse> suceess, Action<PlayFabError> error)
@@ -596,16 +601,10 @@ namespace Utilities.PlayFabHelper
             ArePlayStreamEventsGenerated = config.publishCloudScriptEvents;
             VerboseModeEnabled = config.verboseModeEnabled;
 
-            var u = SaveSystem.Load<PlayFabUser>(DataCategory.User);
-            if(u != default)
+            var group = SaveSystem.Load<PlayFabGroup>(DataCategory.Group);
+            if(group != default)
             {
-                if(u.PlayFabID == PlayFabID)
-                {
-                    foreach (var g in u.Groups)
-                    {
-                        user.UpdateGroup(g);
-                    }
-                }
+                user.UpdateGroup(group);
             }
 
             CurrentAuthedPlayer.SetCurrentUser(user);
