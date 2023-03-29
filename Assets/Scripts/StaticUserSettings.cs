@@ -47,6 +47,13 @@ public static class StaticUserSettings
         return (int)userSettingsData.TotalWordsPerSession;
     }
 
+    public static float GetMusicVolume()
+    {
+        LoadSettings();
+        float volumeLvl = userSettingsData.AudioVolume / 100.0f;
+        return volumeLvl;
+    }
+
     static void LoadSettings()
     {
         

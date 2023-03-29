@@ -6,7 +6,9 @@ using UnityEngine;
 using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
+using Utilities.PlayFabHelper.CurrentUser;
 using Utilities.SaveOperations;
+using Utilities.Logging;
 
 public class DataPlatform : MonoBehaviour
 {
@@ -18,8 +20,8 @@ public class DataPlatform : MonoBehaviour
     public void OnStudyObjectSelected(object s)
     {
         StudyObject studyObject = (StudyObject)s;
-        string key = studyObject.Word.ToString();
-        if (StudyRecord.Record.ContainsKey(studyObject.Word.ToString()))
+        string key = studyObject.Word.PrintAnswer(); //changed to Print answer so key doesnt change when proficiency changes
+        if (StudyRecord.Record.ContainsKey(studyObject.Word.PrintAnswer()))
         {
             StudyRecord.Record[key].TimesSeen++;
             StudyRecord.Record[key].TimeInFlight = studyObject.TimeInFlight;
@@ -33,8 +35,8 @@ public class DataPlatform : MonoBehaviour
     public void OnCorrectAnswer(object s)
     {
         StudyObject studyObject = (StudyObject)s;
-        string key = studyObject.Word.ToString();
-        if (StudyRecord.Record.ContainsKey(studyObject.Word.ToString()))
+        string key = studyObject.Word.PrintAnswer();
+        if (StudyRecord.Record.ContainsKey(studyObject.Word.PrintAnswer()))
         {
             StudyRecord.Record[key].TimesCorrect++;
         }
@@ -71,17 +73,26 @@ public class DataPlatform : MonoBehaviour
     public static StudyRecord GetStudyRecord()
     {
         var data = SaveSystem.Load<StudyRecord>(DataCategory.StatisticRecord);
-        if (data == default)
+        try
         {
-            HelperFunctions.Warning("No data no problem....probably");
+            if (data == default || data.OwnerID != CurrentAuthedPlayer.CurrentUser.PlayFabID)
+            {
+                HelperFunctions.Warning("No data no problem....probably");
+                return new StudyRecord();
+            }
+            else
+            {
+                StudyRecord = data;
+                return new StudyRecord(data);
+            }
+        }
+        catch(Exception e)
+        {
+            HelperFunctions.CatchException(e);
             return new StudyRecord();
         }
-        else
-        {
-            StudyRecord = data;
-            return new StudyRecord(data);
-        }
         
+
     }
 
     // Start is called before the first frame update
@@ -92,9 +103,13 @@ public class DataPlatform : MonoBehaviour
         {
             HelperFunctions.Warning("No data no problem....probably");
         }
-        else
+        else if(data.OwnerID == CurrentAuthedPlayer.CurrentUser.PlayFabID)
         {
             StudyRecord = data;
+        }
+        else
+        {
+            StudyRecord = new StudyRecord();
         }
     }
 
@@ -107,7 +122,7 @@ public class DataPlatform : MonoBehaviour
 
     private void UpdateStreak()
     {
-        if(Playfab.CurrentLoginTime - Playfab.LastLogin > new TimeSpan(24, 0, 0))
+        if(Playfab.CurrentLoginTime - Playfab.LastLogin <= new TimeSpan(24, 0, 0))
         {
             StudyRecord.CurrentStreak++;
             if(StudyRecord.CurrentStreak >= StudyRecord.LongestStreak)
@@ -161,21 +176,33 @@ public class UserStudyData
 [Serializable]
 public class StudyRecord
 {
+    public string OwnerID;
+
     public Dictionary<string, UserStudyData> Record = new Dictionary<string, UserStudyData>();
 
     public int CurrentStreak;
 
     public int LongestStreak;
 
-    public StudyRecord() { }
-
+    public StudyRecord()
+    {
+        try
+        {
+            OwnerID = CurrentAuthedPlayer.CurrentUser.PlayFabID;
+        }
+        catch(Exception e)
+        { 
+            HelperFunctions.CatchException(e);
+            OwnerID = new Guid().ToString(); //should give a 0000 Guid
+        }
+    }
     public StudyRecord(StudyRecord s)
     {
         if(s == null)
         {
             new StudyRecord();
         }
-
+        this.OwnerID = s.OwnerID;
         this.Record = new Dictionary<string, UserStudyData>();
         this.CurrentStreak = s.CurrentStreak;
         this.LongestStreak = s.LongestStreak;

@@ -39,6 +39,9 @@ public class SettingsDisplayController : MonoBehaviour
     ArrowSelector _audioTranslationDirection;
 
     [SerializeField]
+    Slider audioVolume;
+
+    [SerializeField]
     GameObject _wordSettingsUIGroup;
 
     [SerializeField]
@@ -63,7 +66,7 @@ public class SettingsDisplayController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _audioUIGroup.gameObject.SetActive(false);
+        //_audioUIGroup.gameObject.SetActive(false);
         _topArrowSelectLocalPosition = _kanaAndEnglish.GetComponent<RectTransform>().localPosition;
         if (SettingsPageManager.UseDefaultSettings)
         {
@@ -116,6 +119,7 @@ public class SettingsDisplayController : MonoBehaviour
         DriveToggleSliders(currentSettings);
         DriveArrowSelectors(currentSettings);
         ConfigureSelectors(currentSettings);
+        audioVolume.value = currentSettings.AudioVolume;
     }
 
     void SetUpSelectorTuple(ArrowSelector a, ArrowSelector b)

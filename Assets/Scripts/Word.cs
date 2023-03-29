@@ -39,6 +39,35 @@ public class Word
         set;
     }
 
+    public int TimesSeen
+    {
+        get;
+        set;
+    }
+
+    public int TimesAnsweredCorrectly
+    {
+        get;
+        set;
+    }
+
+    public float AverageTime
+    {
+        get;
+        set;
+    }
+
+    public float LongestTime
+    {
+        get;
+        set;
+    }
+
+    public float ShortestTime
+    {
+        get;
+        set;
+    }
     public void ModifyProficiencyLevel(bool wasCorrect)
     {
         if(wasCorrect)

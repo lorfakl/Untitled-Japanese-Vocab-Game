@@ -59,6 +59,7 @@ public class UserSettingsData
     StudyTopic studyTopic;
     NewWordsPerSession newWords;
     AudioTranslateDirection audioTranslateDirection;
+    float audioLevel;
 
     public string OwnerID
     {
@@ -96,6 +97,12 @@ public class UserSettingsData
         set { maxWords = value; }
     }
 
+    public float AudioVolume
+    {
+        get { return audioLevel; }
+        set { audioLevel = value; }
+    }
+
     public UserSettingsData()
     {
 
@@ -103,7 +110,6 @@ public class UserSettingsData
 
     public UserSettingsData(TranslateDirection TranslateDirection, MaxWordsPerSession maxWords, StudyTopic studyTopic, NewWordsPerSession newWords)
     {
-
         this._translateDirection = TranslateDirection;
         this.maxWords = maxWords;
         this.studyTopic = studyTopic;
@@ -120,6 +126,7 @@ public class UserSettingsData
         this.studyTopic = otherData.studyTopic;
         this.newWords = otherData.newWords;
         this.audioTranslateDirection = otherData.audioTranslateDirection;
+        this.audioLevel = otherData.audioLevel;
     }
 
     public static UserSettingsData CreateDefaultSettings()
@@ -131,7 +138,8 @@ public class UserSettingsData
             OwnerID = Playfab.PlayFabID,
             StudyTopic = StudyTopic.Kanji,
             TranslationDirection = TranslateDirection.Kanji2Kana,
-            TotalWordsPerSession = MaxWordsPerSession.Thirty
+            TotalWordsPerSession = MaxWordsPerSession.Thirty,
+            AudioVolume = 50
         };
 
         return settings;
@@ -142,6 +150,7 @@ public class UserSettingsData
         string data = $"Study Topic: {studyTopic} \n" +
             $"Audio Study: {_isAudioStudy} \n" +
             $"Visual Translation Direction: {_translateDirection} \n" +
+            $"Audio Volume: {audioLevel} \n" +
             $"Max total words per session: {maxWords} \n" +
             $"Max New Words per session: {newWords} \n";
         return data;

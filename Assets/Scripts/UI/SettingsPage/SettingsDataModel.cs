@@ -26,10 +26,15 @@ public class SettingsDataModel : MonoBehaviour
     ArrowSelector _audioTranslationDirection;
 
     [SerializeField]
+    Slider _musicVolume;
+    
+    [SerializeField]
     ToggleSlider _totalWordsPerSession;
 
     [SerializeField]
     ToggleSlider _newWordsPerSession;
+
+
 
 
     void Start()
@@ -39,9 +44,10 @@ public class SettingsDataModel : MonoBehaviour
         _kanaAndKanji.OnSelectionChange.AddListener(UpdateTranslationDirection);
         _kanaAndKana.OnSelectionChange.AddListener(UpdateTranslationDirection);
         _kanjiAndEnglish.OnSelectionChange.AddListener(UpdateTranslationDirection);
-        _audioTranslationDirection.OnSelectionChange.AddListener(UpdateAudioTranslationDirection);
+        //_audioTranslationDirection.OnSelectionChange.AddListener(UpdateAudioTranslationDirection);
         _totalWordsPerSession.OnValueSelectedChanged.AddListener(UpdateTotalWords);
         _newWordsPerSession.OnValueSelectedChanged.AddListener(UpdateMaxNewWords);
+        _musicVolume.onValueChanged.AddListener(UpdateMusicVolume);
     }
 
     void UpdateTranslationDirection(string t)
@@ -62,6 +68,11 @@ public class SettingsDataModel : MonoBehaviour
     void UpdateMaxNewWords(string n)
     {
         SettingsPageManager.ModifiedSettings.MaxNewWords = HelperFunctions.ParseEnum<NewWordsPerSession>(n);
+    }
+
+    void UpdateMusicVolume(float value)
+    {
+        SettingsPageManager.ModifiedSettings.AudioVolume = value;
     }
 
     void UpdateAudioTranslationDirection(string d)

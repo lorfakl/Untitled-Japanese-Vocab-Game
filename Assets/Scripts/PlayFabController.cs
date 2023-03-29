@@ -548,8 +548,8 @@ public class PlayFabController : MonoBehaviour
         HelperFunctions.Log("Delta time since last login" + deltaTime);
         string l = "Detla Hours: " + deltaTime.Hours + "\n" + "Detla Minutes: " + deltaTime.Minutes + "\n" + "Detla Seconds: " + deltaTime.Seconds;
         HelperFunctions.Log(l);
-        HelperFunctions.Error("PlayFabCOntroller LoginStatis is set every login NOT FOR PROD");
-        if(deltaTime < twelveHours)
+        //HelperFunctions.Error("PlayFabCOntroller LoginStatis is set every login NOT FOR PROD");
+        if(deltaTime > twelveHours)
         {
             Playfab.ExecuteFunction(new ExecuteFunctionRequest
             {
