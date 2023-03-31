@@ -507,8 +507,8 @@ public class PlayFabController : MonoBehaviour
     
     private void OnDisable()
     {
-        SaveSystem.Save(CurrentAuthedPlayer.CurrentUser, DataCategory.User);
-        SaveSystem.Save(CurrentAuthedPlayer.CurrentUser.Group, DataCategory.Group);
+        //SaveSystem.Save(CurrentAuthedPlayer.CurrentUser, DataCategory.User);
+        //SaveSystem.Save(CurrentAuthedPlayer.CurrentUser.Group, DataCategory.Group);
     }
 
     #endregion

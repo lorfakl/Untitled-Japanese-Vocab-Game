@@ -65,6 +65,10 @@ public class ProficiencyManager : MonoBehaviour
     void SetLeitnerLevel(bool wasCorrect, JapaneseWord word)
     {
         word.ModifyProficiencyLevel(wasCorrect);
-        ss.ModifySessionList(word);
+        if(ss != null)
+        {
+            ss.ModifySessionList(word);
+        }
+        
     }
 }

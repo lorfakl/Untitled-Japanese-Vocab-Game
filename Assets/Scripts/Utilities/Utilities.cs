@@ -14,7 +14,7 @@ using Utilities.PlayFabHelper;
 namespace ProjectSpecificGlobals
 {
     public enum ContactType { GroundContact, CubeContact, BlockContact };
-    public enum SceneNames { MenuScene, OpeningScene, SampleScene, ArcadeLeaderboard, ArcadeOpeningScene, ArcadeStudyScene, ArcadeGameOver}
+    public enum SceneNames { MenuScene, OpeningScene, SampleScene, ArcadeLeaderboard, ArcadeOpeningScene, ArcadeStudyScene, ArcadeGameOver, EnenraScene }
 
     public enum Tags { MainCanvas}
 
@@ -152,7 +152,7 @@ namespace Utilities
         {
             string msgStr = DateTime.Now + ": " + msg.ToString();
             
-            if (Playfab.VerboseModeEnabled)
+            if (!Playfab.VerboseModeEnabled)
             {
                 Debug.Log(msgStr);
             }

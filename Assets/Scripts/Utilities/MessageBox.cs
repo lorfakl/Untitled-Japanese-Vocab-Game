@@ -23,7 +23,7 @@ namespace Utilities
         {
             return new MessageBox(messageBoxType, message, title, closingEvent, parent);
         }
-
+        //NONE OF THIS MESSAGE BOX CODE IS GOOD NEEDS TO BE WORKED ON FOR SINGLE LINE CREATION AND AUTODELETE
         public static MessageBox CreateLoadingBox(string title, string message, GameEvent closingEvent = null, Action continueCallback=null, Transform parent = null, bool useAltParent = false)
         {
             MessageBox msgBox = new MessageBox(MessageBoxType.Loading, message, title, closingEvent, parent);

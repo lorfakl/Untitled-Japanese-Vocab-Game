@@ -29,6 +29,13 @@ public class JSONWordLibrary : MonoBehaviour
         get { return wordsToStudy; }
         private set { wordsToStudy = value; }
     }
+
+    public static List<JapaneseWord> WordsFromFile
+    {
+        get;
+        private set;
+    }
+
     #endregion
 
     #region Private Variables
@@ -147,6 +154,7 @@ public class JSONWordLibrary : MonoBehaviour
         if(StaticUserSettings.IsKanjiStudyTopic())
         {
             workingWordBankList = kanjiJsonObjs;
+            WordsFromFile = kanjiJsonObjs;
         }
         else
         {

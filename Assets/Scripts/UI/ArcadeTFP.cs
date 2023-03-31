@@ -23,6 +23,6 @@ public class ArcadeTFP : MonoBehaviour
 
     void LoadLeaderboard()
     {
-        HelperFunctions.LoadScene(ProjectSpecificGlobals.SceneNames.ArcadeLeaderboard);
+        HelperFunctions.LoadScene(ProjectSpecificGlobals.SceneNames.ArcadeOpeningScene);
     }
 }
