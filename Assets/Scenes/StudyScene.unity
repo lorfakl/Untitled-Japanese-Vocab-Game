@@ -1298,6 +1298,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainTheme: {fileID: 963194229}
+  animator: {fileID: 1311203371}
+  bgImage: {fileID: 1449520639}
+  bossThemes:
+  - {fileID: 8300000, guid: 8c69716199c76ba439d2e883d0ae32d3, type: 3}
+  - {fileID: 8300000, guid: 98972cf39718878428c20d3ca60cf4ad, type: 3}
+  - {fileID: 8300000, guid: ce3671daddbcbd8458caf8d457a74995, type: 3}
+  - {fileID: 8300000, guid: ff408ac37c0a29c49a27744a6e4f7ed6, type: 3}
+  - {fileID: 8300000, guid: 36c4420c1edacaf41ab3ef35b0d9c711, type: 3}
+  bossBackgrounds:
+  - {fileID: 21300000, guid: 2df30ccf490d0f14a94f3da06ab471a6, type: 3}
+  - {fileID: 21300000, guid: dd31691dbb97fa24e84013c47fce1154, type: 3}
+  - {fileID: 21300000, guid: b752cb746a334de40a72c205c7dd8c59, type: 3}
+  - {fileID: 21300000, guid: d47ebfe0526a14a4b8f6ab5b37e5d635, type: 3}
+  - {fileID: 21300000, guid: 6b58d963081ea82449932bbbffcdda85, type: 3}
+  runtimeAnimatorControllers:
+  - {fileID: 9100000, guid: f61e2dceb66b86e4fb41302e07c10c86, type: 2}
+  - {fileID: 9100000, guid: a04505260b4e90e46812b298ef243523, type: 2}
+  - {fileID: 9100000, guid: 3c61966d70c05854faffd8e23ba8149c, type: 2}
+  - {fileID: 9100000, guid: b0729d20bb51bb749b3280de973fe5b5, type: 2}
+  - {fileID: 9100000, guid: 618d5aa3c31443f44b27c32a0056c8c5, type: 2}
+  debugProgressValue: 2.41
 --- !u!4 &716208141
 Transform:
   m_ObjectHideFlags: 0
@@ -2707,7 +2728,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1479701388, guid: 4e18d832a59b53843af3728236d72fbd, type: 3}
+  m_Sprite: {fileID: -835302412, guid: 71400b901ef22b242995ce67b27a3d07, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

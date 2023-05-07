@@ -114,6 +114,7 @@ public class StudySystem : MonoBehaviour
         if(Playfab.WasUserJustCreated)
         {
             PlayFabController.GetPlayerData(new List<string> { UserDataKey.SessionWords.ToString() }, NewlyCreatedParseReturnData);
+            
         }
         else
         {
@@ -126,10 +127,21 @@ public class StudySystem : MonoBehaviour
     void NewlyCreatedParseReturnData(Dictionary<string, string> data)
     {
         //HelperFunctions.Log("Parsing return data");
+        
+        PlayFabController.UpdateUserData(new Dictionary<string, string>
+                    {
+                        {UserDataKey.LeitnerLevels.ToString(), JsonConvert.SerializeObject(data[UserDataKey.SessionWords.ToString()])}
+                    });
         string leitnerJson = data[UserDataKey.SessionWords.ToString()];
 
 
         List<JapaneseWord> sessionWords = JsonConvert.DeserializeObject<List<JapaneseWord>>(leitnerJson);
+        sessionWordLeitnerLevel[ProficiencyLevels.Zero] = sessionWords.ToList();
+        PlayFabController.UpdateUserData(new Dictionary<string, string>
+                    {
+                        {UserDataKey.LeitnerLevels.ToString(), JsonConvert.SerializeObject(sessionWordLeitnerLevel)}
+                    });
+
         studyProgress = 20;
 
         HelperFunctions.Log("Printing return data: ");

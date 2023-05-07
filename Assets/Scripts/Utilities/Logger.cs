@@ -5,7 +5,7 @@ using System;
 using Utilities.PlayFabHelper;
 using Utilities.Logging;
 using Newtonsoft.Json;
-
+using Utilities;
 
 public class Logger : MonoBehaviour
 {
@@ -16,6 +16,8 @@ public class Logger : MonoBehaviour
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledExceptionHandler;
         Application.logMessageReceivedThreaded += UnityLogMessageReceived_Handler;
         Application.logMessageReceived += UnityLogMessageReceived_Handler;
+
+
     }
  
     private void OnDisable()
@@ -38,6 +40,14 @@ public class Logger : MonoBehaviour
 
     private void UnityLogMessageReceived_Handler(string condition, string stackTrace, LogType type)
     {
+        string[] lblst = stackTrace.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+        /*Debug.Log("LOG MESSAGE RECEIVED IS CALLED");
+        foreach(string s in lblst)
+        {
+            Debug.Log(s);
+        }
+
+        Debug.Log(stackTrace);*/
         bool immediatePublish = false;
         if (type == LogType.Error || type == LogType.Exception)
         {

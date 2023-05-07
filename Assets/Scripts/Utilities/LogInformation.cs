@@ -159,5 +159,24 @@ namespace Utilities.Logging
                 $"Error Details: {errorDetails}";
         }
     }
+
+    public class Logger : ILogHandler
+    {
+        public Logger()
+        {
+
+        }
+
+        void ILogHandler.LogException(Exception exception, UnityEngine.Object context)
+        {
+            HelperFunctions.Log(exception);
+
+        }
+
+        void ILogHandler.LogFormat(LogType logType, UnityEngine.Object context, string format, params object[] args)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 

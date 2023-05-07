@@ -78,7 +78,14 @@ namespace Utilities.PlayFabHelper.CurrentUser
         }
         List<PlayerTags> _tags = new List<PlayerTags>();
 
-        public PlayFabUser(string id, List<PlayFab.ClientModels.TagModel> t, UniversalEntityKey e, BasicProfile b, PlayFabInventory i)
+        public int WordsSeen
+        {
+            get;
+            private set;
+        }
+        
+
+        public PlayFabUser(string id, List<PlayFab.ClientModels.TagModel> t, UniversalEntityKey e, BasicProfile b, PlayFabInventory i, int wordsSeen)
         {
             _entityKey = e;
             _inventory = i;
@@ -100,6 +107,7 @@ namespace Utilities.PlayFabHelper.CurrentUser
             }
             _profile = b;
             _playFabID = id;
+            WordsSeen = wordsSeen;
 
         }
     

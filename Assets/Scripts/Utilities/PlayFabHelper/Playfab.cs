@@ -546,7 +546,9 @@ namespace Utilities.PlayFabHelper
                 GetUserInventory = true,
                 GetUserVirtualCurrency = true,
                 GetTitleData = true,
-                TitleDataKeys = new List<string>{ TitleDataKeys.ClientConfiguration.ToString() },
+                TitleDataKeys = new List<string> { TitleDataKeys.ClientConfiguration.ToString() },
+                GetUserData = true,
+                UserDataKeys = new List<string> { UserDataKey.WordsSeen.ToString()},
                 ProfileConstraints = new PlayerProfileViewConstraints
                 {
                     ShowAvatarUrl = true,
@@ -569,9 +571,13 @@ namespace Utilities.PlayFabHelper
             EntityToken = result.EntityToken.EntityToken;
             TokenExpirationTime = (DateTime)result.EntityToken.TokenExpiration;
             HelperFunctions.Log("Is this a new account: " + result.NewlyCreated);
+
+            int wordsSeen = 0;
+
             if (result.NewlyCreated)
             {
                 WasUserJustCreated = true;
+                wordsSeen = 20;
             }
             else
             {
@@ -581,6 +587,18 @@ namespace Utilities.PlayFabHelper
                 {
                     DisplayName = result.InfoResultPayload.PlayerProfile.DisplayName;
                 }
+
+                try
+                {
+                    var userData = result.InfoResultPayload.UserData[UserDataKey.WordsSeen.ToString()];
+                    wordsSeen = Int32.Parse(userData.Value);
+                }
+                catch(Exception e)
+                {
+                    HelperFunctions.CatchException(e);
+                    wordsSeen = 20;
+                }
+                
                     
             }
             
@@ -590,11 +608,11 @@ namespace Utilities.PlayFabHelper
             if (result.InfoResultPayload.PlayerProfile != null)
             {
                 user = new PlayFabUser(PlayFabID, result.InfoResultPayload.PlayerProfile.Tags,
-                (UniversalEntityKey)result.EntityToken.Entity, b, pfInventory);
+                (UniversalEntityKey)result.EntityToken.Entity, b, pfInventory, wordsSeen);
             }
             else
             {
-                user = new PlayFabUser(PlayFabID, null, (UniversalEntityKey)result.EntityToken.Entity, b, pfInventory);
+                user = new PlayFabUser(PlayFabID, null, (UniversalEntityKey)result.EntityToken.Entity, b, pfInventory, wordsSeen);
             }
 
             ClientConfiguration config = JsonConvert.DeserializeObject<ClientConfiguration>(result.InfoResultPayload.TitleData[TitleDataKeys.ClientConfiguration.ToString()]);

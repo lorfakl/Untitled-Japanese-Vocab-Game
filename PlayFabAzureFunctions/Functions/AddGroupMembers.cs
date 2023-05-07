@@ -28,23 +28,29 @@ namespace PlayFabCloudScript.OnLogin
         static string secretKey = "PlayFabSecretKey";
         static string titleID = "titleId";
         static string Id = "";
-        public static ILogger logger = null;
+        public static ILogger logger;
 
         public static List<string> errorStrings = new List<string>();
         [FunctionName("AddMembers")]
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,ILogger log)
         {
-            
+            logger = log;
+            logger.LogInformation("Starting");
             PlayFabSettings.staticSettings.TitleId = Environment.GetEnvironmentVariable(titleID);
             PlayFabSettings.staticSettings.DeveloperSecretKey = Environment.GetEnvironmentVariable(secretKey);
-            logger = log;
+            
+            logger.LogInformation("Parsing Context");
             FunctionExecutionContext<dynamic> context = JsonConvert.DeserializeObject<FunctionExecutionContext<dynamic>>(await req.ReadAsStringAsync());
             dynamic args = context.FunctionArgument;
-            
+            logger.LogInformation("Context parse complete");
             
             Id = context.CallerEntityProfile.Lineage.MasterPlayerAccountId;
+            logger.LogInformation("Grabbed ID");
+            
             var entityTokenTask = PlayFabAuthenticationAPI.GetEntityTokenAsync(new PlayFab.AuthenticationModels.GetEntityTokenRequest());
             await entityTokenTask;
+
+            logger.LogInformation("auth complete");
             
             dynamic groupID = null;
             if (args != null && args["GroupID"] != null)
@@ -52,14 +58,20 @@ namespace PlayFabCloudScript.OnLogin
                 groupID = args["GroupID"];
             }
 
+            logger.LogInformation("Grabbed group id");
+
             dynamic memberKeys = null;
             if (args != null && args["MemberKeys"] != null)
             {
                 memberKeys = args["MemberKeys"];
             }
 
+            logger.LogInformation("memberkeys ID");
+
             List<string> memberIds = new List<string>();
             string groupIDArgument = groupID.ToString();
+
+
 
             try
             {
