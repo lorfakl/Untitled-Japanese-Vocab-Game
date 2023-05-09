@@ -1678,8 +1678,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 244.8, y: 90.3}
-  m_SizeDelta: {x: 200, y: 170}
+  m_AnchoredPosition: {x: 255.64354, y: 82.79303}
+  m_SizeDelta: {x: 200, y: 154.98}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &268850740
 MonoBehaviour:
@@ -1757,7 +1757,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -226739078, guid: d3c534359dca5a54abbda7a8ebcfeb44, type: 3}
+  m_Sprite: {fileID: 976123129, guid: f04ccafd3e8c07343b2fff8afbd5b1ea, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12157,8 +12157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -225.1, y: 90.3}
-  m_SizeDelta: {x: 200, y: 170}
+  m_AnchoredPosition: {x: -230.53, y: 84.377}
+  m_SizeDelta: {x: 189.15, y: 151.8141}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1678889906
 MonoBehaviour:
@@ -12236,7 +12236,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2074188221, guid: d3c534359dca5a54abbda7a8ebcfeb44, type: 3}
+  m_Sprite: {fileID: 629450442, guid: f04ccafd3e8c07343b2fff8afbd5b1ea, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12902,7 +12902,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -605552337, guid: d3c534359dca5a54abbda7a8ebcfeb44, type: 3}
+  m_Sprite: {fileID: -1865660758, guid: f04ccafd3e8c07343b2fff8afbd5b1ea, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -13537,7 +13537,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 550, y: 74.19}
+  m_SizeDelta: {x: 550, y: 233.1545}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1898312661
 MonoBehaviour:
@@ -13559,7 +13559,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Enter a DisplayName:'
+  m_text: 'Enter a Display Name:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9cd11156cdaa08143b2bbfa0c1b8a822, type: 2}
   m_sharedMaterial: {fileID: 205387727140876273, guid: 9cd11156cdaa08143b2bbfa0c1b8a822, type: 2}

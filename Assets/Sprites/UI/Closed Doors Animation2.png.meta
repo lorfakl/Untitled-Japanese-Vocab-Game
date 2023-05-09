@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: 71400b901ef22b242995ce67b27a3d07
+guid: 953381de8e47b9e43abec610a1af453b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -34,12 +34,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
-    wrapW: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -52,7 +52,7 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
@@ -131,13 +131,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Kitsune_Fenrir_0
+      name: Closed Doors Animation2_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e2625594f7f47aa4eb935c63b51a230d
-      internalID: -835302412
+      spriteID: 701b1a101df8b5d43a00d6e9f37a1ebe
+      internalID: 1010833682
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_1
+      name: Closed Doors Animation2_1
       rect:
         serializedVersion: 2
-        x: 1280
+        x: 180
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e0516b6a8d4b22741a8ca8c0f409d29d
-      internalID: -1155231484
+      spriteID: 67b8487bc7882b24d8963b7ac948a5dd
+      internalID: -807123401
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_2
+      name: Closed Doors Animation2_2
       rect:
         serializedVersion: 2
-        x: 2560
+        x: 360
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,20 +187,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5711fd32731e47b47b7e6d4785677a4a
-      internalID: 131127869
+      spriteID: d518b0b373f4c7840bf61fc1d7bd0b58
+      internalID: -801947085
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_3
+      name: Closed Doors Animation2_3
       rect:
         serializedVersion: 2
-        x: 3840
+        x: 540
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,20 +208,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b28caa0c6d6a6c244a22c94597f5c9b1
-      internalID: 792292852
+      spriteID: 0cead2479f2eb8b4db786d301f9b581a
+      internalID: 286627081
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_4
+      name: Closed Doors Animation2_4
       rect:
         serializedVersion: 2
-        x: 5120
+        x: 720
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -229,20 +229,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8fdc6790f9dba9f4bba8af75efc40311
-      internalID: -1518386146
+      spriteID: 4c89f983398467946a26d10b045b9ab4
+      internalID: 1701099961
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_5
+      name: Closed Doors Animation2_5
       rect:
         serializedVersion: 2
-        x: 6400
+        x: 900
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -250,20 +250,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: befeeaf071608524ebff7bddba24b6e3
-      internalID: 124474309
+      spriteID: 874ba12c74c1b4f4fb79ff9fe7d41640
+      internalID: -354659710
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_6
+      name: Closed Doors Animation2_6
       rect:
         serializedVersion: 2
-        x: 7680
+        x: 1080
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -271,20 +271,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fbaeb0ec483ac434aaf5ed30090acf65
-      internalID: -1858856451
+      spriteID: 2b3bd20a8b8f1bd47b02a33c0218c2a9
+      internalID: 370808121
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_7
+      name: Closed Doors Animation2_7
       rect:
         serializedVersion: 2
-        x: 8960
+        x: 1260
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -292,20 +292,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b4a0507593db65c46a10a9d9b147ddca
-      internalID: 324454499
+      spriteID: 548b8bd5011a53443945a369a7347e92
+      internalID: 322518028
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_8
+      name: Closed Doors Animation2_8
       rect:
         serializedVersion: 2
-        x: 10240
+        x: 1440
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -313,20 +313,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1b114367ab16f0c4199b164363287289
-      internalID: 723272884
+      spriteID: 39898f82d0579e640bb9d82e295e1897
+      internalID: 2030106760
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_9
+      name: Closed Doors Animation2_9
       rect:
         serializedVersion: 2
-        x: 11520
+        x: 1620
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -334,20 +334,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b79b6db5b02c9784a83869429e8f42cb
-      internalID: 2061504575
+      spriteID: a0672830fc48c9e46969138dbc3f8c8b
+      internalID: -703443272
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_10
+      name: Closed Doors Animation2_10
       rect:
         serializedVersion: 2
-        x: 12800
+        x: 1800
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -355,20 +355,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7ddc4868aaab6b44287deb9fb75acdbd
-      internalID: -480430984
+      spriteID: de44827c0bf9ac54ead37c1eb985f2fc
+      internalID: 116270932
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Kitsune_Fenrir_11
+      name: Closed Doors Animation2_11
       rect:
         serializedVersion: 2
-        x: 14080
+        x: 1980
         y: 0
-        width: 1280
-        height: 1280
+        width: 180
+        height: 355
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -376,8 +376,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3053e69b61d5812479ecf1636591d16c
-      internalID: -338495564
+      spriteID: 3d6c28d3308f93c40b16025d40c55b65
+      internalID: -1031869696
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closed Doors Animation2_12
+      rect:
+        serializedVersion: 2
+        x: 2160
+        y: 0
+        width: 180
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffad7dfa17ae73e46a28fa59df2e6f0d
+      internalID: 1381719409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Closed Doors Animation2_13
+      rect:
+        serializedVersion: 2
+        x: 2340
+        y: 0
+        width: 180
+        height: 355
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5417836485524a8408e658a1d0d124f4
+      internalID: -1697768884
       vertices: []
       indices: 
       edges: []
@@ -385,7 +427,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 4a428d0150222674ba9310f892b23401
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -393,18 +435,20 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Kitsune_Fenrir_9: 2061504575
-      Kitsune_Fenrir_0: -835302412
-      Kitsune_Fenrir_11: -338495564
-      Kitsune_Fenrir_1: -1155231484
-      Kitsune_Fenrir_4: -1518386146
-      Kitsune_Fenrir_8: 723272884
-      Kitsune_Fenrir_7: 324454499
-      Kitsune_Fenrir_6: -1858856451
-      Kitsune_Fenrir_10: -480430984
-      Kitsune_Fenrir_5: 124474309
-      Kitsune_Fenrir_3: 792292852
-      Kitsune_Fenrir_2: 131127869
+      Closed Doors Animation2_3: 286627081
+      Closed Doors Animation2_2: -801947085
+      Closed Doors Animation2_11: -1031869696
+      Closed Doors Animation2_13: -1697768884
+      Closed Doors Animation2_1: -807123401
+      Closed Doors Animation2_8: 2030106760
+      Closed Doors Animation2_0: 1010833682
+      Closed Doors Animation2_7: 322518028
+      Closed Doors Animation2_9: -703443272
+      Closed Doors Animation2_4: 1701099961
+      Closed Doors Animation2_6: 370808121
+      Closed Doors Animation2_5: -354659710
+      Closed Doors Animation2_10: 116270932
+      Closed Doors Animation2_12: 1381719409
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
