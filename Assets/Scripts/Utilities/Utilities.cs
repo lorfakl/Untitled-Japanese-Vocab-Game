@@ -14,7 +14,7 @@ using Utilities.PlayFabHelper;
 namespace ProjectSpecificGlobals
 {
     public enum ContactType { GroundContact, CubeContact, BlockContact };
-    public enum SceneNames { MenuScene, OpeningScene, SampleScene, ArcadeLeaderboard, ArcadeOpeningScene, ArcadeStudyScene, ArcadeGameOver}
+    public enum SceneNames { MenuScene, StudyScene, ArcadeLeaderboard, ArcadeOpeningScene, ArcadeStudyScene, ArcadeGameOver}
 
     public enum Tags { MainCanvas}
 
@@ -348,6 +348,8 @@ namespace Utilities
         {
             SceneManager.LoadScene(s.ToString());
         }
+
+        
 
         public static List<int> CountDigit(int num)
         {

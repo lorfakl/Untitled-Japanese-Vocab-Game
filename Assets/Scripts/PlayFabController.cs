@@ -41,6 +41,11 @@ public class PlayFabController : MonoBehaviour
     bool useRandomAccounts = false;
 
     [SerializeField]
+    bool overrideLogin;
+
+    static bool overrideTimedLogin;
+
+    [SerializeField]
     LocalPlayFabData localData;
 
     [SerializeField]
@@ -476,7 +481,7 @@ public class PlayFabController : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(this.gameObject);
-        HelperFunctions.Log("Does awake get called twice?");
+        overrideTimedLogin = overrideLogin;
         
     }
         
@@ -549,7 +554,7 @@ public class PlayFabController : MonoBehaviour
         string l = "Detla Hours: " + deltaTime.Hours + "\n" + "Detla Minutes: " + deltaTime.Minutes + "\n" + "Detla Seconds: " + deltaTime.Seconds;
         HelperFunctions.Log(l);
         //HelperFunctions.Error("PlayFabCOntroller LoginStatis is set every login NOT FOR PROD");
-        if(deltaTime > twelveHours)
+        if(deltaTime > twelveHours || overrideTimedLogin)
         {
             Playfab.ExecuteFunction(new ExecuteFunctionRequest
             {
