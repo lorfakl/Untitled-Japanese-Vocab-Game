@@ -30,44 +30,52 @@ namespace PlayFabCloudScript.OnLogin
         static string Id = "";
         public static ILogger logger;
 
+        static List<string> listOfLogs = new List<string>();
+
         public static List<string> errorStrings = new List<string>();
         [FunctionName("AddMembers")]
         public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,ILogger log)
         {
             logger = log;
-            logger.LogInformation("Starting");
+            listOfLogs.Clear();
+
             PlayFabSettings.staticSettings.TitleId = Environment.GetEnvironmentVariable(titleID);
             PlayFabSettings.staticSettings.DeveloperSecretKey = Environment.GetEnvironmentVariable(secretKey);
             
-            logger.LogInformation("Parsing Context");
+            PlayFabHelper.LogInfo("Starting", logger, listOfLogs);
+
+            PlayFabHelper.LogInfo("Parsing Context", logger, listOfLogs);
             FunctionExecutionContext<dynamic> context = JsonConvert.DeserializeObject<FunctionExecutionContext<dynamic>>(await req.ReadAsStringAsync());
             dynamic args = context.FunctionArgument;
-            logger.LogInformation("Context parse complete");
+            PlayFabHelper.LogInfo("Context parse complete", logger, listOfLogs);
             
             Id = context.CallerEntityProfile.Lineage.MasterPlayerAccountId;
-            logger.LogInformation("Grabbed ID");
+            PlayFabHelper.LogInfo("Grabbed ID", logger, listOfLogs);
             
             var entityTokenTask = PlayFabAuthenticationAPI.GetEntityTokenAsync(new PlayFab.AuthenticationModels.GetEntityTokenRequest());
             await entityTokenTask;
 
             logger.LogInformation("auth complete");
-            
-            dynamic groupID = null;
-            if (args != null && args["GroupID"] != null)
+            PlayFabHelper.LogInfo("auth complete", logger, listOfLogs);
+            string groupID = "";
+            List<string> memberKeys = null;
+
+            try
             {
-                groupID = args["GroupID"];
+                AddMembersCSArgument csArgs = JsonConvert.DeserializeObject<AddMembersCSArgument>(args.ToString());
+                groupID = csArgs.GroupID;
+                memberKeys = csArgs.MemberKeys;
             }
-
-            logger.LogInformation("Grabbed group id");
-
-            dynamic memberKeys = null;
-            if (args != null && args["MemberKeys"] != null)
+            catch(Exception e)
             {
-                memberKeys = args["MemberKeys"];
+                string ex = PlayFabHelper.CaptureException(e, logger);
+                PlayFabHelper.LogInfo("Exception Caught", logger, errorStrings);
+                PlayFabHelper.LogInfo(ex, logger, errorStrings);
+                PlayFabHelper.LogInfo(args.ToString(), logger, errorStrings);
+                string requestContent = await new StreamReader(req.Body).ReadToEndAsync();
+                return new OkObjectResult(JsonConvert.SerializeObject(errorStrings) + " " + requestContent);
             }
-
-            logger.LogInformation("memberkeys ID");
-
+/*
             List<string> memberIds = new List<string>();
             string groupIDArgument = groupID.ToString();
 
@@ -87,13 +95,13 @@ namespace PlayFabCloudScript.OnLogin
                 string requestContent = await new StreamReader(req.Body).ReadToEndAsync();
                 return new OkObjectResult(JsonConvert.SerializeObject(errorStrings) + " " + requestContent);
             }
-            
+  */          
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             log.LogInformation($"RequestBody: {requestBody}");
             
             List<PlayFab.GroupsModels.EntityKey> memberKeysToAdd = new List<PlayFab.GroupsModels.EntityKey>();
-            foreach(string id in memberIds)
+            foreach(string id in memberKeys)
             {
                 memberKeysToAdd.Add( new PlayFab.GroupsModels.EntityKey {
                     Type = EntityTypes.title_player_account.ToString(),
@@ -104,7 +112,7 @@ namespace PlayFabCloudScript.OnLogin
             PlayFab.GroupsModels.EntityKey groupKey = new PlayFab.GroupsModels.EntityKey
             {
                 Type = EntityTypes.group.ToString(),
-                Id = groupIDArgument
+                Id = groupID
             };
             var addMembersTask = PlayFabHelper.AddMembers(groupKey, memberKeysToAdd, log);
 

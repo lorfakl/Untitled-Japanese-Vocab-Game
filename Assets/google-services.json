@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "897744812770",
+    "project_id": "yokai-chat",
+    "storage_bucket": "yokai-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897744812770:android:d883937d29c46ab1ce7cbb",
+        "android_client_info": {
+          "package_name": "com.lorfaklindustries.yokaichat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897744812770-1irbognqor4c2dnflg8dgrqvmr1tg5u7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJpuMLJaiSXXmmK9GOy-kvrUM-bOnYJFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "897744812770-1irbognqor4c2dnflg8dgrqvmr1tg5u7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "897744812770-09jj2met8t3bpvv588rrh5ntj7l35fqc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.LORFAKLIndustries.YokaiChat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

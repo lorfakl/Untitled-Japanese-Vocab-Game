@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using Utilities;
 using Utilities.Events;
+using ProjectSpecificGlobals;
 
 public class MenuController : MonoBehaviour
 {
@@ -35,8 +36,7 @@ public class MenuController : MonoBehaviour
     #region Public Methods
     public void StudyButtonClickHandler()
     {
-        SceneManager.LoadScene("StudyScene", LoadSceneMode.Single);
-
+        AsyncSceneLoader.StartSceneLoadProcess(SceneNames.StudyScene);
     }
 
     public void StatsButtonClickHandler()
