@@ -1318,7 +1318,7 @@ MonoBehaviour:
   - {fileID: 9100000, guid: 3c61966d70c05854faffd8e23ba8149c, type: 2}
   - {fileID: 9100000, guid: b0729d20bb51bb749b3280de973fe5b5, type: 2}
   - {fileID: 9100000, guid: 618d5aa3c31443f44b27c32a0056c8c5, type: 2}
-  debugProgressValue: 2.41
+  debugProgressValue: 0.49
 --- !u!4 &716208141
 Transform:
   m_ObjectHideFlags: 0
@@ -1904,6 +1904,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useRandomAccounts: 1
+  overrideLogin: 0
   localData: {fileID: 11400000, guid: c100286b6e6b5c84d8b27a5b56f5e97b, type: 2}
   customID: 
 --- !u!4 &996133953
@@ -2405,7 +2406,7 @@ GameObject:
   - component: {fileID: 1264293851}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: MainCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -40,7 +40,8 @@ public class StudySystem : MonoBehaviour
     Dictionary<ProficiencyLevels, List<JapaneseWord>> sessionWordLeitnerLevel = new Dictionary<ProficiencyLevels, List<JapaneseWord>>();
     Dictionary<ProficiencyLevels, List<JapaneseWord>> sessionWordPrestigeLevel = new Dictionary<ProficiencyLevels, List<JapaneseWord>>();
     int studyProgress = 0;
-    bool shouldNewWordsBeAdded = false;
+
+    static bool shouldNewWordsBeAdded = true;
 
     public Dictionary<ProficiencyLevels, List<JapaneseWord>> SessionWordLeitnerLevels
     {
@@ -50,7 +51,6 @@ public class StudySystem : MonoBehaviour
     #region Public Methods
     public void OnCompletedSessionWords_Handler() //Save Progress to PlayFab
     {
-        shouldNewWordsBeAdded = true;
         SavePlayerDataToPlayFab();
         //HelperFunctions.LoadScene(ProjectSpecificGlobals.SceneNames.MenuScene);
     }
@@ -96,6 +96,7 @@ public class StudySystem : MonoBehaviour
     {
         if(shouldNewWordsBeAdded)
         {
+            shouldNewWordsBeAdded = false;
             AddNewWords();
         }
     }
@@ -186,6 +187,13 @@ public class StudySystem : MonoBehaviour
         {
             JSONWordLibrary.SetWordsToStudy(sessionWords.ToList());
         }
+
+        if(sessionWords.Count == 0)
+        {
+            MessageBoxFactory.CreateMessageBox("Nothing Left to Study", "There are no more words to study right now. Live your life! Come back in 12 hours",
+                () => { HelperFunctions.LoadScene(ProjectSpecificGlobals.SceneNames.MenuScene); });
+        }
+        
     }
 
     void SavePlayerDataToPlayFab()
@@ -270,6 +278,12 @@ public class StudySystem : MonoBehaviour
         PlayFabController.ExecutionCSFunction(CSFunctionNames.AddNewWords, addwordArg);
     }
 
+    /// <summary>
+    /// Using the StaticUserSettings to get the total words. This function takes in a list of words, if it is longer than TotalWords
+    /// the list is shorted and returned
+    /// </summary>
+    /// <param name="l"></param>
+    /// <returns>Shorted list of words, whose size is equal to StaticUserSettings.TotalWordsPerSession</returns>
     List<JapaneseWord> SetTotalWords(List<JapaneseWord> l)
     {
         int totalWords = StaticUserSettings.GetTotalWords();

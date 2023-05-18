@@ -411,6 +411,21 @@ public class GetOtherPlayerStatisticsResult
     public string DisplayName { get; set; }
 }
 
+public class AddMembersCSArgument
+    {
+        [JsonProperty("MemberKeys")]
+        public List<string> MemberKeys { get; set; }
+
+        [JsonProperty("GroupID")]
+        public string GroupID { get; set; }
+    }
+
+    public class GetRivalAvatarsCSArgument
+    {
+        [JsonProperty("Rivals")]
+        public List<UniversalEntityKey> Rivals { get; set; }
+    }
+
 public static class PlayFabHelper
 {
     #region PlayFab Custom Event Name Enums
@@ -785,6 +800,8 @@ public static class PlayFabHelper
         GetModifiedProfileData.errorStrings.Add(err);
         return err;
     }
+
+    
 
     public static string CapturePlayFabError(PlayFabError error, ILogger log)
     {

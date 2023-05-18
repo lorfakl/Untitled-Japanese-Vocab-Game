@@ -24,17 +24,24 @@ namespace Utilities
             return new MessageBox(messageBoxType, message, title, closingEvent, parent);
         }
 
-        public static MessageBox CreateLoadingBox(string title, string message, GameEvent closingEvent = null, Action continueCallback=null, Transform parent = null, bool useAltParent = false)
+        public static MessageBox CreateLoadingBox(string title, string message, GameEvent closingEvent, Action continueCallback=null, Transform parent = null, bool useAltParent = false)
         {
             MessageBox msgBox = new MessageBox(MessageBoxType.Loading, message, title, closingEvent, parent);
             msgBox.DisplayLoadingMessageBox(continueCallback, useAltParent);
             return msgBox;
         }
 
-        public static MessageBox CreateConfirmationBox(string title, string message, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
+        public static MessageBox CreateMessageBox(string title, string message, Action continueCallback, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
+        {
+            MessageBox msgBox = new MessageBox(MessageBoxType.Message, message, title, closingEvent, parent);
+            msgBox.DisplayMessageBox(continueCallback, useAltParent);
+            return msgBox;
+        }
+
+        public static MessageBox CreateConfirmationBox(string title, string message, Action confirmCallback, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
         {
             MessageBox msgBox = new MessageBox(MessageBoxType.Confirmation, message, title, closingEvent, parent);
-            msgBox.DisplayLoadingMessageBox(msgBox.AutoDestroyMessageBox, useAltParent);
+            msgBox.DisplayLoadingMessageBox(confirmCallback, useAltParent);
             return msgBox;
         }
 
@@ -103,6 +110,7 @@ namespace Utilities
             _instance.ConfigureMessageBox(this, continueCallback);
         }
 
+       
         public void DisplayMessageBox(Action onConfirmCallback, Action onDenyCallback, bool useAltParent = false)
         {
             SpawnMessageBoxInstance(useAltParent);
