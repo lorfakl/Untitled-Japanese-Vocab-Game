@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: a3117d849cfcf0940856b9937dd53ef3
+guid: b457e9778928fb54a97337d642202313
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 32
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -132,7 +132,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -143,244 +143,265 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Atumerasu_0
+      name: Shop Page White Rose 2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1268
+        width: 1081
+        height: 1922
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1fd15e84c1e67c44b32776ef7c5262a
+      internalID: 691887475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shop Page White Rose 2_1
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1500
-        height: 1500
+        width: 282
+        height: 212
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80885a46a2668584096ef1361edeeb86
-      internalID: -1007412573
+      spriteID: ebc546c44d4d16549b76cdec5278b6a9
+      internalID: -523538318
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_1
+      name: Shop Page White Rose 2_2
       rect:
         serializedVersion: 2
-        x: 1500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 1085
+        y: 2979
+        width: 1055
+        height: 211
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e053adc4468b8664dbf7cb2ba2c6d3f4
-      internalID: 1239157633
+      spriteID: 65f1c262789d2114ca5d1bb2ce651e9d
+      internalID: 435040633
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_2
+      name: Shop Page White Rose 2_3
       rect:
         serializedVersion: 2
-        x: 3000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 1288
+        y: 2865
+        width: 521
+        height: 112
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d5cc5df1b8bd82745a6192f408e8ee21
-      internalID: 571919075
+      spriteID: 5723e94c791629c4c88c588970f2fa13
+      internalID: 1688043965
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_3
+      name: Shop Page White Rose 2_4
       rect:
         serializedVersion: 2
-        x: 4500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 1097
+        y: 1493
+        width: 1043
+        height: 727
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5b048547c465bc44fa28f0cecf0f7c1d
-      internalID: 197785986
+      spriteID: ed099254fb11c254a8613142551dfae4
+      internalID: -37642954
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_4
+      name: Shop Page White Rose 2_5
       rect:
         serializedVersion: 2
-        x: 6000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 267
+        y: 670
+        width: 1004
+        height: 189
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37688d7cd4464d54ca8e3753956f14d2
-      internalID: -1268237377
+      spriteID: fefb5fcc139dd444583961468c94e33f
+      internalID: -962149781
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_5
+      name: Shop Page White Rose 2_6
       rect:
         serializedVersion: 2
-        x: 7500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 278
+        y: 480
+        width: 992
+        height: 189
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 943affd40cf4b484f84b5dfef06c1481
-      internalID: 1498483561
+      spriteID: c5ce55de0103bc04aacb0644ec9b82e2
+      internalID: -1169656288
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_6
+      name: Shop Page White Rose 2_7
       rect:
         serializedVersion: 2
-        x: 9000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 1270
+        y: 392
+        width: 220
+        height: 249
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 62877dd844e02a64a9b81491e8b6965d
-      internalID: 569328982
+      spriteID: 0f1ca2d0ad4a186478613a8f6e278964
+      internalID: 199223111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_7
+      name: Shop Page White Rose 2_8
       rect:
         serializedVersion: 2
-        x: 10500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 1288
+        y: 651
+        width: 703
+        height: 210
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 725eb63eaf770b542ab37b257c7de7be
-      internalID: 1302330276
+      spriteID: cd180da0ca1dbfb489649be7af1ce8fe
+      internalID: -1426995774
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_8
+      name: Shop Page White Rose 2_9
       rect:
         serializedVersion: 2
-        x: 12000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 1990
+        y: 561
+        width: 140
+        height: 138
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a082fbe0255885d489122ac05a113ea1
-      internalID: -888167219
+      spriteID: 1bbe5494bb0bde94381f78f05e906d47
+      internalID: 315960908
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_9
+      name: Shop Page White Rose 2_10
       rect:
         serializedVersion: 2
-        x: 13500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 1990
+        y: 701
+        width: 140
+        height: 139
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f4c77c583ff3d341a9d1a907f71ee15
-      internalID: 646781847
+      spriteID: e37b84b3a8f51924cbf94ab040d7ee8c
+      internalID: -1993195516
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_10
+      name: Shop Page White Rose 2_11
       rect:
         serializedVersion: 2
-        x: 15000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 1990
+        y: 841
+        width: 141
+        height: 139
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a38ca6bb57db3be44b33eef2112d3d69
-      internalID: 2000640690
+      spriteID: fb9698ff5af87134bb8207f6d6e124f7
+      internalID: 2111902988
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_11
+      name: Shop Page White Rose 2_12
       rect:
         serializedVersion: 2
-        x: 16500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 1079
+        y: 864
+        width: 820
+        height: 634
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -388,50 +409,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 20d7d88145fd50f4ca138ebb9a7e2c9e
-      internalID: -658176453
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_12
-      rect:
-        serializedVersion: 2
-        x: 18000
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e458e9d7cfafdd941b38f270906c8f9e
-      internalID: -1594620386
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_13
-      rect:
-        serializedVersion: 2
-        x: 19500
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 23fe8839632642047a55527f60388c26
-      internalID: -1643923031
+      spriteID: 12adb9a6daa1a144e81c41d71e7091b6
+      internalID: 1755515479
       vertices: []
       indices: 
       edges: []
@@ -439,7 +418,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 6cc2f39b471e5b84da40c466bfd79fe6
     internalID: 0
     vertices: []
     indices: 
@@ -447,20 +426,19 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Atumerasu_7: 1302330276
-      Atumerasu_9: 646781847
-      Atumerasu_0: -1007412573
-      Atumerasu_10: 2000640690
-      Atumerasu_5: 1498483561
-      Atumerasu_3: 197785986
-      Atumerasu_4: -1268237377
-      Atumerasu_1: 1239157633
-      Atumerasu_13: -1643923031
-      Atumerasu_12: -1594620386
-      Atumerasu_8: -888167219
-      Atumerasu_11: -658176453
-      Atumerasu_2: 571919075
-      Atumerasu_6: 569328982
+      Shop Page White Rose 2_12: 1755515479
+      Shop Page White Rose 2_2: 435040633
+      Shop Page White Rose 2_7: 199223111
+      Shop Page White Rose 2_3: 1688043965
+      Shop Page White Rose 2_6: -1169656288
+      Shop Page White Rose 2_4: -37642954
+      Shop Page White Rose 2_11: 2111902988
+      Shop Page White Rose 2_8: -1426995774
+      Shop Page White Rose 2_5: -962149781
+      Shop Page White Rose 2_9: 315960908
+      Shop Page White Rose 2_1: -523538318
+      Shop Page White Rose 2_10: -1993195516
+      Shop Page White Rose 2_0: 691887475
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 

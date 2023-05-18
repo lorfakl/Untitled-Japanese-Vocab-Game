@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a3117d849cfcf0940856b9937dd53ef3
+guid: c60c829801208ee49996c38a49f6c6f6
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -37,9 +37,9 @@ TextureImporter:
     filterMode: 0
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
-    wrapW: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -52,7 +52,7 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 32
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -132,7 +132,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -143,13 +143,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Atumerasu_0
+      name: windows_screen_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1500
-        height: 1500
+        x: 7
+        y: 114
+        width: 451
+        height: 70
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -157,20 +157,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80885a46a2668584096ef1361edeeb86
-      internalID: -1007412573
+      spriteID: 0c69e609c18c3ed4b9bd70faa99c76af
+      internalID: 1652018001
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_1
+      name: windows_screen_1
       rect:
         serializedVersion: 2
-        x: 1500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 486
+        y: 114
+        width: 86
+        height: 71
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,20 +178,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e053adc4468b8664dbf7cb2ba2c6d3f4
-      internalID: 1239157633
+      spriteID: 01ef40d1a2e3da647afb37bb721779b1
+      internalID: 1543085494
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_2
+      name: windows_screen_2
       rect:
         serializedVersion: 2
-        x: 3000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 575
+        y: 114
+        width: 86
+        height: 71
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,20 +199,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d5cc5df1b8bd82745a6192f408e8ee21
-      internalID: 571919075
+      spriteID: 3d1f887a26ff1584fa142a47472054d8
+      internalID: -1319770094
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_3
+      name: windows_screen_3
       rect:
         serializedVersion: 2
-        x: 4500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 664
+        y: 114
+        width: 86
+        height: 71
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -220,20 +220,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5b048547c465bc44fa28f0cecf0f7c1d
-      internalID: 197785986
+      spriteID: d5bb6095553601e459283e2a2de8673d
+      internalID: -1978984313
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_4
+      name: windows_screen_4
       rect:
         serializedVersion: 2
-        x: 6000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 754
+        y: 113
+        width: 86
+        height: 71
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -241,20 +241,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37688d7cd4464d54ca8e3753956f14d2
-      internalID: -1268237377
+      spriteID: 458c69b097d9b9645970642c2426a0d4
+      internalID: 1025084126
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_5
+      name: windows_screen_5
       rect:
         serializedVersion: 2
-        x: 7500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 844
+        y: 113
+        width: 86
+        height: 71
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -262,20 +262,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 943affd40cf4b484f84b5dfef06c1481
-      internalID: 1498483561
+      spriteID: cf9f8ee07de307e43b61b107ceb4fac5
+      internalID: 1806870672
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_6
+      name: windows_screen_7
       rect:
         serializedVersion: 2
-        x: 9000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 18
+        y: 22
+        width: 70
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -283,20 +283,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 62877dd844e02a64a9b81491e8b6965d
-      internalID: 569328982
+      spriteID: 47251a03668940441b0584031ac16dd1
+      internalID: -1380448242
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_7
+      name: windows_screen_8
       rect:
         serializedVersion: 2
-        x: 10500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 108
+        y: 21
+        width: 70
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -304,20 +304,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 725eb63eaf770b542ab37b257c7de7be
-      internalID: 1302330276
+      spriteID: a9a7517cbf82fe44a8b33f1d36970fd6
+      internalID: 1245013360
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_8
+      name: windows_screen_9
       rect:
         serializedVersion: 2
-        x: 12000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 197
+        y: 22
+        width: 70
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -325,20 +325,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a082fbe0255885d489122ac05a113ea1
-      internalID: -888167219
+      spriteID: e581d1f02d34dc34995478aab5d9339d
+      internalID: 514693666
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_9
+      name: windows_screen_10
       rect:
         serializedVersion: 2
-        x: 13500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 289
+        y: 21
+        width: 70
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -346,20 +346,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f4c77c583ff3d341a9d1a907f71ee15
-      internalID: 646781847
+      spriteID: b3976ff1dcbf52147997dccf800023f8
+      internalID: -1800137359
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_10
+      name: windows_screen_11
       rect:
         serializedVersion: 2
-        x: 15000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 377
+        y: 21
+        width: 70
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -367,20 +367,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a38ca6bb57db3be44b33eef2112d3d69
-      internalID: 2000640690
+      spriteID: 307403fe3d8029641878d60c74528961
+      internalID: 1572996326
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_11
+      name: windows_screen_12
       rect:
         serializedVersion: 2
-        x: 16500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 501
+        y: 25
+        width: 54
+        height: 46
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -388,20 +388,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 20d7d88145fd50f4ca138ebb9a7e2c9e
-      internalID: -658176453
+      spriteID: af3c9bccbd7d2324b8e3cf05f9170d80
+      internalID: 123020121
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_12
+      name: windows_screen_13
       rect:
         serializedVersion: 2
-        x: 18000
-        y: 0
-        width: 1500
-        height: 1500
+        x: 599
+        y: 27
+        width: 39
+        height: 42
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -409,20 +409,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e458e9d7cfafdd941b38f270906c8f9e
-      internalID: -1594620386
+      spriteID: 989ff4365fbb28c4fa8920f0cba11547
+      internalID: 1032632927
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_13
+      name: windows_screen_14
       rect:
         serializedVersion: 2
-        x: 19500
-        y: 0
-        width: 1500
-        height: 1500
+        x: 679
+        y: 27
+        width: 56
+        height: 42
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -430,8 +430,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 23fe8839632642047a55527f60388c26
-      internalID: -1643923031
+      spriteID: ebfb67838b3b2924ea7509c86f6d595a
+      internalID: 606048254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windows_screen_16
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 24
+        width: 64
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0354b3dc4e9193347ab094274afdb490
+      internalID: -1868057117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: windows_screen_18
+      rect:
+        serializedVersion: 2
+        x: 866
+        y: 26
+        width: 43
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f189bd119a92b94a91380b90f697802
+      internalID: -1126606543
       vertices: []
       indices: 
       edges: []
@@ -447,20 +489,25 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Atumerasu_7: 1302330276
-      Atumerasu_9: 646781847
-      Atumerasu_0: -1007412573
-      Atumerasu_10: 2000640690
-      Atumerasu_5: 1498483561
-      Atumerasu_3: 197785986
-      Atumerasu_4: -1268237377
-      Atumerasu_1: 1239157633
-      Atumerasu_13: -1643923031
-      Atumerasu_12: -1594620386
-      Atumerasu_8: -888167219
-      Atumerasu_11: -658176453
-      Atumerasu_2: 571919075
-      Atumerasu_6: 569328982
+      windows_screen_7: -1380448242
+      windows_screen_10: -1800137359
+      windows_screen_12: 123020121
+      windows_screen_16: -1868057117
+      windows_screen_17: -1953643049
+      windows_screen_15: 946347083
+      windows_screen_18: -1126606543
+      windows_screen_6: -1794296528
+      windows_screen_11: 1572996326
+      windows_screen_13: 1032632927
+      windows_screen_14: 606048254
+      windows_screen_0: 1652018001
+      windows_screen_1: 1543085494
+      windows_screen_5: 1806870672
+      windows_screen_4: 1025084126
+      windows_screen_9: 514693666
+      windows_screen_8: 1245013360
+      windows_screen_3: -1978984313
+      windows_screen_2: -1319770094
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 

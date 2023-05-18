@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a3117d849cfcf0940856b9937dd53ef3
+guid: 61f2fa1eb06c7c047bdbac895ad67e6e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -37,9 +37,9 @@ TextureImporter:
     filterMode: 0
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
-    wrapW: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -52,7 +52,7 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 32
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -132,7 +132,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -143,13 +143,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Atumerasu_0
+      name: Call Box 1_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 1
         y: 0
-        width: 1500
-        height: 1500
+        width: 64
+        height: 114
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -157,20 +157,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80885a46a2668584096ef1361edeeb86
-      internalID: -1007412573
+      spriteID: e5e0e7aed1f5997438d41f493c819918
+      internalID: -773316177
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_1
+      name: Call Box 1_1
       rect:
         serializedVersion: 2
-        x: 1500
+        x: 67
         y: 0
-        width: 1500
-        height: 1500
+        width: 64
+        height: 114
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,20 +178,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e053adc4468b8664dbf7cb2ba2c6d3f4
-      internalID: 1239157633
+      spriteID: 99d977aa17ff12d40a54cb147dcd8b4e
+      internalID: 826100451
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_2
+      name: Call Box 1_2
       rect:
         serializedVersion: 2
-        x: 3000
+        x: 133
         y: 0
-        width: 1500
-        height: 1500
+        width: 64
+        height: 114
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,20 +199,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d5cc5df1b8bd82745a6192f408e8ee21
-      internalID: 571919075
+      spriteID: e79d011f9fcba064c94987f63607aa3d
+      internalID: -1513882336
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_3
+      name: Call Box 1_3
       rect:
         serializedVersion: 2
-        x: 4500
+        x: 199
         y: 0
-        width: 1500
-        height: 1500
+        width: 64
+        height: 114
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -220,20 +220,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5b048547c465bc44fa28f0cecf0f7c1d
-      internalID: 197785986
+      spriteID: 58c6c4a507ba32b4b86a77073aa50a83
+      internalID: -1871124899
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_4
+      name: Call Box 1_4
       rect:
         serializedVersion: 2
-        x: 6000
+        x: 265
         y: 0
-        width: 1500
-        height: 1500
+        width: 64
+        height: 114
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -241,20 +241,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37688d7cd4464d54ca8e3753956f14d2
-      internalID: -1268237377
+      spriteID: 22a533bc423a99643b36e3e0e243283e
+      internalID: -1414185569
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Atumerasu_5
+      name: Call Box 1_5
       rect:
         serializedVersion: 2
-        x: 7500
+        x: 331
         y: 0
-        width: 1500
-        height: 1500
+        width: 64
+        height: 114
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -262,176 +262,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 943affd40cf4b484f84b5dfef06c1481
-      internalID: 1498483561
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_6
-      rect:
-        serializedVersion: 2
-        x: 9000
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 62877dd844e02a64a9b81491e8b6965d
-      internalID: 569328982
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_7
-      rect:
-        serializedVersion: 2
-        x: 10500
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 725eb63eaf770b542ab37b257c7de7be
-      internalID: 1302330276
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_8
-      rect:
-        serializedVersion: 2
-        x: 12000
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a082fbe0255885d489122ac05a113ea1
-      internalID: -888167219
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_9
-      rect:
-        serializedVersion: 2
-        x: 13500
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1f4c77c583ff3d341a9d1a907f71ee15
-      internalID: 646781847
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_10
-      rect:
-        serializedVersion: 2
-        x: 15000
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a38ca6bb57db3be44b33eef2112d3d69
-      internalID: 2000640690
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_11
-      rect:
-        serializedVersion: 2
-        x: 16500
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 20d7d88145fd50f4ca138ebb9a7e2c9e
-      internalID: -658176453
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_12
-      rect:
-        serializedVersion: 2
-        x: 18000
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e458e9d7cfafdd941b38f270906c8f9e
-      internalID: -1594620386
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Atumerasu_13
-      rect:
-        serializedVersion: 2
-        x: 19500
-        y: 0
-        width: 1500
-        height: 1500
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 23fe8839632642047a55527f60388c26
-      internalID: -1643923031
+      spriteID: ea9982c5a172a594cacaf91994121da2
+      internalID: 2086477945
       vertices: []
       indices: 
       edges: []
@@ -447,20 +279,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Atumerasu_7: 1302330276
-      Atumerasu_9: 646781847
-      Atumerasu_0: -1007412573
-      Atumerasu_10: 2000640690
-      Atumerasu_5: 1498483561
-      Atumerasu_3: 197785986
-      Atumerasu_4: -1268237377
-      Atumerasu_1: 1239157633
-      Atumerasu_13: -1643923031
-      Atumerasu_12: -1594620386
-      Atumerasu_8: -888167219
-      Atumerasu_11: -658176453
-      Atumerasu_2: 571919075
-      Atumerasu_6: 569328982
+      Call Box 1_0: -773316177
+      Call Box 1_2: -1513882336
+      Call Box 1_3: -1871124899
+      Call Box 1_4: -1414185569
+      Call Box 1_1: 826100451
+      Call Box 1_5: 2086477945
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
