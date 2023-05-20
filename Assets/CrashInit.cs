@@ -9,7 +9,7 @@ using Firebase.Crashlytics;
 public class CrashInit : MonoBehaviour
 {
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         // Initialize Firebase
         Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
