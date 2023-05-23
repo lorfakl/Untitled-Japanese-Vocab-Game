@@ -13,7 +13,7 @@ namespace Utilities.Events
         Bool = 2, 
         Trigger = 3
     }
-
+    [RequireComponent(typeof(Animator))]
     public class AnimationEventListener : GameEventListener
     {
         [Tooltip("Enter the name of the Trigger. It must MATCH EXACTY what was typed in the Parameter section of the Animator")]

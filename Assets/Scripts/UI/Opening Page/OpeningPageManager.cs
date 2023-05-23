@@ -88,7 +88,7 @@ public class OpeningPageManager : MonoBehaviour
 
         GameEvent onUpdateDisplayNameComplete = ScriptableObject.CreateInstance<GameEvent>();
         var confirmBox = MessageBoxFactory.Create(MessageBoxType.Confirmation, $"This will be a permnant change. Would you like to Keep the DisplayName: {n}?", "Confirm Display");
-        confirmBox.DisplayMessageBox(() => 
+        confirmBox.DisplayConfirmationBox(() => 
         {
             var loadBox = MessageBoxFactory.Create(MessageBoxType.Loading, "Please Wait while game data is loaded", "Updating DisplayName", onUpdateDisplayNameComplete);
             loadBox.DisplayLoadingMessageBox();

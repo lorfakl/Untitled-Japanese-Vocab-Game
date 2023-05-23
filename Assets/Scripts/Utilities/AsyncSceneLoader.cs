@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Utilities;
 using Utilities.Events;
@@ -11,12 +12,7 @@ namespace Utilities
 {
     public class AsyncSceneLoader : MonoBehaviour
     {
-        [SerializeField]
-        GameEvent _loadingComplete;
-
-        [SerializeField]
-        GameObject _loadingScreenPrefab;
-
+        
         private static AsyncSceneLoader _instance;
 
         private AsyncSceneLoader Instance
@@ -42,7 +38,10 @@ namespace Utilities
 
             _instance = this;
             DontDestroyOnLoad(this.gameObject);
+            //loadingImage = _loadingScreenPrefab.GetComponent<Image>();
         }
+
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -62,8 +61,11 @@ namespace Utilities
 
         private void ConfigureLoadingScreen(SceneNames s)
         {
-            _loadingScreenPrefab.SetActive(true);
-            MessageBoxFactory.CreateLoadingBox("Loading Study Session", "Get Ready to Tap some words...quickly", _loadingComplete, null, _loadingScreenPrefab.transform, true);
+
+            SceneLoaderAsset.StaticInstance.ChangeVisibility(true);
+            SceneLoaderAsset.StaticInstance.LoadingCompleteEvent.Raise();
+            MessageBoxFactory.CreateLoadingBox("Loading Study Session", "Get Ready to Tap some words...quickly",
+                SceneLoaderAsset.StaticInstance.LoadingCompleteEvent, null, SceneLoaderAsset.StaticInstance.transform, true);
 
             StartCoroutine(LoadScene(s));
         }
@@ -83,9 +85,11 @@ namespace Utilities
             }
 
 
-            _loadingComplete.Raise();
+            SceneLoaderAsset.StaticInstance.LoadingCompleteEvent.Raise();
 
         }
+
+        
 
     }
 }

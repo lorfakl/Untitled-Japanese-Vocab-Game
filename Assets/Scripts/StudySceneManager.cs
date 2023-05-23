@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Utilities;
 using Utilities.PlayFabHelper.CurrentUser;
+using ProjectSpecificGlobals;
 
 public class StudySceneManager : MonoBehaviour
 {
@@ -24,6 +26,9 @@ public class StudySceneManager : MonoBehaviour
     Sprite[] bossBackgrounds;
 
     [SerializeField]
+    Button exitBtn;
+
+    [SerializeField]
     RuntimeAnimatorController[] runtimeAnimatorControllers;
 
     public float debugProgressValue = 0;
@@ -35,6 +40,15 @@ public class StudySceneManager : MonoBehaviour
     
     int currentProgressIndex = 0; //this index is used to retrieve the values in these arrays
     float bossChangeChance = 0;
+
+    public void OnQuitSelection()
+    {
+        MessageBoxFactory.CreateConfirmationBox("Are you sure you want to quit?", "Your progress will not be saved and you will return to the title screen",
+            () => 
+            {
+                SceneManager.LoadScene(SceneNames.MenuScene.ToString(), LoadSceneMode.Single);    
+            });
+    }
     private void Awake()
     {
 
@@ -47,7 +61,9 @@ public class StudySceneManager : MonoBehaviour
         {
             wordsSeen = CurrentAuthedPlayer.CurrentUser.WordsSeen;
         }
-             
+
+        exitBtn.onClick.AddListener(OnQuitSelection);
+
         //1000 words 5 bosses 200 words per boss
         //as the wordsseen approaches 200 the probably of boss changing approaches 0.5
         //there are 4 thresholds 200 400 600 800 1000 by the time you get to 1000 words it should be 
