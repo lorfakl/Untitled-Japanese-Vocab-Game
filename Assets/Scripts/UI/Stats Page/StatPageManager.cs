@@ -206,9 +206,7 @@ public class StatPageManager : MonoBehaviour
                         }
                     });
             }
-            //LeaderboardManager.CreateLeaderboard(StatisticName.LeagueSP, leaderboardEntryPrefab, leaderboardPanelContent.transform, )
-            
-            
+            //LeaderboardManager.CreateLeaderboard(StatisticName.LeagueSP, leaderboardEntryPrefab, leaderboardPanelContent.transform, );
         }
         else if(hasPlayed)
         {

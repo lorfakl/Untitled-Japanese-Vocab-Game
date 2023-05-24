@@ -178,12 +178,14 @@ namespace Utilities
 
         public static string Log<T>(T msg)
         {
+            string msgStr = DateTime.Now + ": " + msg.ToString();
+
             if (CrashInit.IsCrashlyticsInitialized)
             {
-                Crashlytics.Log(msg.ToSafeString());
+                Crashlytics.Log(msgStr.ToSafeString());
             }
 
-            string msgStr = DateTime.Now + ": " + msg.ToString();
+            
             
             if (Playfab.VerboseModeEnabled)
             {

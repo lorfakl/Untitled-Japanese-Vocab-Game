@@ -43,6 +43,7 @@ public class PlayFabController : MonoBehaviour
     [SerializeField]
     bool overrideLogin;
 
+
     static bool overrideTimedLogin;
 
     [SerializeField]
@@ -487,7 +488,9 @@ public class PlayFabController : MonoBehaviour
         
     void Start()
     {
-        if(useRandomAccounts)
+
+#if UNITY_EDITOR
+        if (useRandomAccounts)
         {
             Playfab.Login(OnSuccessfulLogin, OnPlayFabError, useRandomAccounts);
         }
@@ -499,8 +502,13 @@ public class PlayFabController : MonoBehaviour
         {
             Playfab.Login(OnSuccessfulLogin, OnPlayFabError);
         }
-        
-        
+        return;
+
+#else
+        Playfab.Login(OnSuccessfulLogin, OnPlayFabError);
+#endif
+
+
     }
 
     // Update is called once per frame
