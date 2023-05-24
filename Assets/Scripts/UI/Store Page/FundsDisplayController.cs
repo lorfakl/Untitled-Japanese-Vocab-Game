@@ -75,7 +75,7 @@ public class FundsDisplayController : MonoBehaviour
                 $"\n Would you like to continue: ";
 
             MessageBox confirmPurchase = MessageBoxFactory.Create(MessageBoxType.Confirmation, msg, "Confirm Purchase");
-            confirmPurchase.DisplayMessageBox(OnRecievedPurchaseConfirmation, confirmPurchase.AutoDestroyMessageBox);
+            confirmPurchase.DisplayConfirmationBox(OnRecievedPurchaseConfirmation, confirmPurchase.AutoDestroyMessageBox);
         }
     }
 

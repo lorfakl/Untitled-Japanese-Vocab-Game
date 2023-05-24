@@ -10,6 +10,11 @@ using System.Reflection;
 using System.Collections;
 using ProjectSpecificGlobals;
 using Utilities.PlayFabHelper;
+using Firebase;
+using Firebase.Analytics;
+using Firebase.Crashlytics;
+using Utilities.Logging;
+using Unity.VisualScripting;
 
 namespace ProjectSpecificGlobals
 {
@@ -138,18 +143,46 @@ namespace Utilities
         #region Debug Utility Functions
 
 
+
         public static void Error(string msg)
         {
+            if(CrashInit.IsCrashlyticsInitialized)
+            {
+                Crashlytics.LogException(new Exception(msg));
+            }
+            
             Debug.LogError(msg);
         }
 
         public static void Warning<T>(T msg)
         {
+            if (CrashInit.IsCrashlyticsInitialized)
+            {
+                Crashlytics.Log(msg.ToSafeString());
+            }
+
             Debug.LogWarning(DateTime.Now + ": " + msg.ToString());
+        }
+
+        public static void CatchException(Exception e)
+        {
+            if (CrashInit.IsCrashlyticsInitialized)
+            {
+                Crashlytics.LogException(e);
+            }
+            Debug.LogWarning(e.Source);
+            Debug.LogWarning(e.Message);
+            Debug.LogWarning(e.StackTrace);
+            Debug.LogWarning(e.InnerException);
         }
 
         public static string Log<T>(T msg)
         {
+            if (CrashInit.IsCrashlyticsInitialized)
+            {
+                Crashlytics.Log(msg.ToSafeString());
+            }
+
             string msgStr = DateTime.Now + ": " + msg.ToString();
             
             if (Playfab.VerboseModeEnabled)
@@ -230,13 +263,7 @@ namespace Utilities
             Debug.Log(msg);
         }
 
-        public static void CatchException(Exception e)
-        {
-            Debug.LogWarning(e.Source);
-            Debug.LogWarning(e.Message);
-            Debug.LogWarning(e.StackTrace);
-            Debug.LogWarning(e.InnerException);
-        }
+        
 
         public static string PrintObjectProperties<T>(T src)
         {

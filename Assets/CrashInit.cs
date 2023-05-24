@@ -6,37 +6,57 @@ using UnityEngine;
 using Firebase;
 using Firebase.Crashlytics;
 
-public class CrashInit : MonoBehaviour
+namespace Utilities.Logging
 {
-    // Use this for initialization
-    void Start()
+    public class CrashInit: MonoBehaviour
     {
-        // Initialize Firebase
-        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
-            var dependencyStatus = task.Result;
-            if (dependencyStatus == Firebase.DependencyStatus.Available)
-            {
-                // Create and hold a reference to your FirebaseApp,
-                // where app is a Firebase.FirebaseApp property of your application class.
-                // Crashlytics will use the DefaultInstance, as well;
-                // this ensures that Crashlytics is initialized.
-                Firebase.FirebaseApp app = Firebase.FirebaseApp.DefaultInstance;
+        private static bool _isCrashlyticsInitialized = false;
 
-                // When this property is set to true, Crashlytics will report all
-                // uncaught exceptions as fatal events. This is the recommended behavior.
-                Crashlytics.ReportUncaughtExceptionsAsFatal = true;
+        public static bool IsCrashlyticsInitialized
+        {
+            get { return _isCrashlyticsInitialized; }
+        }
 
-                // Set a flag here for indicating that your project is ready to use Firebase.
-                Debug.Log("Crashilytics initialized");
-            }
-            else
+        private void Awake()
+        {
+            if (!_isCrashlyticsInitialized)
             {
-                UnityEngine.Debug.LogError(System.String.Format(
-                  "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
-                // Firebase Unity SDK is not safe to use here.
+                Initialize();
+
             }
-        });
-        FirebaseApp.LogLevel = Firebase.LogLevel.Verbose;
+        }
+
+        // Use this for initialization
+        private static void Initialize()
+        {
+            // Initialize Firebase
+            Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+            {
+                var dependencyStatus = task.Result;
+                if (dependencyStatus == Firebase.DependencyStatus.Available)
+                {
+                    // Create and hold a reference to your FirebaseApp,
+                    // where app is a Firebase.FirebaseApp property of your application class.
+                    // Crashlytics will use the DefaultInstance, as well;
+                    // this ensures that Crashlytics is initialized.
+                    Firebase.FirebaseApp app = Firebase.FirebaseApp.DefaultInstance;
+
+                    // When this property is set to true, Crashlytics will report all
+                    // uncaught exceptions as fatal events. This is the recommended behavior.
+                    Crashlytics.ReportUncaughtExceptionsAsFatal = true;
+                    _isCrashlyticsInitialized = true;
+                    FirebaseApp.LogLevel = Firebase.LogLevel.Verbose;
+                    // Set a flag here for indicating that your project is ready to use Firebase.
+                    Debug.Log("Crashilytics initialized");
+                }
+                else
+                {
+                    UnityEngine.Debug.LogError(System.String.Format(
+                      "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
+                    // Firebase Unity SDK is not safe to use here.
+                }
+            });
+        }
+
     }
-    
 }

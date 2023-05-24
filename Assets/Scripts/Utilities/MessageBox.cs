@@ -41,7 +41,7 @@ namespace Utilities
         public static MessageBox CreateConfirmationBox(string title, string message, Action confirmCallback, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
         {
             MessageBox msgBox = new MessageBox(MessageBoxType.Confirmation, message, title, closingEvent, parent);
-            msgBox.DisplayLoadingMessageBox(confirmCallback, useAltParent);
+            msgBox.DisplayConfirmationBox(confirmCallback, null, useAltParent);
             return msgBox;
         }
 
@@ -111,9 +111,13 @@ namespace Utilities
         }
 
        
-        public void DisplayMessageBox(Action onConfirmCallback, Action onDenyCallback, bool useAltParent = false)
+        public void DisplayConfirmationBox(Action onConfirmCallback, Action onDenyCallback = null, bool useAltParent = false)
         {
             SpawnMessageBoxInstance(useAltParent);
+            if(onDenyCallback == null)
+            {
+                onDenyCallback = this.AutoDestroyMessageBox;
+            }
             _instance.ConfigureMessageBox(this, onConfirmCallback, onDenyCallback);
         }
 
