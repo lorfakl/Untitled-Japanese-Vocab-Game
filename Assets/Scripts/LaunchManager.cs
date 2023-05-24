@@ -94,7 +94,13 @@ public class LaunchManager : MonoBehaviour
 
     void PrepNextLaunch(float yPos)
     {
-        Vector3 newPosition = baselinePosition;
+        Vector3 newPosition = new Vector3();
+#if UNITY_EDITOR
+
+        newPosition = baselineObject.transform.position;
+#else
+        newPosition = baselinePosition;
+#endif
         newPosition.x = Random.Range(-20, 25);
         newPosition.y = yPos;
         GameObject newLaunchObject = GameObject.Instantiate(launchObject, newPosition, Quaternion.identity);
