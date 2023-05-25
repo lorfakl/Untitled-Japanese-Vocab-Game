@@ -7,6 +7,8 @@ using Utilities;
 using Utilities.Events;
 using Utilities.PlayFabHelper;
 using PlayFab;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 
 public class OpeningPageManager : MonoBehaviour
 {
@@ -24,6 +26,12 @@ public class OpeningPageManager : MonoBehaviour
 
 
     GameEvent _finishedLoadingEvent;
+
+
+    public void OnSignInWithGoogle_EventHandler()
+    {
+        InitializeGoogleServices();
+    }
 
     private void Awake()
     {
@@ -51,6 +59,28 @@ public class OpeningPageManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void InitializeGoogleServices()
+    {
+        /*PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+.AddOauthScope("profile")
+.RequestServerAuthCode(false)
+.Build();
+        GooglePlayGames.BasicApi.*/
+        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+    }
+
+    void ProcessAuthentication(SignInStatus status)
+    {
+        if(status == SignInStatus.Success)
+        {
+            Debug.Log("Successful Google Signin");
+        }
+        else
+        {
+            Debug.Log("LoginFailed?");
+        }
     }
 
     void OnLoginPageSetUp()
