@@ -20,6 +20,10 @@ public class MenuController : MonoBehaviour
     GameObject profilePanel;
     [SerializeField]
     GameObject openingPanel;
+    [SerializeField]
+    GameObject glossaryPanel;
+    [SerializeField]
+    GameObject studySetPanel;
 
     [SerializeField]
     GameObject[] panels;
@@ -41,59 +45,34 @@ public class MenuController : MonoBehaviour
 
     public void StatsButtonClickHandler()
     {
-
-        if (!statsPanel.activeInHierarchy)
-        {
-            ChangeActivePanel(statsPanel);
-        }
-        else
-        {
-            statsPanel.GetComponent<RectTransform>().localPosition = Vector3.zero;
-            activePanel = statsPanel;
-        }
+        CheckActivePanel(statsPanel);
     }
 
     public void SettingButtonClickHandler()
     {
-        if (!settingsPanel.activeInHierarchy)
-        {
-            ChangeActivePanel(settingsPanel);
-        }
-        else
-        {
-            settingsPanel.GetComponent<RectTransform>().localPosition = Vector3.zero;
-            activePanel = settingsPanel;
-        }
+        CheckActivePanel(settingsPanel);
     }
 
     public void ProfileButtonClickHandler()
     {
-        if (!profilePanel.activeInHierarchy)
-        {
-            ChangeActivePanel(profilePanel);
-        }
-        else
-        {
-            profilePanel.GetComponent<RectTransform>().localPosition = Vector3.zero;
-            activePanel = profilePanel;
-        }
-
+        CheckActivePanel(profilePanel);
         _profilePageActiveEvent.Raise();
     }
 
     public void ShopButtonClickHandler()
     {
-        if (!shopPanel.activeInHierarchy)
-        {
-            ChangeActivePanel(shopPanel);
-        }
-        else
-        {
-            shopPanel.GetComponent<RectTransform>().localPosition = Vector3.zero;
-            activePanel = shopPanel;
-        }
-
+        CheckActivePanel(shopPanel); 
         _shopPageActiveEvent.Raise();
+    }
+
+    public void CustomStudySetButtonClickHandler()
+    {
+        CheckActivePanel(studySetPanel);
+    }
+
+    public void GlossaryButtonClickHandler()
+    {
+        CheckActivePanel(glossaryPanel);
     }
     #endregion
 
@@ -131,6 +110,20 @@ public class MenuController : MonoBehaviour
         
     }
     #endregion
+
+    private void CheckActivePanel(GameObject panel)
+    {
+        if (!panel.activeInHierarchy)
+        {
+            ChangeActivePanel(panel);
+        }
+        else
+        {
+            panel.GetComponent<RectTransform>().localPosition = Vector3.zero;
+            activePanel = panel;
+        }
+    }
+
     private void ChangeActivePanel(GameObject selectedPanel)
     {
         if(activePanel != null)

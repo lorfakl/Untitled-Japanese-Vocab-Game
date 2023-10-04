@@ -41,8 +41,8 @@ public class StudySystem : MonoBehaviour
     Dictionary<ProficiencyLevels, List<JapaneseWord>> sessionWordPrestigeLevel = new Dictionary<ProficiencyLevels, List<JapaneseWord>>();
     int studyProgress = 0;
 
-    static bool shouldNewWordsBeAdded = true;
-
+    static bool shouldNewWordsBeAdded = true; //we want this value to persist after the StudyScene is unloaded
+    
     public Dictionary<ProficiencyLevels, List<JapaneseWord>> SessionWordLeitnerLevels
     {
         get { return sessionWordLeitnerLevel; }
