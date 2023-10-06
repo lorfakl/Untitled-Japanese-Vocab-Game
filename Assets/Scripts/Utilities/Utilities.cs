@@ -18,16 +18,16 @@ using Unity.VisualScripting;
 
 namespace ProjectSpecificGlobals
 {
-    public enum ContactType { GroundContact, CubeContact, BlockContact };
     public enum SceneNames { MenuScene, StudyScene, ArcadeLeaderboard, ArcadeOpeningScene, ArcadeStudyScene, ArcadeGameOver}
 
-    public enum Tags { MainCanvas}
+    public enum Tags { MainCanvas }
 
-    public static class MobileSettings
+    public static class Globals
     {
-        public static int dragPower = 250;
-        public static int multiplier = 2;
+        public static List<JapaneseWord> japaneseWords = new List<JapaneseWord>();
+        
     }
+    
 }
 
 /// <summary>
@@ -179,14 +179,16 @@ namespace Utilities
         public static string Log<T>(T msg)
         {
             string msgStr = DateTime.Now + ": " + msg.ToString();
-
+#if UNITY_EDITOR
+            Debug.Log(msgStr);
+#else
             if (CrashInit.IsCrashlyticsInitialized)
             {
                 Crashlytics.Log(msgStr.ToSafeString());
             }
+#endif
 
-            
-            
+
             if (Playfab.VerboseModeEnabled)
             {
                 Debug.Log(msgStr);
@@ -299,7 +301,7 @@ namespace Utilities
 
             return Log(fieldContent);
         }
-        #endregion
+#endregion
 
         #region Misc
         public static Vector3 GetMouseWorldPosition()

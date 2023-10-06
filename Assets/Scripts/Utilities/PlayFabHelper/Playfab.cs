@@ -548,7 +548,7 @@ namespace Utilities.PlayFabHelper
                 GetTitleData = true,
                 TitleDataKeys = new List<string> { TitleDataKeys.ClientConfiguration.ToString() },
                 GetUserData = true,
-                UserDataKeys = new List<string> { UserDataKey.WordsSeen.ToString()},
+                UserDataKeys = new List<string> { UserDataKey.WordsSeen.ToString(), UserDataKey.LeitnerLevels.ToString()},
                 ProfileConstraints = new PlayerProfileViewConstraints
                 {
                     ShowAvatarUrl = true,
@@ -591,7 +591,11 @@ namespace Utilities.PlayFabHelper
                 try
                 {
                     var userData = result.InfoResultPayload.UserData[UserDataKey.WordsSeen.ToString()];
+
                     wordsSeen = Int32.Parse(userData.Value);
+                    var lietnerUserData = result.InfoResultPayload.UserData[UserDataKey.LeitnerLevels.ToString()];
+                    string leitherJsonString = lietnerUserData.Value;
+                    CurrentAuthedPlayer.CachedUserData.Add(UserDataKey.LeitnerLevels, leitherJsonString);
                 }
                 catch(Exception e)
                 {

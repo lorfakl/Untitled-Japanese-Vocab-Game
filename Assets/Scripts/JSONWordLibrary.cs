@@ -138,11 +138,19 @@ public class JSONWordLibrary : MonoBehaviour
 
     void LoadWordFromJSON()
     {
-        string kanjiFile = kanjiJsonFile.text;
-        kanjiJsonObjs = JsonConvert.DeserializeObject<List<JapaneseWord>>(kanjiFile);
+        if(kanjiJsonObjs.Count == 0) 
+        {
+            string kanjiFile = kanjiJsonFile.text;
+            kanjiJsonObjs = JsonConvert.DeserializeObject<List<JapaneseWord>>(kanjiFile);
+        }
+
+        if (kanaJsonObjs.Count == 0)
+        {
+            string kanaFile = kanaJsonFile.text;
+            kanaJsonObjs = JsonConvert.DeserializeObject<List<JapaneseWord>>(kanaFile);
+        }
         //HelperFunctions.PrintListContent<JapaneseWord>(kanjiJsonObjs);
-        string kanaFile = kanaJsonFile.text;
-        kanaJsonObjs = JsonConvert.DeserializeObject<List<JapaneseWord>>(kanaFile);
+        
 
         if(StaticUserSettings.IsKanjiStudyTopic())
         {
@@ -152,6 +160,36 @@ public class JSONWordLibrary : MonoBehaviour
         {
             workingWordBankList = kanaJsonObjs;
         }
+    }
+
+    public static List<JapaneseWord> LoadWordsFromJSON()
+    {
+        if(kanjiJsonObjs.Count == 0)
+        {
+            TextAsset wordJson = Resources.Load<TextAsset>("japaneseWordList");
+            kanjiJsonObjs = JsonConvert.DeserializeObject<List<JapaneseWord>>(wordJson.text);
+        }
+        
+        return kanjiJsonObjs;
+    }
+
+    static void AddAndSaveWordIds(List<JapaneseWord> kanjiList, List<JapaneseWord> kanaList)
+    {
+        int idCount = 1;
+        foreach(JapaneseWord word in kanjiList)
+        {
+            word.SetID(idCount.ToString());
+            idCount++;
+        }
+        string allJson = JsonConvert.SerializeObject(kanjiList, Formatting.Indented);
+        File.WriteAllText(Application.dataPath + "//japaneseWordList.json", allJson);
+        foreach (JapaneseWord word in kanaList)
+        {
+            word.SetID(idCount.ToString());
+            idCount++;
+        }
+        allJson = JsonConvert.SerializeObject(kanaList, Formatting.Indented);
+        File.WriteAllText(Application.dataPath + "//kanaList.json", allJson);
     }
 
     static JapaneseWord AddWordToWordBank(JapaneseWord currentWord)

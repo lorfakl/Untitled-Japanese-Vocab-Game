@@ -7,6 +7,13 @@ namespace Utilities.PlayFabHelper.CurrentUser
 {
     public static class CurrentAuthedPlayer
     {
+        private static Dictionary<UserDataKey, string> cachedUserData = new Dictionary<UserDataKey, string>();
+
+        public static Dictionary<UserDataKey, string> CachedUserData
+        {
+            get { return cachedUserData; }
+        }
+
         public static PlayFabUser CurrentUser
         {
             get;

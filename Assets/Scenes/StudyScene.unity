@@ -3657,8 +3657,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   removeWordFromSessionEvent: {fileID: 11400000, guid: ab3d91d3102582e48ae8208157b26e38, type: 2}
   completedSessionListEvent: {fileID: 11400000, guid: 5cdc1f70fd1a3e44e8c24841cb0e6fa8, type: 2}
-  kanjiJsonFile: {fileID: 4900000, guid: d2c9078e608a17c4aad1e7c1a562b7ab, type: 3}
-  kanaJsonFile: {fileID: 4900000, guid: 935a9d6df890fc743b159b8ec002b32a, type: 3}
+  kanjiJsonFile: {fileID: 4900000, guid: 04217bec5a155fc4e8c71da415609847, type: 3}
+  kanaJsonFile: {fileID: 4900000, guid: 376ce0f6568d79047a2edcd121fae91b, type: 3}
 --- !u!114 &1419740498
 MonoBehaviour:
   m_ObjectHideFlags: 0

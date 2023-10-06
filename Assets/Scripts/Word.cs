@@ -9,65 +9,83 @@ public class Word
 {
     public static int maxLeitnerLevel = 6;
     public static int maxPrestigeLevel = 8;
+    
+    [JsonProperty]
     public string ID
     {
         get;
         protected set;
     }
 
+    [JsonProperty]
     public int LeitnerLevel
     {
         get;
         set;
     }
 
+    [JsonProperty]
     public int PreviousLeitnerLevel
     {
         get;
         set;
     }
 
+    [JsonProperty]
     public int PrestigeLevel
     {
         get;
         set;
     }
 
+    [JsonProperty]
     public int PreviousPrestigeLevel
     {
         get;
         set;
     }
 
+    [JsonProperty]
     public int TimesSeen
     {
         get;
         set;
     }
 
+    [JsonProperty]
     public int TimesAnsweredCorrectly
     {
         get;
         set;
     }
 
+    [JsonProperty]
+    public float TotalTimeToAnswer
+    {
+        get;
+        set;
+    }
+
+    [JsonProperty]
     public float AverageTime
     {
         get;
         set;
     }
 
+    [JsonProperty]
     public float LongestTime
     {
         get;
         set;
     }
-
+    [JsonProperty]
     public float ShortestTime
     {
         get;
         set;
     }
+
     public void ModifyProficiencyLevel(bool wasCorrect)
     {
         if(wasCorrect)
@@ -120,6 +138,11 @@ public class JapaneseWord : Word
         Kanji = word.Kanji;
         Kana = word.Kana;
         English = word.English;
+    }
+
+    public void SetID(string id)
+    {
+        this.ID = id;
     }
 
     public string PrintAnswer()
