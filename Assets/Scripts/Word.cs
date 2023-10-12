@@ -86,6 +86,11 @@ public class Word
         set;
     }
 
+    public float CorrectPercentage()
+    {
+        float percent = (float)TimesAnsweredCorrectly / (float)TimesSeen * 100f;
+        return percent;
+    }
     public void ModifyProficiencyLevel(bool wasCorrect)
     {
         if(wasCorrect)

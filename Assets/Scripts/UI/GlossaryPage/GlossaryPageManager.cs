@@ -33,7 +33,8 @@ public class GlossaryPageManager : MonoBehaviour
     SortButton speedSortButton;
 
     private static Dictionary<int, string> filterOptions = new Dictionary<int, string>();
-    private Dictionary<int, List<JapaneseWord>> sortedDict = new Dictionary<int, List<JapaneseWord>>();
+    private Dictionary<string, List<JapaneseWord>> sortedDict = new Dictionary<string, List<JapaneseWord>>();
+
     private void Awake()
     {
         HelperFunctions.Log("Is this called Glossary Awake");
@@ -55,14 +56,12 @@ public class GlossaryPageManager : MonoBehaviour
             foreach (var opt in filterDropdown.options)
             {
                 filterOptions.Add(filterDropdown.options.IndexOf(opt), opt.text);
-                
             }
         }
 
         foreach (var opt in filterDropdown.options)
         {
-            sortedDict.Add(filterDropdown.options.IndexOf(opt), new List<JapaneseWord>());
-
+            sortedDict.Add(opt.text, new List<JapaneseWord>());
         }
         
         if(correctSortButton != null) 
@@ -71,20 +70,14 @@ public class GlossaryPageManager : MonoBehaviour
             correctSortButton.OnSortModeChange += SortByCorrect;
             speedSortButton.OnSortModeChange += SortBySpeed;
         }
-        
     }
-
-    
-
-
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        FilterDisplay(filterDropdown.value);
     }
 
-    
     // Update is called once per frame
     void Update()
     {
@@ -101,16 +94,17 @@ public class GlossaryPageManager : MonoBehaviour
             {
                 foreach (var word in singleLevels)
                 {
-                    sortedDict[0].Add(word);
+                    sortedDict["Studied"].Add(word);
+                    GlossaryEntry.WordsToDisplay.Enqueue(word);
+                    GameObject.Instantiate(glossaryEntryPrefab, glossaryContentPanel.transform, false);
                 }
             }
-            HelperFunctions.Log($"Studied List has been loaded with {sortedDict[0].Count} entires");
+            HelperFunctions.Log($"Studied List has been loaded with {sortedDict["Studied"].Count} entires");
         }
         catch(Exception ex) 
         { 
             //new user or broken user load all words
         }
-        
     }
 
     private void Search(string keyword)
@@ -122,7 +116,17 @@ public class GlossaryPageManager : MonoBehaviour
     {
         HelperFunctions.Log($"Int Value passed from event: {optionIndex}");
         string filterOption = filterOptions[optionIndex];
+        DisplayGlossary(sortedDict[filterOption]);
+    }
 
+    private void DisplayGlossary(List<JapaneseWord> words)
+    {
+        GlossaryEntry.WordsToDisplay.Clear();
+        foreach(var w in words)
+        {
+            GlossaryEntry.WordsToDisplay.Enqueue(w);
+            GameObject.Instantiate(glossaryEntryPrefab, glossaryContentPanel.transform, false);
+        }
     }
 
     private void SortBySeen(SortState s)
@@ -131,9 +135,13 @@ public class GlossaryPageManager : MonoBehaviour
     }
 
     private void SortByCorrect(SortState s)
-    { }
+    {
+
+    }
 
     private void SortBySpeed(SortState s)
-    { }
+    {
+
+    }
 
 }

@@ -4,15 +4,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public struct GlossaryEntryData
-{
-    public int timesSeen;
-    public string correctness;
-    public float averageAnswerSpeed;
-    public JapaneseWord word;
-}
 
-public delegate void GlossaryEntrySelectedEventHandler(GlossaryEntryData d);
+public delegate void GlossaryEntrySelectedEventHandler(JapaneseWord d);
 public class GlossaryEntry : MonoBehaviour
 {
     [SerializeField]
@@ -30,9 +23,10 @@ public class GlossaryEntry : MonoBehaviour
     [SerializeField]
     Button entryButton;
 
+    public static Queue<JapaneseWord> WordsToDisplay = new Queue<JapaneseWord>();
     public event GlossaryEntrySelectedEventHandler entrySelected;
 
-    private GlossaryEntryData data;
+    private JapaneseWord data;
 
     // Start is called before the first frame update
     private void Awake()
@@ -41,7 +35,8 @@ public class GlossaryEntry : MonoBehaviour
     }
     void Start()
     {
-        
+        data = WordsToDisplay.Dequeue();
+        DisplayData();
     }
 
     // Update is called once per frame
@@ -53,5 +48,20 @@ public class GlossaryEntry : MonoBehaviour
     private void EntrySelected()
     {
         entrySelected.Invoke(data);
+    }
+
+    private void DisplayData()
+    {
+        if(data.Kanji == "-1")
+        {
+            wordText.text = data.Kana;
+        }
+        else
+        {
+            wordText.text = data.Kanji;
+        }
+        seenText.text = data.TimesSeen.ToString();
+        correctnessText.text = data.CorrectPercentage().ToString();
+        speedText.text = data.AverageTime.ToString();
     }
 }
