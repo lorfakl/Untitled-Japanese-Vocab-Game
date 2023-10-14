@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-
+using Utilities.Events;
 
 public delegate void GlossaryEntrySelectedEventHandler(JapaneseWord d);
 public class GlossaryEntry : MonoBehaviour
@@ -23,10 +23,24 @@ public class GlossaryEntry : MonoBehaviour
     [SerializeField]
     Button entryButton;
 
-    public static Queue<JapaneseWord> WordsToDisplay = new Queue<JapaneseWord>();
+    [SerializeField]
+    GameEvent entrySelectedEvent;
+
+    public static Queue<JapaneseWord> WordsToDisplay = new Queue<JapaneseWord>(250);
     public event GlossaryEntrySelectedEventHandler entrySelected;
 
     private JapaneseWord data;
+
+    public JapaneseWord Data
+    {
+        get { return data; }
+    }
+
+    public void UpdateDisplay(JapaneseWord w)
+    {
+        data = w;
+        DisplayData();
+    }
 
     // Start is called before the first frame update
     private void Awake()
@@ -47,7 +61,8 @@ public class GlossaryEntry : MonoBehaviour
 
     private void EntrySelected()
     {
-        entrySelected.Invoke(data);
+        entrySelectedEvent.Raise(data);
+
     }
 
     private void DisplayData()

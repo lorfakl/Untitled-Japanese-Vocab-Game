@@ -230,6 +230,7 @@ MonoBehaviour:
   correctnessText: {fileID: 4058497949361121900}
   speedText: {fileID: 140013704336357867}
   entryButton: {fileID: 8427973608458479028}
+  entrySelectedEvent: {fileID: 11400000, guid: e749f2c5038095c4b932bc0fbe73ae4b, type: 2}
 --- !u!1 &1377292405204530806
 GameObject:
   m_ObjectHideFlags: 0
