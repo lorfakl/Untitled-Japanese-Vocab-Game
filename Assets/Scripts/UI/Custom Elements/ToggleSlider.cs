@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
@@ -29,7 +30,10 @@ public class ToggleSlider : MonoBehaviour
     Image _toggleForeground;
 
     [SerializeField]
-    TMP_Text textOptions; 
+    TMP_Text textOptions;
+
+    [SerializeField]
+    Transform textContainer;
 
     [SerializeField]
     ToggleSliderOptions _totalTogglePositions;
@@ -81,7 +85,17 @@ public class ToggleSlider : MonoBehaviour
     private void Awake()
     {
         OnValueSelectedChanged = new UnityEvent<string>();
+        if(_options.Length > 4)
+        {
+            HelperFunctions.Error("A Slider Toggle SHOULD NOT have more than 4 options. AutoResizing");
+            string[] newOptionArr = new string[4];
+            for(int i = 0; i < 4; i++) 
+            {
+                newOptionArr[i] = _options[i];
+            }
 
+            _options = newOptionArr;
+        }
     }
 
     private void Start()
@@ -111,32 +125,55 @@ public class ToggleSlider : MonoBehaviour
 
         _mostRecentSliderVal = 0;
     }
+
     private void LoadOptions()
     {
-        string opt = "";
-        for(int i = 0; i < _options.Length; i++)
+        //initially all text children are enabled
+        int enabledKids = 4;
+        for(int i = 0; i < textContainer.childCount; i++)
         {
-            if(i == (_options.Length - 1))
+            var textChild = textContainer.GetChild(i);
+            if (i < _options.Length)
             {
-                opt += _options[i];
-            }
-            else
-            {
-                if(opt.Length == 2)
+                try
                 {
-                    opt += _options[i] + "\t\t";
+                    textChild.GetComponent<TMP_Text>().text = _options[i];
+                    RectTransform textChildRect = textChild.GetComponent<RectTransform>();
+                    Vector2 currentSize = textChildRect.sizeDelta;
+                    Vector2 updatedSize = new Vector2(CalculateTextBoxWidth(_options.Length), currentSize.y);
+                    textChildRect.sizeDelta = updatedSize;
                 }
-                else
-                {
-                    opt += _options[i] + "\t" + "\t";
+                catch(Exception e) 
+                { 
+                    HelperFunctions.CatchException(e);
                 }
                 
             }
+            else
+            {
+                textChild.gameObject.SetActive(false);
+            }
         }
 
-        textOptions.text = opt;
         _totalTogglePositions = (ToggleSliderOptions)_options.Length;
         CurrentSelection = _options[0];
+    }
+
+    private float CalculateTextBoxWidth(int optCount)
+    {
+        switch(optCount)
+        {
+            case 2:
+                return 300f;
+            case 3:
+                return 150f;
+            case 4:
+                return 100f;
+            default:
+                string errMsg = $"Invalid number of options when calculating the Text box width count given:{optCount}";
+                HelperFunctions.Error(errMsg);
+                throw new ArgumentException(errMsg);
+        }
     }
 
     private void ChangeSliderLocation(float value)

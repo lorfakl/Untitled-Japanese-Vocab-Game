@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Utilities.Events;
+using Utilities.UserInterfaceAddOns;
 
 public delegate void GlossaryEntrySelectedEventHandler(JapaneseWord d);
 public class GlossaryEntry : MonoBehaviour
@@ -26,6 +27,10 @@ public class GlossaryEntry : MonoBehaviour
     [SerializeField]
     GameEvent entrySelectedEvent;
 
+    [SerializeField]
+    GameEvent entryLongPressEvent;
+
+
     public static Queue<JapaneseWord> WordsToDisplay = new Queue<JapaneseWord>(250);
     public event GlossaryEntrySelectedEventHandler entrySelected;
 
@@ -45,8 +50,20 @@ public class GlossaryEntry : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        entryButton.onClick.AddListener(EntrySelected);
+        
+        LongPress longPressInstance = entryButton.GetComponent<LongPress>();
+        if(longPressInstance != null) 
+        {
+            longPressInstance.OnLongPressRegistered.AddListener(LongPressEventHandler);
+            longPressInstance.OnShortPressRegistered.AddListener(EntrySelected);
+            entryButton.onClick.AddListener(() => { });
+        }
+        else
+        {
+            entryButton.onClick.AddListener(EntrySelected);
+        }
     }
+
     void Start()
     {
         data = WordsToDisplay.Dequeue();
@@ -57,6 +74,11 @@ public class GlossaryEntry : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void LongPressEventHandler() 
+    {
+        entryLongPressEvent.Raise(data);
     }
 
     private void EntrySelected()
@@ -79,4 +101,6 @@ public class GlossaryEntry : MonoBehaviour
         correctnessText.text = data.CorrectPercentage().ToString();
         speedText.text = data.AverageTime.ToString();
     }
+
+
 }

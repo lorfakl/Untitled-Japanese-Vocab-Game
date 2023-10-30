@@ -19,6 +19,12 @@ public class GlossaryPageManager : MonoBehaviour
     GameObject glossaryContentPanel;
 
     [SerializeField]
+    GameObject wordDetails;
+
+    [SerializeField]
+    GameObject goalSubMenu;
+
+    [SerializeField]
     TMP_InputField searchField;
 
     [SerializeField]
@@ -43,12 +49,25 @@ public class GlossaryPageManager : MonoBehaviour
         WordDetailsController.Data.Enqueue(selectedEntry);
         HelperFunctions.Log("Casted the selected Entry");
 
-        SwapActiveStateOfChilderen();
+        DisableAllOtherChildren(wordDetails);
+    }
+
+    public void OnGlossaryEntryLongPress(object e)
+    {
+        JapaneseWord longPressedEntry = (JapaneseWord)e;
+        DisableAllOtherChildren(goalSubMenu);
+        goalSubMenu.SetActive(true);
+
+    }
+
+    public void OnGoalSubMenuClosed()
+    {
+        DisableAllOtherChildren(3);
     }
 
     public void OnWordDetailsClosed()
     {
-        SwapActiveStateOfChilderen();
+        DisableAllOtherChildren(3);
     }
 
     private void Awake()
@@ -99,6 +118,28 @@ public class GlossaryPageManager : MonoBehaviour
     void Update()
     {
         
+    }
+    private void OnEnable()
+    {
+        
+        //SwapActiveStateOfChilderen();
+    }
+
+    private void OnDisable()
+    {
+        //SwapActiveStateOfChilderen();
+        /*for (int i = 1; i < childCount-1; i++)
+        {
+            var child = transform.GetChild(i);
+            if(!child.gameObject.activeSelf)
+            {
+                child.gameObject.SetActive(true);
+            }
+            else
+            {
+                child.gameObject.SetActive(false);
+            }
+        }*/
     }
 
     private void InitializeGlossaryDefaultView()
@@ -229,12 +270,31 @@ public class GlossaryPageManager : MonoBehaviour
 
     }
 
-    private void SwapActiveStateOfChilderen()
+    private void DisableAllOtherChildren(int index)
     {
         for (int i = 1; i < childCount; i++)
         {
             var child = transform.GetChild(i);
-            child.gameObject.SetActive(!child.gameObject.activeSelf);
+            if (i < index)
+            {
+                child.gameObject.SetActive(true);
+            }
+            else
+            {
+                child.gameObject.SetActive(false);
+            }
+            
         }
+    }
+
+    private void DisableAllOtherChildren(GameObject g)
+    {
+        for (int i = 1; i < childCount; i++)
+        {
+            var child = transform.GetChild(i);
+            child.gameObject.SetActive(false);
+        }
+
+        g.SetActive(true);  
     }
 }
