@@ -16,20 +16,6 @@ using Firebase.Crashlytics;
 using Utilities.Logging;
 using Unity.VisualScripting;
 
-namespace ProjectSpecificGlobals
-{
-    public enum SceneNames { MenuScene, StudyScene, ArcadeLeaderboard, ArcadeOpeningScene, ArcadeStudyScene, ArcadeGameOver}
-
-    public enum Tags { MainCanvas }
-
-    public static class Globals
-    {
-        public static List<JapaneseWord> japaneseWords = new List<JapaneseWord>();
-        
-    }
-    
-}
-
 /// <summary>
 /// The utilities class is for storing the general purpose commonly used functions and data structures 
 /// </summary>

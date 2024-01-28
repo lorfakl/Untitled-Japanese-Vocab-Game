@@ -9,27 +9,61 @@ using ProjectSpecificGlobals;
 
 public class StudySceneManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public enum PanelUI { Stats, Meaning}
+
+    //Boss Music Themes
     [SerializeField]
     AudioSource mainTheme;
 
     [SerializeField]
+    AudioClip[] bossThemes;
+
+    //Boss Animations
+    [SerializeField]
     Animator animator;
 
     [SerializeField]
-    Image bgImage; 
+    RuntimeAnimatorController[] runtimeAnimatorControllers;
 
+    //Background Image
     [SerializeField]
-    AudioClip[] bossThemes;
+    Image bgImage;
 
     [SerializeField]
     Sprite[] bossBackgrounds;
 
+    //Definition Panel
+    [SerializeField]
+    Sprite[] definitionDisplays;
+
+    [SerializeField]
+    Sprite[] statDisplays;
+
+    //Next Button UI
+    [SerializeField]
+    Image nextWordBtnImage;
+
+    [SerializeField]
+    Sprite[] nextWordBtnImages;
+
+    //Score Readout UI
+    [SerializeField]
+    Image scoreDisplayImage;
+
+    [SerializeField]
+    Sprite[] scoreDisplaySprites;
+
+    //Target Word UI
+    [SerializeField]
+    Image targetWordImage;
+
+    [SerializeField]
+    Sprite[] targetWordSprites;
+
     [SerializeField]
     Button exitBtn;
 
-    [SerializeField]
-    RuntimeAnimatorController[] runtimeAnimatorControllers;
+    
 
     public float debugProgressValue = 0;
 
@@ -40,7 +74,7 @@ public class StudySceneManager : MonoBehaviour
     
     int currentProgressIndex = 0; //this index is used to retrieve the values in these arrays
     float bossChangeChance = 0;
-
+    int bossInfoIndex = 0;
     public void OnQuitSelection()
     {
         MessageBoxFactory.CreateConfirmationBox("Are you sure you want to quit?", "Your progress will not be saved and you will return to the title screen",
@@ -49,6 +83,20 @@ public class StudySceneManager : MonoBehaviour
                 SceneManager.LoadScene(SceneNames.MenuScene.ToString(), LoadSceneMode.Single);    
             });
     }
+
+    public Sprite GetDefinitionPanelImage(PanelUI selection)
+    {
+        switch(selection) 
+        {
+            case PanelUI.Meaning:
+                return definitionDisplays[bossInfoIndex];
+            case PanelUI.Stats: 
+                return statDisplays[bossInfoIndex];
+            default:
+                return null;
+        }
+    }
+
     private void Awake()
     {
 
@@ -65,12 +113,12 @@ public class StudySceneManager : MonoBehaviour
         exitBtn.onClick.AddListener(OnQuitSelection);
 
         //1000 words 5 bosses 200 words per boss
-        //as the wordsseen approaches 200 the probably of boss changing approaches 0.5
+        //as the wordsSeen approaches 200 the probably of boss changing approaches 0.5
         //there are 4 thresholds 200 400 600 800 1000 by the time you get to 1000 words it should be 
-        //loop through thresholds if ws is less than i use i as threshold 
-        //take fraction of ws and threshold this fraction determines the probability of the next boss
+        //loop through thresholds if wordsSeen is less than i use i as threshold 
+        //take fraction of wordsSeen and threshold this fraction determines the probability of the next boss
         //ex ws=60 thres = 200 60/200  30% change of a 50%
-        for(int i = 0; i < wordsSeenThresholds.Length; i++)
+        for (int i = 0; i < wordsSeenThresholds.Length; i++)
         {
             if(wordsSeen < wordsSeenThresholds[i])
             {
@@ -100,7 +148,7 @@ public class StudySceneManager : MonoBehaviour
 #endif
 
         HelperFunctions.Log($"Chance of Boss change {bossChangeChance}");
-        int bossInfoIndex = currentProgressIndex;
+        bossInfoIndex = currentProgressIndex;
 
         if (bossChangeChance > Random.Range(0f, 1f))
         {
@@ -114,6 +162,12 @@ public class StudySceneManager : MonoBehaviour
         animator.Play("Base Layer.Entry");
 
         bgImage.sprite = bossBackgrounds[bossInfoIndex];
+        
+        //targetWordImage.sprite = targetWordSprites[bossInfoIndex];
+        //scoreDisplayImage.sprite = scoreDisplaySprites[bossInfoIndex];
+        nextWordBtnImage.sprite = nextWordBtnImages[bossInfoIndex];
+
+            
     }
 
     void Start()

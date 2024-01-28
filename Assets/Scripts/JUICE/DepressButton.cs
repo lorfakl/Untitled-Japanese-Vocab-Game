@@ -8,25 +8,23 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class DepressButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-
-    [SerializeField]
-    Sprite pressedBtn;
-
-    [SerializeField]
-    Sprite unPressedBtn;
-
-    Image _imageSpriteContainer;
+    [Range(0.1f, 0.5f)]
+    [SerializeField] float pressScaleFactor;
 
     [SerializeField] AudioClip _pressClip, _releaseClip;
 
     [SerializeField] AudioSource _source;
 
-    
+    Vector3 _originalScale;
 
     // Start is called before the first frame update
     void Start()
     {
-        _imageSpriteContainer = GetComponent<Image>();
+        _originalScale = transform.localScale;
+        if(pressScaleFactor < 0.1f)
+        {
+            pressScaleFactor = 0.1f;
+        }
     }
 
     // Update is called once per frame
@@ -37,11 +35,24 @@ public class DepressButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _imageSpriteContainer.sprite = pressedBtn;
+        ChangeButtonScale(false);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _imageSpriteContainer.sprite = unPressedBtn;
+        ChangeButtonScale(true);
+    }
+
+    private void ChangeButtonScale(bool returnToOriginal)
+    {
+        if(returnToOriginal) 
+        { 
+            transform.localScale = _originalScale;
+        }
+        else
+        {
+            Vector3 pressedScale = (1.0f-pressScaleFactor) * transform.localScale;
+            transform.localScale = pressedScale;
+        }
     }
 }

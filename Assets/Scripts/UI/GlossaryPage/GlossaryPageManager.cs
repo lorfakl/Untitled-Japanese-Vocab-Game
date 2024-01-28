@@ -10,6 +10,12 @@ using Newtonsoft.Json;
 using ProjectSpecificGlobals;
 using System.Linq;
 
+//TO DO
+/*MAKE SURE THAT SORTS ARE SAVED BETWEEN LIST LOADS PROBABLY AN EVENT CACHE 
+ MAKE SURE THAT ENTRIES PULL THEIR DATA AND SEND TO WORD DETAILS
+
+When no data is available for Glossary filter show messagebox stating as such
+*/
 public class GlossaryPageManager : MonoBehaviour
 {
     [SerializeField]
@@ -41,11 +47,12 @@ public class GlossaryPageManager : MonoBehaviour
 
     private static Dictionary<int, string> filterOptions = new Dictionary<int, string>();
     private Dictionary<string, List<JapaneseWord>> sortedDict = new Dictionary<string, List<JapaneseWord>>();
+    private List<GlossaryEntry> entries = new List<GlossaryEntry>();
     private int childCount = 0;
 
     public void OnGlossaryEntrySelected(object e)
     {
-        JapaneseWord selectedEntry = (JapaneseWord)e;
+        UserStudyData selectedEntry = (UserStudyData)e;
         WordDetailsController.Data.Enqueue(selectedEntry);
         HelperFunctions.Log("Casted the selected Entry");
 
@@ -147,16 +154,33 @@ public class GlossaryPageManager : MonoBehaviour
         //default view is "Studied" index 0
         try
         {
-            Dictionary<string, List<JapaneseWord>> playerLeitnerLevels = JsonConvert.DeserializeObject<Dictionary<string, List<JapaneseWord>>>(CurrentAuthedPlayer.CachedUserData[Utilities.PlayFabHelper.UserDataKey.LeitnerLevels]);
-            foreach (var singleLevels in playerLeitnerLevels.Values)
+            if(DataPlatform.CheckIfStudyRecordLoaded())
             {
-                foreach (var word in singleLevels)
+                sortedDict["Known"] = Globals.LoadedStudyRecord.GetCurrentKnownWords();
+                sortedDict["Studied"] = Globals.LoadedStudyRecord.GetCurrentStudiedWords();
+                sortedDict["Mastered"] = Globals.LoadedStudyRecord.GetCurrentMasteredWords();
+                sortedDict["Difficult"] = Globals.LoadedStudyRecord.GetCurrentDifficultWords();
+                sortedDict["Recognize"] = Globals.LoadedStudyRecord.GetCurrentRecognizedWords();
+            }
+            else
+            {
+                Dictionary<string, List<JapaneseWord>> playerLeitnerLevels = JsonConvert.DeserializeObject<Dictionary<string, List<JapaneseWord>>>(CurrentAuthedPlayer.CachedUserData[Utilities.PlayFabHelper.UserDataKey.LeitnerLevels]);
+                foreach (var singleLevels in playerLeitnerLevels.Values)
                 {
-                    sortedDict["Studied"].Add(word);
-                    GlossaryEntry.WordsToDisplay.Enqueue(word);
-                    GameObject.Instantiate(glossaryEntryPrefab, glossaryContentPanel.transform, false);
+                    foreach (var word in singleLevels)
+                    {
+                        sortedDict["Studied"].Add(word);
+                    }
                 }
             }
+
+            foreach(var word in sortedDict["Studied"])
+            {
+                GlossaryEntry.WordsToDisplay.Enqueue(word);
+                var entry = GameObject.Instantiate(glossaryEntryPrefab, glossaryContentPanel.transform, false);
+                entries.Add(entry.GetComponent<GlossaryEntry>());
+            }
+            
             HelperFunctions.Log($"Studied List has been loaded with {sortedDict["Studied"].Count} entires");
         }
         catch(Exception ex) 
@@ -217,57 +241,63 @@ public class GlossaryPageManager : MonoBehaviour
     private void DisplayGlossary(List<JapaneseWord> words)
     {
         int glossaryDisplayCount = glossaryContentPanel.transform.childCount;
-        if (words.Count == glossaryDisplayCount)
+        //another option for updating the entries that are already visible
+        //is to using the GlossaryEntry update function to check for updates from the Queue
+        
+        if (glossaryDisplayCount >= words.Count) 
         {
-            HelperFunctions.Log("Exiting the Glossary Display, because this is likely the same data");
-            return;
-        }
-        else
-        {   //another option for updating the entries that are already visible
-            //is to using the GlossaryEntry update function to check for updates from the Queue
-            if (glossaryDisplayCount > words.Count) 
+            for(int i = 0; i < words.Count; i++)
             {
-                for(int i = 0; i < words.Count; i++)
-                {
-                    glossaryContentPanel.transform.GetChild(i).GetComponent<GlossaryEntry>().UpdateDisplay(words[i]);
-                }
-                int leftovers = glossaryDisplayCount - words.Count;
-                for (int i = leftovers;i < glossaryDisplayCount; i++)
-                {
-                    glossaryContentPanel.transform.GetChild(i).gameObject.SetActive(false);
-                }
+                entries[i].UpdateDisplay(words[i]);
+                entries[i].transform.SetSiblingIndex(i);
+                entries[i].gameObject.SetActive(true);
             }
-            else //words.Count > glossaryDisplayCount
+            
+            for (int i = words.Count; i < glossaryDisplayCount; i++)
             {
-                for (int i = 0; i < glossaryDisplayCount; i++)
-                {
-                    glossaryContentPanel.transform.GetChild(i).GetComponent<GlossaryEntry>().UpdateDisplay(words[i]);
-                }
+                glossaryContentPanel.transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
+        else //words.Count > glossaryDisplayCount
+        {
+            for (int i = 0; i < glossaryDisplayCount; i++)
+            {
+                entries[i].UpdateDisplay(words[i]);
+                entries[i].transform.SetSiblingIndex(i);
+                entries[i].gameObject.SetActive(true);
+            }
 
-                int leftovers = words.Count - glossaryDisplayCount;
-                for (int i = leftovers; i < words.Count; i++)
-                {
-                    GlossaryEntry.WordsToDisplay.Enqueue(words[i]);
-                    GameObject.Instantiate(glossaryEntryPrefab, glossaryContentPanel.transform, false);
-                }
+            int leftovers = words.Count - glossaryDisplayCount;
+            for (int i = leftovers; i < words.Count; i++)
+            {
+                GlossaryEntry.WordsToDisplay.Enqueue(words[i]);
+                var entry = GameObject.Instantiate(glossaryEntryPrefab, glossaryContentPanel.transform, false);
+                entries.Add(entry.GetComponent<GlossaryEntry>());
             }
-            HelperFunctions.Log("Updated the Glossary Display");
         }
+        HelperFunctions.Log("Updated the Glossary Display");
+        
     }
 
     private void SortBySeen(SortState s)
     {
-        //foreach()
+        HelperFunctions.Log($"Sorting Seen by {s}");
+        var sortedEntries = SortButton.SortEntries(entries, SortProperty.Seen, s);
+        DisplayGlossary(sortedEntries);
     }
 
     private void SortByCorrect(SortState s)
     {
-
+        HelperFunctions.Log($"Sorting Corrrect by {s}");
+        var sortedEntries = SortButton.SortEntries(entries, SortProperty.Correct, s);
+        DisplayGlossary(sortedEntries);
     }
 
     private void SortBySpeed(SortState s)
     {
-
+        HelperFunctions.Log($"Sorting Speed by {s}");
+        var sortedEntries = SortButton.SortEntries(entries, SortProperty.Speed, s);
+        DisplayGlossary(sortedEntries);
     }
 
     private void DisableAllOtherChildren(int index)

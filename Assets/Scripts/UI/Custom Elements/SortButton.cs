@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Utilities;
+using System.Linq;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public enum SortState { Ascending, Descending }
+public enum  SortProperty { Seen, Speed, Correct}
 
 public delegate void OnSortModeChangeEventHandler(SortState state);
 
-[RequireComponent(typeof(Button))]
 [RequireComponent(typeof(Image))]
 public class SortButton : MonoBehaviour
 {
@@ -20,7 +23,7 @@ public class SortButton : MonoBehaviour
     float tweenTime = 0.3f;
 
     [SerializeField]
-    SpriteRenderer ascendingSprite;
+    Button button;
 
     [SerializeField]
     SpriteRenderer descendingSprite;
@@ -30,19 +33,39 @@ public class SortButton : MonoBehaviour
     SortState _state;
 
     public event OnSortModeChangeEventHandler OnSortModeChange;
+
+    public static List<JapaneseWord> SortEntries(List<GlossaryEntry> entriesToSort, SortProperty p, SortState s)
+    {
+        List<JapaneseWord> sortedList = new List<JapaneseWord>();
+        switch(p)
+        {
+            case SortProperty.Correct:
+                sortedList = SortByCorrect(entriesToSort, s);
+                break;
+            case SortProperty.Seen:
+                sortedList = SortBySeen(entriesToSort, s);
+                break;
+            case SortProperty.Speed:
+                sortedList = SortBySpeed(entriesToSort, s);
+                break;
+            default:
+                break;
+        }
+
+        return sortedList;
+    }
+
     private void Awake()
     {
         _imageSpriteContainer = GetComponent<Image>();
-        _button = GetComponent<Button>();
+        _button = button;
         _button.onClick.AddListener(ChangeSortMode);
     }
-
-    
 
     // Start is called before the first frame update
     void Start()
     {
-        _state = SortState.Ascending;
+        _state = SortState.Descending;
 
     }
 
@@ -51,12 +74,12 @@ public class SortButton : MonoBehaviour
         if(_state == SortState.Ascending)
         {
             _state = SortState.Descending;
-            SetActiveSprite(descendingSprite, ascendingSprite);
+            //SetActiveSprite(descendingSprite, ascendingSprite);
         }
         else
         {
             _state = SortState.Ascending;
-            SetActiveSprite(ascendingSprite, descendingSprite);
+            //SetActiveSprite(ascendingSprite, descendingSprite);
         }
     }
 
@@ -73,6 +96,73 @@ public class SortButton : MonoBehaviour
 
     private void ChangeSortMode()
     {
+        HelperFunctions.Log("Click!");
+        ChangeButtonState();
         OnSortModeChange?.Invoke(_state);
     }
+
+    private static List<JapaneseWord> SortBySpeed(List<GlossaryEntry> entriesToSort, SortState s)
+    {
+        List<GlossaryEntry> sortedList = null;
+        if(s == SortState.Ascending)
+        {
+            sortedList = entriesToSort.OrderBy(entry => entry.Data.AverageTime).ToList();
+        }
+        else
+        {
+            sortedList = entriesToSort.OrderByDescending(entry => entry.Data.AverageTime).ToList();
+        }
+
+        List<JapaneseWord> sortedWordList = new List<JapaneseWord>();    
+        for(int i = 0; i < sortedList.Count; i++)
+        {
+            sortedWordList.Add(sortedList[i].Data);
+        }
+        
+        return sortedWordList;
+        
+    }
+
+    private static List<JapaneseWord> SortBySeen(List<GlossaryEntry> entriesToSort, SortState s)
+    {
+        List<GlossaryEntry> sortedList = null;
+        if (s == SortState.Ascending)
+        {
+            sortedList = entriesToSort.OrderBy(entry => entry.Data.TimesSeen).ToList();
+        }
+        else
+        {
+            sortedList = entriesToSort.OrderByDescending(entry => entry.Data.TimesSeen).ToList();
+        }
+
+        List<JapaneseWord> sortedWordList = new List<JapaneseWord>();
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            sortedWordList.Add(sortedList[i].Data);
+        }
+
+        return sortedWordList;
+    }
+
+    private static List<JapaneseWord> SortByCorrect(List<GlossaryEntry> entriesToSort, SortState s)
+    {
+        List<GlossaryEntry> sortedList = null;
+        if (s == SortState.Ascending)
+        {
+            sortedList = entriesToSort.OrderBy(entry => entry.Data.CorrectPercentage()).ToList();
+        }
+        else
+        {
+            sortedList = entriesToSort.OrderByDescending(entry => entry.Data.CorrectPercentage()).ToList();
+        }
+
+        List<JapaneseWord> sortedWordList = new List<JapaneseWord>();
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            sortedWordList.Add(sortedList[i].Data);
+        }
+
+        return sortedWordList;
+    }
+
 }

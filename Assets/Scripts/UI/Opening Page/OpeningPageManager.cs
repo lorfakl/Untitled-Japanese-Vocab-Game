@@ -27,6 +27,7 @@ public class OpeningPageManager : MonoBehaviour
 
     private void Awake()
     {
+
         _finishedLoadingEvent = ScriptableObject.CreateInstance<GameEvent>();
         MessageBoxFactory.Create(MessageBoxType.Loading, "Please Wait while game data is loaded", "Loading Player Data...", _finishedLoadingEvent).DisplayLoadingMessageBox(); 
         if(PlayFabController.IsAuthenticated)
@@ -51,6 +52,11 @@ public class OpeningPageManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void CheckDisplayName()
+    {
+        ValidateDisplayNameSize();
     }
 
     void OnLoginPageSetUp()
@@ -98,11 +104,13 @@ public class OpeningPageManager : MonoBehaviour
                 { 
                     onUpdateDisplayNameComplete.Raise();
                     _displayNameConfirmation.gameObject.SetActive(false);
+                    MenuController.PanelChangeEnabled = true;
                 }, 
                 (error)=> 
                 { 
                     onUpdateDisplayNameComplete.Raise(); 
-                    ValidateUniqueDisplayName(error); 
+                    ValidateUniqueDisplayName(error);
+                    MenuController.PanelChangeEnabled = true;
                 }); 
         }, 
         () => { confirmBox.DestroyMessageBox(); });   
@@ -119,6 +127,7 @@ public class OpeningPageManager : MonoBehaviour
         else
         {
             _displayNameConfirmation.gameObject.SetActive(false);
+            MenuController.PanelChangeEnabled = true;
         }
     }
 

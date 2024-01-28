@@ -45,9 +45,9 @@ public class WordDetailsController : MonoBehaviour
     [SerializeField]
     float tweenTime;
 
-    public static Queue<JapaneseWord> Data = new Queue<JapaneseWord>();
+    public static Queue<UserStudyData> Data = new Queue<UserStudyData>();
 
-    private JapaneseWord _data;
+    private UserStudyData _data;
     private void Awake()
     {
         closeButton.onClick.AddListener(() => { wordDetailsClosedEvent.Raise(); });
@@ -67,13 +67,13 @@ public class WordDetailsController : MonoBehaviour
 
     private void DisplayData()
     {
-        title.text = (_data.Kanji == "-1") ? _data.Kana : _data.Kanji;
+        title.text = (_data.Word.Kanji == "-1") ? _data.Word.Kana : _data.Word.Kanji;
         seenValue.text = $"Times Seen: {_data.TimesSeen}";
-        correctValue.text = $"Percent Correct: {_data.CorrectPercentage()}";
-        speedValue.text = $"Average Answer Speed: {_data.AverageTime}";
-        kana.text = $"Kana: {_data.Kana}";
-        meaing.text = $"Defintion: {_data.English}";
-        fastestSpeedValue.text = $"Highest Answer Speed: {_data.ShortestTime}";
+        correctValue.text = $"Percent Correct: {_data.GetCorrectPercentage()}";
+        speedValue.text = $"Average Answer Speed: {_data.AnswerSpeed}";
+        kana.text = $"Kana: {_data.Word.Kana}";
+        meaing.text = $"Defintion: {_data.Word.English}";
+        //fastestSpeedValue.text = $"Highest Answer Speed: {_data.}";
         medianSpeedValue.text = "Requires API call figure out where it should table place";
     }
 

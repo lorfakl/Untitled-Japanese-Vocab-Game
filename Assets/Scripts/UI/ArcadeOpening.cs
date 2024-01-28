@@ -19,7 +19,7 @@ public class ArcadeOpening : MonoBehaviour
     GameEvent _startStudyEvent;
     // Start is called before the first frame update
 
-    string name = "";
+    new string name = "";
     
 
     void Start()

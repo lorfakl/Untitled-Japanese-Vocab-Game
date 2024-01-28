@@ -13,6 +13,8 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
     #endregion
 
     #region Private Variables
+    [SerializeField]
+    StudySceneManager sceneManager;
 
     [SerializeField] 
     RectTransform definitionTextPanel;
@@ -29,7 +31,10 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
     TMP_Text reportText;
 
     [SerializeField]
-    Image panel;
+    Image displayUI;
+
+    [SerializeField]
+    Sprite statsBox;
 
     [SerializeField]
     Button NextWordButton;
@@ -49,11 +54,11 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
     {
         _wasSessionComplete = true; 
         
-        StudyRecord studyRecord = r as StudyRecord;
-        _statsReport = studyRecord.GenerateRecordReport();
-        
+        StudySession session = r as StudySession;
+        _statsReport = session.GenerateRecordReport();
 
-        panel.enabled = true;
+
+        
         definitionTextPanel.gameObject.SetActive(true);
         nextWordButtonText.text = "Show Stats";
         NextWordButton.onClick.RemoveAllListeners();
@@ -66,7 +71,6 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
             return;
         }
         ShowDefintion();
-        panel.enabled = true;
         definitionTextPanel.gameObject.SetActive(true);
     }
 
@@ -76,7 +80,6 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
         {
             return;
         }
-        panel.enabled = false;
         definitionTextPanel.gameObject.SetActive(false);
     }
     #endregion
@@ -87,7 +90,8 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
         HelperFunctions.Log("DefinitionPanelEventProcessor Start Function");
         //definitionTextPanel = GameObject.FindGameObjectWithTag("def").GetComponent<RectTransform>();
         HelperFunctions.Log($"There are {definitionTextPanel.childCount} children");
-        
+        displayUI.sprite = sceneManager.GetDefinitionPanelImage(StudySceneManager.PanelUI.Meaning);
+
     }
     #endregion
 
@@ -112,6 +116,11 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
 
     void DisplayStatSummary()
     {
+        kanaText.gameObject.SetActive(false);
+        kanjiText.gameObject.SetActive(false);
+        meaningText.gameObject.SetActive(false);
+        
+        displayUI.sprite = sceneManager.GetDefinitionPanelImage(StudySceneManager.PanelUI.Stats);
         foreach (var key in _statsReport.Keys)
         {
             reportText.text += key + ": " + _statsReport[key] + "\n";
@@ -124,7 +133,7 @@ public class DefinitionPanelEventProcessor : MonoBehaviour
             definitionTextPanel.GetChild(i).gameObject.SetActive(false);
         }
         reportText.enabled = true;
-
+        reportText.gameObject.SetActive(true);
         NextWordButton.onClick.RemoveAllListeners();
         NextWordButton.onClick.AddListener(ReturnToMainMenu);
         nextWordButtonText.text = "Return Home";

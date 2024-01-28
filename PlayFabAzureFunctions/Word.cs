@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using Newtonsoft.Json;
 
 public class Word
 {
     public static int maxLeitnerLevel = 6;
     public static int maxPrestigeLevel = 8;
+    
+    [JsonProperty]
     public string ID
     {
         get;
@@ -55,8 +57,11 @@ public class Word
 
 public class JapaneseWord : Word
 {
+    [JsonProperty]
     public string Kanji { get; set; }
+    [JsonProperty]
     public string Kana { get; set; }
+    [JsonProperty]
     public string English { get; set; }
 
     public string PrintAnswer()

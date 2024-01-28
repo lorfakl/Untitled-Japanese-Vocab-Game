@@ -306,29 +306,14 @@ public class StatPageManager : MonoBehaviour
     
     private void DisplayRecord()
     {
-        var r = DataPlatform.GetStudyRecord();
-        if(r.Record.Count == 0)
-        {
-            averageSpeed.text += " " + "N/A";
-            wordsKnown.text += " " + "N/A";
-            currentStreak.text += " " + "N/A";
-            longestStreak.text += " " + "N/A";
-            return;
-        }
-
-        var report = r.GenerateRecordReport();
-
-
-        List<string> reportData = new List<string>();
-
-        foreach(string key in report.Keys)
-        {
-            reportData.Add(report[key]);
-        }
-        averageSpeed.text += reportData[0];
-        wordsKnown.text += " " + reportData[reportData.Count - 3];
-        currentStreak.text += " " + reportData[reportData.Count - 2];
-        longestStreak.text += " " + reportData[reportData.Count - 1];
+        double overallAverage = DataPlatform.GetOverallAverage();
+        int wordsKnownCount = DataPlatform.GetWordsKnownCount();
+        int currentStreakNumber = DataPlatform.GetCurrentStreak();
+        int longestStreakNumber = DataPlatform.GetLongestStreak();
+        averageSpeed.text += overallAverage != -1 ? $" {overallAverage}" : " N/A";
+        wordsKnown.text += wordsKnownCount != -1 ? $" {wordsKnownCount}" : " N/A";
+        currentStreak.text += currentStreakNumber != -1 ? $" {currentStreakNumber}" : " N/A";
+        longestStreak.text += longestStreakNumber != -1 ? $" {longestStreakNumber}" : " N/A";
     }
     #endregion
 }

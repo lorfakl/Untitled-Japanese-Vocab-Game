@@ -94,21 +94,25 @@ public class ScoreEventProcessors : MonoBehaviour
                 {"Entries", new List<CloudScriptStatArgument>{ new CloudScriptStatArgument(StatisticName.ArcadeScore, Score)} }
             }, true);
 
-        LeaderboardEntry e = LeaderboardManager.GetLeaderboard(StatisticName.ArcadeScore).GetLeaderboardEntry(Playfab.PlayFabID);
-        if (e.playfabID == Playfab.PlayFabID)
-        {
-            e.score += Score;
-        }
-        else
-        {
-            e = new LeaderboardEntry
+        Leaderboard lb = LeaderboardManager.GetLeaderboard(StatisticName.ArcadeScore);
+        if (lb != default(Leaderboard))
+        { 
+            LeaderboardEntry e = lb.GetLeaderboardEntry(Playfab.PlayFabID);
+            if (e.playfabID == Playfab.PlayFabID)
             {
-                displayName = Playfab.DisplayName,
-                avatarPhotoSprite = CurrentAuthedPlayer.CurrentUser.Avatar.AvatarPhoto,
-                playfabID = Playfab.PlayFabID,
-                score = Score
-            };
-            LeaderboardManager.GetLeaderboard(StatisticName.ArcadeScore).AddEntry(e);
+                e.score += Score;
+            }
+            else
+            {
+                e = new LeaderboardEntry
+                {
+                    displayName = Playfab.DisplayName,
+                    avatarPhotoSprite = CurrentAuthedPlayer.CurrentUser.Avatar.AvatarPhoto,
+                    playfabID = Playfab.PlayFabID,
+                    score = Score
+                };
+                LeaderboardManager.GetLeaderboard(StatisticName.ArcadeScore).AddEntry(e);
+            }
         }
         
     }

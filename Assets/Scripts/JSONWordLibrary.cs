@@ -32,31 +32,33 @@ public class JSONWordLibrary : MonoBehaviour
     #endregion
 
     #region Private Variables
-    static JapaneseWord CurrentWord
+    public static JapaneseWord CurrentWord
     {
         get;
-        set;
+        private set;
     }
 
     List<string> linesInFile;
-    static List<JapaneseWord> kanjiJsonObjs;
-    static List<JapaneseWord> kanaJsonObjs;
-    static List<JapaneseWord> workingWordBankList;
-    static List<JapaneseWord> wordsToStudy;
+    static List<JapaneseWord> kanjiJsonObjs = new List<JapaneseWord>();
+    static List<JapaneseWord> kanaJsonObjs = new List<JapaneseWord>();
+    static List<JapaneseWord> workingWordBankList = new List<JapaneseWord>();
+    static List<JapaneseWord> wordsToStudy = new List<JapaneseWord>();
     #endregion
 
     List<JapaneseWord> removedWords = new List<JapaneseWord>();
     static Dictionary<string, bool> wasAnsweredDict = new Dictionary<string, bool>();
     #region Public Methods
 
-    public void OnCorrectAnswerEvent_Handler(object s)
+    //change to study object selected event handler
+    //TO DO: make this faster bro 
+    public void OnStudyObjectSelectedEvent_Handler() //function declaration 
     {
-        StudyObject studyObject = (StudyObject)s;
-        JapaneseWord wordTarget = WordsToStudy.Find(word => word.PrintAnswer() == studyObject.Word.PrintAnswer());
+        
+        JapaneseWord wordTarget = WordsToStudy.Find(word => CurrentWord.ID == word.ID);
         
         try
         {
-            wasAnsweredDict.Add(wordTarget.ToString(), true);
+            wasAnsweredDict.Add(wordTarget.ID, true);
         }
         catch(Exception e)
         {
@@ -64,7 +66,7 @@ public class JSONWordLibrary : MonoBehaviour
             return;
         }
         
-        HelperFunctions.Log($"Correctly Translated: {studyObject.Word}");
+        //HelperFunctions.Log($"Correctly Translated: {studyObject.Word}");
         bool wasRemoved = WordsToStudy.Remove(wordTarget);
         if (wasRemoved)
         {
@@ -203,9 +205,18 @@ public class JSONWordLibrary : MonoBehaviour
     {
         int randomIndex = UnityEngine.Random.Range(0, WordsToStudy.Count);
         JapaneseWord nextWord = WordsToStudy[randomIndex];
-        if(wasAnsweredDict.ContainsKey(nextWord.ToString()))
+        if(wasAnsweredDict.ContainsKey(nextWord.ID))
         {
-            throw new System.Exception($"{nextWord} was not properly removed kinda sucks");
+            bool removed = WordsToStudy.Remove(nextWord);
+            if(!removed)
+            {
+                HelperFunctions.Error($"For some reason we are unable to remove: {nextWord}");
+            }
+            else
+            {
+                randomIndex = UnityEngine.Random.Range(0, WordsToStudy.Count);
+                nextWord = WordsToStudy[randomIndex];
+            }
         }
         return nextWord;
     }

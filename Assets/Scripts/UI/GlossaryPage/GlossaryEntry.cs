@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using Utilities.Events;
 using Utilities.UserInterfaceAddOns;
+using ProjectSpecificGlobals;
 
 public delegate void GlossaryEntrySelectedEventHandler(JapaneseWord d);
 public class GlossaryEntry : MonoBehaviour
@@ -54,9 +55,9 @@ public class GlossaryEntry : MonoBehaviour
         LongPress longPressInstance = entryButton.GetComponent<LongPress>();
         if(longPressInstance != null) 
         {
-            longPressInstance.OnLongPressRegistered.AddListener(LongPressEventHandler);
-            longPressInstance.OnShortPressRegistered.AddListener(EntrySelected);
-            entryButton.onClick.AddListener(() => { });
+            //longPressInstance.OnLongPressRegistered.AddListener(LongPressEventHandler);
+            //longPressInstance.OnShortPressRegistered.AddListener(EntrySelected);
+            entryButton.onClick.AddListener(() => { EntrySelected(); });
         }
         else
         {
@@ -97,9 +98,32 @@ public class GlossaryEntry : MonoBehaviour
         {
             wordText.text = data.Kanji;
         }
-        seenText.text = data.TimesSeen.ToString();
-        correctnessText.text = data.CorrectPercentage().ToString();
-        speedText.text = data.AverageTime.ToString();
+        if(Globals.UserDataLoaded) 
+        { 
+            var statInstance = Globals.LoadedStudyRecord.TryGetWordData(data.ID);
+            if(statInstance != null)
+            {
+                seenText.text = statInstance.TimesSeen.ToString();
+                correctnessText.text = statInstance.GetCorrectPercentage().ToString();
+                double avgSpeed = Globals.LoadedStudyRecord.GetAverageAnswerSpeedForWord(data.ID);
+                if(avgSpeed > 0) 
+                {
+                    speedText.text = avgSpeed.ToString();
+                }
+                else
+                {
+                    speedText.text = statInstance.AnswerSpeed.ToString();
+                }
+                
+            }
+        }
+        else
+        {
+            seenText.text = data.TimesSeen.ToString();
+            correctnessText.text = data.CorrectPercentage().ToString();
+            speedText.text = data.AverageTime.ToString();
+        }
+        
     }
 
 

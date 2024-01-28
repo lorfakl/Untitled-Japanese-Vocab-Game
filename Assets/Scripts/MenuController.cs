@@ -30,16 +30,27 @@ public class MenuController : MonoBehaviour
 
     [SerializeField]
     GameEvent _profilePageActiveEvent;
+
     [SerializeField]
     GameEvent _shopPageActiveEvent;
+
+    [SerializeField]
+    OpeningPageManager openingPage;
 
     GameObject activePanel;
 
     Dictionary<GameObject, Vector3> stowPositionDict = new Dictionary<GameObject, Vector3>();
 
+
+    public static bool PanelChangeEnabled { get; set; }
     #region Public Methods
     public void StudyButtonClickHandler()
     {
+        if (!PanelChangeEnabled)
+        {
+            openingPage.CheckDisplayName();
+            return;
+        }
         AsyncSceneLoader.StartSceneLoadProcess(SceneNames.StudyScene);
     }
 
@@ -113,6 +124,12 @@ public class MenuController : MonoBehaviour
 
     private void CheckActivePanel(GameObject panel)
     {
+        if(!PanelChangeEnabled)
+        {
+            openingPage.CheckDisplayName();
+            return;
+        }
+
         if (!panel.activeInHierarchy)
         {
             ChangeActivePanel(panel);

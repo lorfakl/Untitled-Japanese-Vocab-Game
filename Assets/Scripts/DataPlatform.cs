@@ -9,108 +9,130 @@ using Utilities.PlayFabHelper;
 using Utilities.PlayFabHelper.CurrentUser;
 using Utilities.SaveOperations;
 using Utilities.Logging;
+using ProjectSpecificGlobals;
+using System.Diagnostics;
+using System.Linq;
 
 public class DataPlatform : MonoBehaviour
 {
     [SerializeField]
     GameEvent statReportReady;
 
+    bool hasStartStudying = false;
+    Stopwatch studySessionTimer = null;
 
-    static StudyRecord StudyRecord = new StudyRecord();
-    public void OnStudyObjectSelected(object s)
+    Dictionary<string, UserStudyData> sessionData = new Dictionary<string, UserStudyData>();
+    StudyRecord StudyRecord = null;
+    int correctCount = 0;
+    double totalTimeStudied = 0;
+    public void OnNextWordSelected()
     {
-        StudyObject studyObject = (StudyObject)s;
-        string key = studyObject.Word.PrintAnswer(); //changed to Print answer so key doesnt change when proficiency changes
-        if (StudyRecord.Record.ContainsKey(studyObject.Word.PrintAnswer()))
+        if (!hasStartStudying)
         {
-            StudyRecord.Record[key].TimesSeen++;
-            StudyRecord.Record[key].TimeInFlight = studyObject.TimeInFlight;
+            hasStartStudying = true;
+            studySessionTimer.Start();
+            return;
         }
-        else
+
+        if (hasStartStudying)
         {
-            StudyRecord.Record.Add(key, new UserStudyData(studyObject));
+            totalTimeStudied += studySessionTimer.Elapsed.TotalSeconds;
+            studySessionTimer.Reset();
+            studySessionTimer.Start();
         }
     }
 
-    public void OnCorrectAnswer(object s)
+    public void OnStudyObjectSelected()
     {
-        StudyObject studyObject = (StudyObject)s;
-        string key = studyObject.Word.PrintAnswer();
-        if (StudyRecord.Record.ContainsKey(studyObject.Word.PrintAnswer()))
+        studySessionTimer.Stop();
+        JapaneseWord currentWord = JSONWordLibrary.CurrentWord;
+        string currentWordID = currentWord.ID;
+
+        if (!sessionData.ContainsKey(currentWordID))
         {
-            StudyRecord.Record[key].TimesCorrect++;
+            sessionData.Add(currentWordID, new UserStudyData(currentWord));
         }
-        else
+        
+        sessionData[currentWordID].TimesSeen++;
+        sessionData[currentWordID].TotalTimeOnScreen += studySessionTimer.Elapsed.TotalSeconds;
+        HelperFunctions.Log("On Select CaLLED");
+        
+    }
+
+    public void OnCorrectAnswer()
+    {
+        JapaneseWord currentWord = JSONWordLibrary.CurrentWord;
+        string currentWordID = currentWord.ID;
+        if(currentWord.ID == null)
         {
-            StudyRecord.Record.Add(key, new UserStudyData(studyObject));
-            StudyRecord.Record[key].TimesCorrect++;
+            int i = 0;
         }
+
+        if (!sessionData.ContainsKey(currentWordID))
+        {
+            //HelperFunctions.Error($"WordID {currentWordID} should already been in the sessionData {sessionData.Keys.ToList()} this should have already been in the Dict. Investigate");
+            sessionData.Add(currentWordID, new UserStudyData(currentWord));
+            //sessionData[currentWordID].TimesSeen++;
+            //sessionData[currentWordID].TimesCorrect++;
+            //sessionData[currentWordID].AnswerSpeed = studySessionTimer.Elapsed.TotalSeconds;
+        }
+       
+        sessionData[currentWordID].TimesCorrect++;
+        sessionData[currentWordID].AnswerSpeed = studySessionTimer.Elapsed.TotalSeconds;
+        correctCount++;
+        HelperFunctions.Log("On CORRECT CaLLED");
     }
 
     public void OnStudySessionComplete()
     {
-        UpdateStreak();
-        List<TelemetryWrapper> telemtry = new List<TelemetryWrapper>();
+        StudySession studySession = new StudySession(sessionData, correctCount, totalTimeStudied);
+        StudyRecord.AddSession(studySession);
 
+        /*List<TelemetryWrapper> telemtry = new List<TelemetryWrapper>();
         foreach (var key in StudyRecord.Record.Keys)
         {
 
             TelemetryWrapper t = new TelemetryWrapper
             {
                 Entity = Playfab.UserEntityKey,
-                EventName = Utilities.Logging.EventName.study_object_selection_made,
-                Namespace = Utilities.Logging.EventNamespace.UserStudyData,
+                EventName = EventName.study_object_selection_made,
+                Namespace = EventNamespace.UserStudyData,
                 PayloadJSON = JsonConvert.SerializeObject(StudyRecord.Record[key])
             };
             telemtry.Add(t);
         }
-        PlayFabController.WriteTelemetryEvents(telemtry);
-        SaveSystem.Save(StudyRecord, DataCategory.StatisticRecord);
+        PlayFabController.WriteTelemetryEvents(telemtry);*/
 
-        statReportReady.Raise(new StudyRecord(StudyRecord));
+        SaveSystem.Save(StudyRecord, DataCategory.StatisticRecord);
+        statReportReady.Raise(studySession);
     }
 
-    public static StudyRecord GetStudyRecord()
+    
+    
+    // Start is called before the first frame update
+    void Start()
     {
-        var data = SaveSystem.Load<StudyRecord>(DataCategory.StatisticRecord);
-        try
+        if(Globals.UserDataLoaded)
         {
-            if (data == default || data.OwnerID != CurrentAuthedPlayer.CurrentUser.PlayFabID)
+            StudyRecord = Globals.LoadedStudyRecord;
+        }
+        else
+        {
+            var data = SaveSystem.Load<StudyRecord>(DataCategory.StatisticRecord);
+            if (data == default)
             {
                 HelperFunctions.Warning("No data no problem....probably");
-                return new StudyRecord();
+                StudyRecord = new StudyRecord();
             }
             else
             {
                 StudyRecord = data;
-                return new StudyRecord(data);
             }
         }
-        catch(Exception e)
-        {
-            HelperFunctions.CatchException(e);
-            return new StudyRecord();
-        }
         
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        var data = SaveSystem.Load<StudyRecord>(DataCategory.StatisticRecord);
-        if(data == default)
-        {
-            HelperFunctions.Warning("No data no problem....probably");
-        }
-        else if(data.OwnerID == CurrentAuthedPlayer.CurrentUser.PlayFabID)
-        {
-            StudyRecord = data;
-        }
-        else
-        {
-            StudyRecord = new StudyRecord();
-        }
+        studySessionTimer = new Stopwatch();
+        correctCount = 0;
+        totalTimeStudied = 0;
     }
 
 
@@ -120,144 +142,83 @@ public class DataPlatform : MonoBehaviour
         
     }
 
-    private void UpdateStreak()
+    public static double GetOverallAverage()
     {
-        if(Playfab.CurrentLoginTime - Playfab.LastLogin <= new TimeSpan(24, 0, 0))
+        if(CheckIfStudyRecordLoaded())
         {
-            StudyRecord.CurrentStreak++;
-            if(StudyRecord.CurrentStreak >= StudyRecord.LongestStreak)
-            {
-                StudyRecord.LongestStreak = StudyRecord.CurrentStreak;
-            }
+            return Globals.LoadedStudyRecord.GetCurrentOverallAverage();
+        }
+        else 
+        {
+            return 0;
+        }
+        throw new NotImplementedException();
+    }
+
+    public static int GetWordsKnownCount()
+    {
+        if (CheckIfStudyRecordLoaded())
+        {
+            return Globals.LoadedStudyRecord.GetCurrentWordsKnown();
         }
         else
         {
-            StudyRecord.CurrentStreak = 0;
+            return -1;
         }
-    }
-}
-
-[Serializable]
-public class UserStudyData
-{
-    [JsonProperty("Word")]
-    public JapaneseWord Word;
-
-    [JsonProperty("TimesSeen")]
-    public int TimesSeen;
-
-    [JsonProperty("TimesCorrect")]
-    public int TimesCorrect;
-
-    [JsonProperty("TimeInFlight")]
-    public float TimeInFlight;
-
-    [JsonConstructor]
-    public UserStudyData()
-    { }
-
-    public UserStudyData(StudyObject s)
-    {
-        Word = s.Word;
-        TimesSeen = 0;
-        TimesCorrect = 0;
-        TimeInFlight = s.TimeInFlight;
+        throw new NotImplementedException();
     }
 
-    public UserStudyData(UserStudyData u)
+    public static int GetCurrentStreak()
     {
-        this.Word = u.Word;
-        this.TimesSeen = u.TimesSeen;
-        this.TimesCorrect = u.TimesCorrect;
-        this.TimeInFlight = u.TimeInFlight;
-    }
-}
-
-[Serializable]
-public class StudyRecord
-{
-    public string OwnerID;
-
-    public Dictionary<string, UserStudyData> Record = new Dictionary<string, UserStudyData>();
-
-    public int CurrentStreak;
-
-    public int LongestStreak;
-
-    public StudyRecord()
-    {
-        try
+        if (CheckIfStudyRecordLoaded())
         {
-            OwnerID = CurrentAuthedPlayer.CurrentUser.PlayFabID;
+            return Globals.LoadedStudyRecord.GetCurrentStreak();
         }
-        catch(Exception e)
+        else
+        {
+            return -1;
+        }
+        throw new NotImplementedException();
+    }
+
+    public static int GetLongestStreak()
+    {
+        if (CheckIfStudyRecordLoaded())
+        {
+            return Globals.LoadedStudyRecord.GetLongestStreak();
+        }
+        else
+        {
+            return -1;
+        }
+        throw new NotImplementedException();
+    }
+
+    public static bool CheckIfStudyRecordLoaded()
+    {
+        if(Globals.UserDataLoaded) 
         { 
-            HelperFunctions.CatchException(e);
-            OwnerID = new Guid().ToString(); //should give a 0000 Guid
+            return true;
         }
-    }
-    public StudyRecord(StudyRecord s)
-    {
-        if(s == null)
+        else
         {
-            new StudyRecord();
-        }
-        this.OwnerID = s.OwnerID;
-        this.Record = new Dictionary<string, UserStudyData>();
-        this.CurrentStreak = s.CurrentStreak;
-        this.LongestStreak = s.LongestStreak;
-        foreach(var pair in s.Record)
-        {
-            Record.Add(pair.Key, new UserStudyData(pair.Value));
-        }
-    }
-
-    public Dictionary<string, string> GenerateRecordReport()
-    {
-        if(Record.Count == 0)
-        {
-            return new Dictionary<string, string>();
-        }
-
-        Dictionary<string, string> report = new Dictionary<string, string>();
-        report.Add("Average Answer Speed", CalculateAverageFlightTime().ToString() + "s");
-        report.Add("Number of words known", CalculateNumberOfKnownWords().ToString());
-        report.Add("Current Streak", this.CurrentStreak.ToString());
-        report.Add("Longest Streak", this.LongestStreak.ToString());
-        return report;
-
-    }
-
-    public float CalculateAverageFlightTime()
-    {
-        float averageFlightTime = 0;
-        foreach(KeyValuePair<string, UserStudyData> pair in Record)
-        {
-            averageFlightTime += Record[pair.Key].TimeInFlight;
-        }
-        averageFlightTime /= Record.Count;
-        return averageFlightTime;
-    }
-
-    public int CalculateNumberOfKnownWords()
-    {
-        int knownCount = 0;
-        foreach (KeyValuePair<string, UserStudyData> pair in Record)
-        {
-            try
+            var data = SaveSystem.Load<StudyRecord>(DataCategory.StatisticRecord);
+            if(data == default(StudyRecord))
             {
-                float recognitionPercentage = pair.Value.TimesCorrect / pair.Value.TimesSeen;
-                if (recognitionPercentage > 0.75f)
-                {
-                    knownCount++;
-                }
+                return false;
             }
-            catch(DivideByZeroException)
+            else
             {
-                return 0;
+                Globals.UpdateGlobalStudyRecord(data);
+                return true;
             }
-            
         }
-        return knownCount;
     }
 }
+
+
+
+
+
+
+

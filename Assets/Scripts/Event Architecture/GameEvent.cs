@@ -37,7 +37,7 @@ namespace Utilities.Events
             for (int i = eventListeners.Count - 1; i >= 0; i--)
             {
                 eventListeners[i].OnEventRaiseWithData(eventData);
-                eventListeners[i].OnEventRaised();
+                //eventListeners[i].OnEventRaised();
             }
         }
 
