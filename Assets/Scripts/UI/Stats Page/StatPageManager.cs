@@ -310,7 +310,7 @@ public class StatPageManager : MonoBehaviour
         int wordsKnownCount = DataPlatform.GetWordsKnownCount();
         int currentStreakNumber = DataPlatform.GetCurrentStreak();
         int longestStreakNumber = DataPlatform.GetLongestStreak();
-        averageSpeed.text += overallAverage != -1 ? $" {overallAverage}" : " N/A";
+        averageSpeed.text += overallAverage != -1 ? $" {overallAverage:F2}s" : " N/A";
         wordsKnown.text += wordsKnownCount != -1 ? $" {wordsKnownCount}" : " N/A";
         currentStreak.text += currentStreakNumber != -1 ? $" {currentStreakNumber}" : " N/A";
         longestStreak.text += longestStreakNumber != -1 ? $" {longestStreakNumber}" : " N/A";

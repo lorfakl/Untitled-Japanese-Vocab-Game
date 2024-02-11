@@ -25,6 +25,7 @@ namespace Utilities.PlayFabHelper
         LeitnerLevels,
         PrestigeLevels,
         SessionWords,
+        SessionKana,
         LoginCount,
         NextSession,
         WordsSeen

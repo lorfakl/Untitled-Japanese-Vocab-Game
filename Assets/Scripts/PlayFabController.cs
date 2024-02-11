@@ -413,6 +413,11 @@ public class PlayFabController : MonoBehaviour
     
     public static void WriteTelemetryEvents(List<TelemetryWrapper> events, Action success = null)
     {
+        if(events.Count == 0 || events == null)
+        {
+            return;
+        }
+
         List<EventContents> eventContents = new List<EventContents>();
         foreach(var e in events)
         {
@@ -482,8 +487,9 @@ public class PlayFabController : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(this.gameObject);
+#if UNITY_EDITOR
         overrideTimedLogin = overrideLogin;
-        
+#endif     
     }
         
     void Start()
@@ -615,7 +621,7 @@ public class PlayFabController : MonoBehaviour
 
         GetTitleDataRequest rq = new GetTitleDataRequest
         {
-            Keys = new List<string> { key }
+            Keys = new List<string> { TitleDataKeys.StarterKana.ToString(), TitleDataKeys.StarterWords.ToString() }
         };
 
         Playfab.GetTitleData(rq, 
@@ -633,12 +639,19 @@ public class PlayFabController : MonoBehaviour
         {
             Data = new Dictionary<string, string> 
             {
-                {UserDataKey.SessionWords.ToString(), result.Data[key]},
+                {UserDataKey.SessionWords.ToString(), result.Data[TitleDataKeys.StarterWords.ToString()]},
+                {UserDataKey.SessionKana.ToString(), result.Data[TitleDataKeys.StarterKana.ToString()]},
                 {UserDataKey.LeitnerLevels.ToString(), emptyLeitnerLevelData},
                 {UserDataKey.PrestigeLevels.ToString(), emptyProfeincyLevelData},
                 {UserDataKey.LoginCount.ToString(), "0" },
                 {UserDataKey.NextSession.ToString(),  ""},
                 {UserDataKey.WordsSeen.ToString(), "20" }
+
+
+
+
+
+
             }
         },
         (result) =>

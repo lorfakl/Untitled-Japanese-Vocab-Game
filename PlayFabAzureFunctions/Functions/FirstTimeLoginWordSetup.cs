@@ -58,6 +58,7 @@ namespace PlayFabCloudScript.OnLogin
         {
             Data = new Dictionary<string, string> 
             {
+                {"Session Kana", result.Data["StarterKana"]},
                 {"Session Words", result.Data["Starter Words"]},
                 {"LoginCount", "0"},
                 {"WeeklySP", "0"},

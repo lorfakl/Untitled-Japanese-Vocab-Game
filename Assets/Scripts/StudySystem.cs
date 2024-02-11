@@ -114,7 +114,15 @@ public class StudySystem : MonoBehaviour
     {
         if(Playfab.WasUserJustCreated)
         {
-            PlayFabController.GetPlayerData(new List<string> { UserDataKey.SessionWords.ToString() }, NewlyCreatedParseReturnData);
+            if(StaticUserSettings.IsKanjiStudyTopic())
+            {
+                PlayFabController.GetPlayerData(new List<string> { UserDataKey.SessionWords.ToString() }, NewlyCreatedParseReturnData);
+            }
+            else
+            {
+                PlayFabController.GetPlayerData(new List<string> { UserDataKey.SessionKana.ToString() }, NewlyCreatedParseReturnData);
+            }
+            
             
         }
         else
@@ -128,12 +136,22 @@ public class StudySystem : MonoBehaviour
     void NewlyCreatedParseReturnData(Dictionary<string, string> data)
     {
         //HelperFunctions.Log("Parsing return data");
-        
+        string sessionKey = "";
+
+        if(StaticUserSettings.IsKanjiStudyTopic()) 
+        { 
+            sessionKey = UserDataKey.SessionWords.ToString();
+        }
+        else
+        {
+            sessionKey = UserDataKey.SessionKana.ToString();
+        }
+
         PlayFabController.UpdateUserData(new Dictionary<string, string>
                     {
-                        {UserDataKey.LeitnerLevels.ToString(), JsonConvert.SerializeObject(data[UserDataKey.SessionWords.ToString()])}
+                        {UserDataKey.LeitnerLevels.ToString(), JsonConvert.SerializeObject(data[sessionKey])}
                     });
-        string leitnerJson = data[UserDataKey.SessionWords.ToString()];
+        string leitnerJson = data[sessionKey];
 
 
         List<JapaneseWord> sessionWords = JsonConvert.DeserializeObject<List<JapaneseWord>>(leitnerJson);
@@ -287,19 +305,23 @@ public class StudySystem : MonoBehaviour
     List<JapaneseWord> SetTotalWords(List<JapaneseWord> l)
     {
         int totalWords = StaticUserSettings.GetTotalWords();
-        List<JapaneseWord> shortenedList = new List<JapaneseWord>();
+        List<JapaneseWord> shortenedList = new List<JapaneseWord>(totalWords);
         if (l.Count > totalWords)
         {
-            shortenedList.Capacity = totalWords;
             for(int i = 0; i < shortenedList.Capacity; i++)
             {
                 int randIndex = UnityEngine.Random.Range(0, l.Count);
                 shortenedList.Add(l[randIndex]);
                 l.RemoveAt(randIndex);
             }
+            return shortenedList;
+        }
+        else
+        {
+            return l;
         }
 
-        return shortenedList;
+        
     }
     #endregion
 }

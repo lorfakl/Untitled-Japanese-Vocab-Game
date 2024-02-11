@@ -302,4 +302,110 @@ public class StudyRecord
             return knownWords;
         }
     }
+
+    public void InitializeWordIDs()
+    {
+        this.WordStatistics.Keys.ToList().ForEach((key) => 
+        {
+            var wordDataOverTime = WordStatistics[key];
+            foreach(var wordDataInstance in wordDataOverTime)
+            {
+                var word = wordDataInstance.Value.Word;
+                if(String.IsNullOrEmpty(word.ID))
+                {
+                    word.SetID(key);
+                }
+                else
+                {
+                    HelperFunctions.Log($"Current word ID: {word.ID} current key:{key}");
+                }
+            }
+            BuildKnownledgeList(wordDataOverTime);
+
+        });
+    }
+
+    private void BuildKnownledgeList(StatOverTime<UserStudyData> studyDataOverTime)
+    {
+        var wordToAdd = studyDataOverTime.MostRecent().Word;
+        if (studiedWords == null)
+        {
+            studiedWords = new List<JapaneseWord>();
+        }
+
+        if (!studiedWords.Exists(word => word.ID == wordToAdd.ID))
+        {
+            studiedWords.Add(wordToAdd);
+        }
+
+        float totalSeen = 0f;
+        float totalCorrect = 0f;
+        float correctPercentage = 0f;
+
+        foreach(var instance in studyDataOverTime)
+        {
+            totalSeen += instance.Value.TimesSeen;
+            totalCorrect += instance.Value.TimesCorrect;
+        }
+
+        correctPercentage = (totalCorrect/ totalSeen) * 100;
+        
+        switch (correctPercentage) 
+        {
+            case > 98f:
+                if (masteredWords == null)
+                {
+                    masteredWords = new List<JapaneseWord>();
+                    masteredWords.Add(wordToAdd);
+                    break;
+                }
+
+                if (!masteredWords.Exists(word => word.ID == wordToAdd.ID))
+                {
+                    masteredWords.Add(wordToAdd);
+                }
+                break;
+            case > 69f:
+                if (knownWords == null)
+                {
+                    knownWords = new List<JapaneseWord>();
+                    knownWords.Add(wordToAdd);
+                    break;
+                }
+
+                if(!knownWords.Exists(word => word.ID == wordToAdd.ID))
+                {
+                    knownWords.Add(wordToAdd);
+                }
+                break;
+            case >= 39f:
+                if (recognizedWords == null)
+                {
+                    recognizedWords = new List<JapaneseWord>();
+                    recognizedWords.Add(wordToAdd);
+                    break;
+                }
+
+                if (!recognizedWords.Exists(word => word.ID == wordToAdd.ID))
+                {
+                    recognizedWords.Add(wordToAdd);
+                }
+                break;
+            case < 39f:
+                if (difficultWords == null)
+                {
+                    difficultWords = new List<JapaneseWord>();
+                    difficultWords.Add(wordToAdd);
+                    break;
+                }
+
+                if (!difficultWords.Exists(word => word.ID == wordToAdd.ID))
+                {
+                    difficultWords.Add(wordToAdd);
+                }
+                break;
+
+        }
+
+    }
 }

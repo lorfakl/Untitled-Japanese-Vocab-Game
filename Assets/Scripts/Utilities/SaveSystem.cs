@@ -52,7 +52,7 @@ namespace Utilities.SaveOperations
 
         public static T Load<T>(DataCategory c) where T : class
         {
-            FileStream file;
+            FileStream file = null;
             try
             {
                 string fileName = c.ToString();
@@ -76,7 +76,7 @@ namespace Utilities.SaveOperations
                 else
                 {
                     HelperFunctions.Log("File path: " + path + " does NOT exist...idiot");
-                    //file.Close();
+                    file.Close();
                     return default(T);
                 }
 

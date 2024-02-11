@@ -164,17 +164,6 @@ public class JSONWordLibrary : MonoBehaviour
         }
     }
 
-    public static List<JapaneseWord> LoadWordsFromJSON()
-    {
-        if(kanjiJsonObjs.Count == 0)
-        {
-            TextAsset wordJson = Resources.Load<TextAsset>("japaneseWordList");
-            kanjiJsonObjs = JsonConvert.DeserializeObject<List<JapaneseWord>>(wordJson.text);
-        }
-        
-        return kanjiJsonObjs;
-    }
-
     static void AddAndSaveWordIds(List<JapaneseWord> kanjiList, List<JapaneseWord> kanaList)
     {
         int idCount = 1;

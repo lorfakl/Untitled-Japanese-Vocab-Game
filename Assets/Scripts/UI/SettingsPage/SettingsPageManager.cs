@@ -54,7 +54,6 @@ public class SettingsPageManager : MonoBehaviour
                 CurrentSettings = StaticUserSettings.Settings;
                 ModifiedSettings = new UserSettingsData(CurrentSettings);
                 return;
-  
             }
             else
             {

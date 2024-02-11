@@ -14,6 +14,18 @@ public class LoadingIndicator : MonoBehaviour
     float _tweenTime = 1f;
 
     bool _isTweening = false;
+    
+    
+    public void UpdateIndicatorSettings(float tweenTime, Color color)
+    {
+        _tweenTime = tweenTime;
+        _loadingImage.color = color;
+    }
+
+    private void Awake()
+    {
+        int i = 0;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +41,7 @@ public class LoadingIndicator : MonoBehaviour
     private void OnDisable()
     {
         DOTween.Clear();
+        _isTweening = false;
     }
 
     void TweenFillAmount()

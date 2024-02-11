@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using Utilities.Events;
 using Utilities.UserInterfaceAddOns;
 using ProjectSpecificGlobals;
+using System;
+
 
 public delegate void GlossaryEntrySelectedEventHandler(JapaneseWord d);
 public class GlossaryEntry : MonoBehaviour
@@ -34,7 +36,7 @@ public class GlossaryEntry : MonoBehaviour
 
     public static Queue<JapaneseWord> WordsToDisplay = new Queue<JapaneseWord>(250);
     public event GlossaryEntrySelectedEventHandler entrySelected;
-
+    private JapaneseWord deepCopyToSend;
     private JapaneseWord data;
 
     public JapaneseWord Data
@@ -84,12 +86,13 @@ public class GlossaryEntry : MonoBehaviour
 
     private void EntrySelected()
     {
-        entrySelectedEvent.Raise(data);
+        entrySelectedEvent.Raise(deepCopyToSend);
 
     }
 
     private void DisplayData()
     {
+        deepCopyToSend = new JapaneseWord(data);
         if(data.Kanji == "-1")
         {
             wordText.text = data.Kana;
@@ -103,16 +106,25 @@ public class GlossaryEntry : MonoBehaviour
             var statInstance = Globals.LoadedStudyRecord.TryGetWordData(data.ID);
             if(statInstance != null)
             {
-                seenText.text = statInstance.TimesSeen.ToString();
-                correctnessText.text = statInstance.GetCorrectPercentage().ToString();
+                seenText.text = $"{statInstance.TimesSeen}";
+                float correctPercentage = statInstance.GetCorrectPercentage();
+                correctnessText.text = $"{correctPercentage}%";
+                deepCopyToSend.TimesSeen = statInstance.TimesSeen;
+                deepCopyToSend.CorrectPercent = correctPercentage;
+                Data.CorrectPercent = correctPercentage;
+                Data.TimesSeen = statInstance.TimesSeen;
                 double avgSpeed = Globals.LoadedStudyRecord.GetAverageAnswerSpeedForWord(data.ID);
                 if(avgSpeed > 0) 
                 {
-                    speedText.text = avgSpeed.ToString();
+                    speedText.text = $"{avgSpeed:F2}s";
+                    deepCopyToSend.AverageTime = (float)avgSpeed;
+                    Data.AverageTime = (float)avgSpeed;
                 }
                 else
                 {
-                    speedText.text = statInstance.AnswerSpeed.ToString();
+                    speedText.text = $"{statInstance.AnswerSpeed:F2}s";
+                    deepCopyToSend.AverageTime = (float)statInstance.AnswerSpeed;
+                    Data.AverageTime = (float)statInstance.AnswerSpeed;
                 }
                 
             }
@@ -120,8 +132,13 @@ public class GlossaryEntry : MonoBehaviour
         else
         {
             seenText.text = data.TimesSeen.ToString();
-            correctnessText.text = data.CorrectPercentage().ToString();
-            speedText.text = data.AverageTime.ToString();
+            deepCopyToSend.TimesSeen = data.TimesSeen;
+            
+            correctnessText.text = $"{data.CorrectPercentage()}%";
+            deepCopyToSend.CorrectPercent = data.CorrectPercentage();
+
+            speedText.text = $"{data.AverageTime}s";
+            deepCopyToSend.AverageTime = data.AverageTime;
         }
         
     }

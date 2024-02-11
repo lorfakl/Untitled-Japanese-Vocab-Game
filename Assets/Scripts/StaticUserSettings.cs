@@ -54,6 +54,11 @@ public static class StaticUserSettings
         return volumeLvl;
     }
 
+    public static void UpdateSettings(UserSettingsData userSettingsData)
+    {
+        CurrentAuthedPlayer.UserSettings = userSettingsData;
+    }
+
     static void LoadSettings()
     {
         

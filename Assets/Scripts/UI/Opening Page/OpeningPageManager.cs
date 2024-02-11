@@ -27,7 +27,6 @@ public class OpeningPageManager : MonoBehaviour
 
     private void Awake()
     {
-
         _finishedLoadingEvent = ScriptableObject.CreateInstance<GameEvent>();
         MessageBoxFactory.Create(MessageBoxType.Loading, "Please Wait while game data is loaded", "Loading Player Data...", _finishedLoadingEvent).DisplayLoadingMessageBox(); 
         if(PlayFabController.IsAuthenticated)
@@ -108,9 +107,9 @@ public class OpeningPageManager : MonoBehaviour
                 }, 
                 (error)=> 
                 { 
-                    onUpdateDisplayNameComplete.Raise(); 
-                    ValidateUniqueDisplayName(error);
+                    onUpdateDisplayNameComplete.Raise();
                     MenuController.PanelChangeEnabled = true;
+                    ValidateUniqueDisplayName(error);
                 }); 
         }, 
         () => { confirmBox.DestroyMessageBox(); });   
@@ -137,6 +136,7 @@ public class OpeningPageManager : MonoBehaviour
         {
             var errorBox = MessageBoxFactory.Create(MessageBoxType.Message, "DisplayName is not available. Either taken or profane", "Invalid DisplayName");
             errorBox.DisplayMessageBox(errorBox.AutoDestroyMessageBox);
+            MenuController.PanelChangeEnabled = false;
         }
     }
 }

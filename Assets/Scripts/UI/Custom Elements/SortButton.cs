@@ -9,7 +9,6 @@ using System.Linq;
 using static UnityEngine.EventSystems.EventTrigger;
 
 public enum SortState { Ascending, Descending }
-public enum  SortProperty { Seen, Speed, Correct}
 
 public delegate void OnSortModeChangeEventHandler(SortState state);
 
@@ -33,27 +32,6 @@ public class SortButton : MonoBehaviour
     SortState _state;
 
     public event OnSortModeChangeEventHandler OnSortModeChange;
-
-    public static List<JapaneseWord> SortEntries(List<GlossaryEntry> entriesToSort, SortProperty p, SortState s)
-    {
-        List<JapaneseWord> sortedList = new List<JapaneseWord>();
-        switch(p)
-        {
-            case SortProperty.Correct:
-                sortedList = SortByCorrect(entriesToSort, s);
-                break;
-            case SortProperty.Seen:
-                sortedList = SortBySeen(entriesToSort, s);
-                break;
-            case SortProperty.Speed:
-                sortedList = SortBySpeed(entriesToSort, s);
-                break;
-            default:
-                break;
-        }
-
-        return sortedList;
-    }
 
     private void Awake()
     {
@@ -101,7 +79,7 @@ public class SortButton : MonoBehaviour
         OnSortModeChange?.Invoke(_state);
     }
 
-    private static List<JapaneseWord> SortBySpeed(List<GlossaryEntry> entriesToSort, SortState s)
+    public static List<JapaneseWord> SortBySpeed(List<GlossaryEntry> entriesToSort, SortState s)
     {
         List<GlossaryEntry> sortedList = null;
         if(s == SortState.Ascending)
@@ -118,12 +96,11 @@ public class SortButton : MonoBehaviour
         {
             sortedWordList.Add(sortedList[i].Data);
         }
-        
+
         return sortedWordList;
-        
     }
 
-    private static List<JapaneseWord> SortBySeen(List<GlossaryEntry> entriesToSort, SortState s)
+    public static List<JapaneseWord> SortBySeen(List<GlossaryEntry> entriesToSort, SortState s)
     {
         List<GlossaryEntry> sortedList = null;
         if (s == SortState.Ascending)
@@ -144,7 +121,7 @@ public class SortButton : MonoBehaviour
         return sortedWordList;
     }
 
-    private static List<JapaneseWord> SortByCorrect(List<GlossaryEntry> entriesToSort, SortState s)
+    public static List<JapaneseWord> SortByCorrect(List<GlossaryEntry> entriesToSort, SortState s)
     {
         List<GlossaryEntry> sortedList = null;
         if (s == SortState.Ascending)

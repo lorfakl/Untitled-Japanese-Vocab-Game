@@ -209,6 +209,7 @@ public class DataPlatform : MonoBehaviour
             }
             else
             {
+                data.InitializeWordIDs();
                 Globals.UpdateGlobalStudyRecord(data);
                 return true;
             }

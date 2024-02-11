@@ -60,7 +60,7 @@ public class Word
     }
 
     [JsonProperty]
-    public float TotalTimeToAnswer
+    public float CorrectPercent
     {
         get;
         set;

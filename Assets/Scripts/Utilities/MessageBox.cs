@@ -31,9 +31,9 @@ namespace Utilities
             return msgBox;
         }
 
-        public static MessageBox CreateMessageBox(string title, string message, Action continueCallback, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
+        public static MessageBox CreateMessageBox(string title, string message, Action continueCallback, bool shouldAutoDestroy = false, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
         {
-            MessageBox msgBox = new MessageBox(MessageBoxType.Message, message, title, closingEvent, parent);
+            MessageBox msgBox = new MessageBox(MessageBoxType.Message, message, title, shouldAutoDestroy, closingEvent, parent);
             msgBox.DisplayMessageBox(continueCallback, useAltParent);
             return msgBox;
         }
@@ -42,6 +42,13 @@ namespace Utilities
         {
             MessageBox msgBox = new MessageBox(MessageBoxType.Confirmation, message, title, closingEvent, parent);
             msgBox.DisplayConfirmationBox(confirmCallback, null, useAltParent);
+            return msgBox;
+        }
+
+        public static MessageBox CreateQuestionBox(string title, string message, Action answerYesCallback, Action answerNoCallback, GameEvent closingEvent = null, Transform parent = null, bool useAltParent = false)
+        {
+            MessageBox msgBox = new MessageBox(MessageBoxType.Confirmation, message, title, closingEvent, parent);
+            msgBox.DisplayConfirmationBox(answerYesCallback, answerNoCallback, useAltParent);
             return msgBox;
         }
 
@@ -73,7 +80,7 @@ namespace Utilities
         private Transform _altParent;
         private Transform _mainCanvas;
         private GameEvent _onCloseEvent;
-
+        private bool shouldAutoDestroy;
         public MessageBoxType MessageType
         {
             get { return _messageBoxType; }
@@ -88,6 +95,8 @@ namespace Utilities
         {
             get { return _title; }
         }
+
+        public bool ShouldAutoDestroy { get { return shouldAutoDestroy; } }
 
         public GameEvent OnCloseEvent
         {
@@ -118,6 +127,10 @@ namespace Utilities
             {
                 onDenyCallback = this.AutoDestroyMessageBox;
             }
+            else if(onConfirmCallback == null)
+            {
+                onConfirmCallback = this.AutoDestroyMessageBox;
+            }
             _instance.ConfigureMessageBox(this, onConfirmCallback, onDenyCallback);
         }
 
@@ -144,8 +157,12 @@ namespace Utilities
             }
 
             _mainCanvas = GameObject.FindGameObjectWithTag(Tags.MainCanvas.ToString()).transform;
+        }
 
-            
+        public MessageBox(MessageBoxType messageBoxType, string message, string title, bool shouldAutoDestroy, GameEvent closingEvent = null, Transform parent = null) 
+            : this( messageBoxType, message,  title,  closingEvent, parent)
+        {
+            this.shouldAutoDestroy = shouldAutoDestroy;
         }
 
         private void SpawnMessageBoxInstance(bool useAltParent)

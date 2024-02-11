@@ -63,7 +63,6 @@ public class MessageBoxInstance : MonoBehaviour
         if(OnOKCallback != null)
         {
             _OnContinueCallback = OnOKCallback;
-            
         }
         else
         {
@@ -119,6 +118,10 @@ public class MessageBoxInstance : MonoBehaviour
     void Continue()
     {
         _OnContinueCallback();
+        if(_owner.ShouldAutoDestroy)
+        {
+            DestroyMessageBox(_owner);
+        }
     }
 
     void InitializeMessageBox(MessageBox owner)

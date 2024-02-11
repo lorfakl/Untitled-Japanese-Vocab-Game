@@ -162,9 +162,13 @@ public class StudySceneManager : MonoBehaviour
         animator.Play("Base Layer.Entry");
 
         bgImage.sprite = bossBackgrounds[bossInfoIndex];
-        
-        //targetWordImage.sprite = targetWordSprites[bossInfoIndex];
-        //scoreDisplayImage.sprite = scoreDisplaySprites[bossInfoIndex];
+
+        if (bossInfoIndex != 0) 
+        {
+            targetWordImage.sprite = targetWordSprites[bossInfoIndex];
+            scoreDisplayImage.sprite = scoreDisplaySprites[bossInfoIndex];
+        }
+
         nextWordBtnImage.sprite = nextWordBtnImages[bossInfoIndex];
 
             

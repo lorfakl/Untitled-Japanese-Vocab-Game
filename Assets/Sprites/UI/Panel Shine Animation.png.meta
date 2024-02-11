@@ -127,6 +127,18 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -135,11 +147,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 171
-        width: 129
-        height: 57
+        y: 193
+        width: 516
+        height: 34
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -155,12 +167,12 @@ TextureImporter:
       name: Panel Shine Animation_1
       rect:
         serializedVersion: 2
-        x: 129
-        y: 171
-        width: 129
-        height: 57
+        x: 33
+        y: 172
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -176,12 +188,12 @@ TextureImporter:
       name: Panel Shine Animation_2
       rect:
         serializedVersion: 2
-        x: 258
-        y: 171
-        width: 129
-        height: 57
+        x: 162
+        y: 172
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -197,12 +209,12 @@ TextureImporter:
       name: Panel Shine Animation_3
       rect:
         serializedVersion: 2
-        x: 387
-        y: 171
-        width: 129
-        height: 57
+        x: 291
+        y: 172
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -218,12 +230,12 @@ TextureImporter:
       name: Panel Shine Animation_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 114
-        width: 129
-        height: 57
+        x: 420
+        y: 172
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -239,12 +251,12 @@ TextureImporter:
       name: Panel Shine Animation_5
       rect:
         serializedVersion: 2
-        x: 129
-        y: 114
-        width: 129
-        height: 57
+        x: 0
+        y: 136
+        width: 516
+        height: 34
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -260,12 +272,12 @@ TextureImporter:
       name: Panel Shine Animation_6
       rect:
         serializedVersion: 2
-        x: 258
-        y: 114
-        width: 129
-        height: 57
+        x: 33
+        y: 115
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -281,12 +293,12 @@ TextureImporter:
       name: Panel Shine Animation_7
       rect:
         serializedVersion: 2
-        x: 387
-        y: 114
-        width: 129
-        height: 57
+        x: 162
+        y: 115
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -302,12 +314,12 @@ TextureImporter:
       name: Panel Shine Animation_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 57
-        width: 129
-        height: 57
+        x: 291
+        y: 115
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -323,12 +335,12 @@ TextureImporter:
       name: Panel Shine Animation_9
       rect:
         serializedVersion: 2
-        x: 129
-        y: 57
-        width: 129
-        height: 57
+        x: 420
+        y: 115
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -344,12 +356,12 @@ TextureImporter:
       name: Panel Shine Animation_10
       rect:
         serializedVersion: 2
-        x: 258
-        y: 57
-        width: 129
-        height: 57
+        x: 0
+        y: 79
+        width: 516
+        height: 34
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -365,12 +377,12 @@ TextureImporter:
       name: Panel Shine Animation_11
       rect:
         serializedVersion: 2
-        x: 387
-        y: 57
-        width: 129
-        height: 57
+        x: 33
+        y: 58
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -386,12 +398,12 @@ TextureImporter:
       name: Panel Shine Animation_12
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 129
-        height: 57
+        x: 162
+        y: 58
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -407,12 +419,12 @@ TextureImporter:
       name: Panel Shine Animation_13
       rect:
         serializedVersion: 2
-        x: 129
-        y: 0
-        width: 129
-        height: 57
+        x: 291
+        y: 58
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -428,12 +440,12 @@ TextureImporter:
       name: Panel Shine Animation_14
       rect:
         serializedVersion: 2
-        x: 258
-        y: 0
-        width: 129
-        height: 57
+        x: 420
+        y: 58
+        width: 56
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -441,6 +453,90 @@ TextureImporter:
       bones: []
       spriteID: 670f8a19a5fcdc14ea8daa3b5f694a9d
       internalID: -754695097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Panel Shine Animation_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 22
+        width: 387
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d1b2f97250fcad4fad47e23c3e5aa1d
+      internalID: 1098329719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Panel Shine Animation_16
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 1
+        width: 56
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84d331854f3ca5d44ae16f57f90a5764
+      internalID: -1285467145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Panel Shine Animation_17
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 1
+        width: 56
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b012f689be959e4eac2ce8276697e17
+      internalID: 1076279145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Panel Shine Animation_18
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 1
+        width: 56
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a419438d86835a4e8db47e8115e963a
+      internalID: 923734814
       vertices: []
       indices: 
       edges: []
@@ -456,6 +552,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Panel Shine Animation_15: 1098329719
       Panel Shine Animation_5: -1014116895
       Panel Shine Animation_11: -1030698146
       Panel Shine Animation_10: 1703383408
@@ -463,7 +560,10 @@ TextureImporter:
       Panel Shine Animation_14: -754695097
       Panel Shine Animation_9: 2115393198
       Panel Shine Animation_13: 258906576
+      Panel Shine Animation_16: -1285467145
+      Panel Shine Animation_18: 923734814
       Panel Shine Animation_2: 1977256892
+      Panel Shine Animation_17: 1076279145
       Panel Shine Animation_7: 1598022845
       Panel Shine Animation_1: 1269945659
       Panel Shine Animation_8: 484516936

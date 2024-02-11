@@ -920,10 +920,10 @@ RectTransform:
   m_Father: {fileID: 484596223}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.8, y: 0}
+  m_SizeDelta: {x: 133.32, y: 40.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &463521425
 MonoBehaviour:
@@ -945,7 +945,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Next Word
+  m_text: Start Study!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9cd11156cdaa08143b2bbfa0c1b8a822, type: 2}
   m_sharedMaterial: {fileID: 205387727140876273, guid: 9cd11156cdaa08143b2bbfa0c1b8a822, type: 2}
@@ -972,7 +972,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.5
+  m_fontSize: 19.6
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1008,7 +1008,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: 4.3735256}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1034,6 +1034,8 @@ GameObject:
   - component: {fileID: 484596222}
   - component: {fileID: 484596221}
   - component: {fileID: 484596220}
+  - component: {fileID: 484596224}
+  - component: {fileID: 484596225}
   m_Layer: 5
   m_Name: nextWordButton
   m_TagString: Untagged
@@ -1084,19 +1086,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 484596221}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: 899f46c27b3001247b5013816b8b94b1, type: 2}
-        m_TargetAssemblyTypeName: Utilities.Events.GameEvent, Assembly-CSharp
-        m_MethodName: Raise
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &484596221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1117,7 +1107,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1222403427, guid: b935598c029af1f4b8c25f1865a699b2, type: 3}
+  m_Sprite: {fileID: -1551594629, guid: 1a27e1f4a485adc46a751b80572f1ef7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1156,6 +1146,41 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 53.034973}
   m_SizeDelta: {x: 187.456, y: 57.67}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &484596224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484596219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e15b68c9cd2ce4a8b85d92d2a9c73a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsStarterTrigger: 0
+  passthroughGameEvent: {fileID: 11400000, guid: 899f46c27b3001247b5013816b8b94b1, type: 2}
+  titleMessage: Next Word Button
+  descriptionMessage: 'Tap this button to get the word bank to fly at the screen.
+    Your job is to select the proper translation as fast as possible. Translation
+    modes are set in the settings. '
+  target: {fileID: 484596223}
+  button: {fileID: 484596220}
+--- !u!114 &484596225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484596219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96e7b3c16414384687a70e985dde436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 484596220}
+  text: {fileID: 463521425}
+  replaceText: Next Word
 --- !u!1 &625358145
 GameObject:
   m_ObjectHideFlags: 0
@@ -1467,15 +1492,25 @@ MonoBehaviour:
   - {fileID: -226915873, guid: a06e673fb5c14d74cb4d115620867ece, type: 3}
   nextWordBtnImage: {fileID: 484596221}
   nextWordBtnImages:
-  - {fileID: 1222403427, guid: b935598c029af1f4b8c25f1865a699b2, type: 3}
-  - {fileID: 738348767, guid: b935598c029af1f4b8c25f1865a699b2, type: 3}
-  - {fileID: -377451086, guid: b935598c029af1f4b8c25f1865a699b2, type: 3}
-  - {fileID: -785271848, guid: b935598c029af1f4b8c25f1865a699b2, type: 3}
-  - {fileID: 770115322, guid: b935598c029af1f4b8c25f1865a699b2, type: 3}
+  - {fileID: -1551594629, guid: 1a27e1f4a485adc46a751b80572f1ef7, type: 3}
+  - {fileID: -1923897858, guid: 1a27e1f4a485adc46a751b80572f1ef7, type: 3}
+  - {fileID: 1540080566, guid: 1a27e1f4a485adc46a751b80572f1ef7, type: 3}
+  - {fileID: 1143436661, guid: 1a27e1f4a485adc46a751b80572f1ef7, type: 3}
+  - {fileID: 66868885, guid: 1a27e1f4a485adc46a751b80572f1ef7, type: 3}
   scoreDisplayImage: {fileID: 1483225891}
-  scoreDisplaySprites: []
-  targetWordImage: {fileID: 0}
-  targetWordSprites: []
+  scoreDisplaySprites:
+  - {fileID: -570367794, guid: db453b7f6463a3f4691714661def3d6b, type: 3}
+  - {fileID: -385157460, guid: 5480e4bdea153cb47ac9de7b9eeca2e3, type: 3}
+  - {fileID: 1598022845, guid: 4558179f9f718d94ab5086edfd8de5a1, type: 3}
+  - {fileID: 1185906479, guid: 8dea8ebe94d9f3e428aa4705f2f500b2, type: 3}
+  - {fileID: -1188491810, guid: af04df73cc499ae4daa3210eb4f779ef, type: 3}
+  targetWordImage: {fileID: 979404149}
+  targetWordSprites:
+  - {fileID: 1839432944, guid: 94ba55d82e9785345b0d1bcd1ccc12aa, type: 3}
+  - {fileID: 1044079943, guid: 7922d7b04deeb2b4b9d67f9f7b872210, type: 3}
+  - {fileID: 289771648, guid: c7905875cb7ea2045b6b7a301257ccf9, type: 3}
+  - {fileID: -1064057070, guid: 714ae947b35e46c4d813b531b6676f80, type: 3}
+  - {fileID: -1405907375, guid: 351bf250e8bc1a545975fd146ffe2219, type: 3}
   exitBtn: {fileID: 2136265544}
   debugProgressValue: 0.49
 --- !u!4 &716208141
@@ -2003,6 +2038,7 @@ GameObject:
   - component: {fileID: 979404148}
   - component: {fileID: 979404150}
   - component: {fileID: 979404149}
+  - component: {fileID: 979404151}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -2069,6 +2105,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 979404147}
   m_CullTransparentMesh: 1
+--- !u!114 &979404151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979404147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e15b68c9cd2ce4a8b85d92d2a9c73a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsStarterTrigger: 0
+  passthroughGameEvent: {fileID: 0}
+  titleMessage: Current Word To Translate
+  descriptionMessage: This will display the current word to translate. It will either
+    be a set of kanji or kana written in japanese or english based on your settings
+  target: {fileID: 979404148}
+  button: {fileID: 0}
 --- !u!1001 &995905945
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2648,6 +2703,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentWordTarget: {fileID: 1603029892}
+--- !u!1 &1091094035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1091094036}
+  m_Layer: 0
+  m_Name: emphasisTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1091094036
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091094035}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 275, y: -646.9651, z: 0}
+  m_LocalScale: {x: 6.6666665, y: 6.6666665, z: 6.6666665}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1264293850}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1172797367
 GameObject:
   m_ObjectHideFlags: 0
@@ -2830,6 +2916,7 @@ RectTransform:
   - {fileID: 1354849270}
   - {fileID: 1041973981}
   - {fileID: 1443003311}
+  - {fileID: 1091094036}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8650,6 +8737,7 @@ GameObject:
   - component: {fileID: 1483225890}
   - component: {fileID: 1483225892}
   - component: {fileID: 1483225891}
+  - component: {fileID: 1483225893}
   m_Layer: 5
   m_Name: ScoreUI
   m_TagString: Untagged
@@ -8716,6 +8804,76 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1483225889}
   m_CullTransparentMesh: 1
+--- !u!114 &1483225893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483225889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e15b68c9cd2ce4a8b85d92d2a9c73a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsStarterTrigger: 0
+  passthroughGameEvent: {fileID: 0}
+  titleMessage: 'Score '
+  descriptionMessage: Tells you your score.
+  target: {fileID: 1483225890}
+  button: {fileID: 0}
+--- !u!1 &1487032750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1487032752}
+  - component: {fileID: 1487032751}
+  m_Layer: 0
+  m_Name: ExplanationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1487032751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487032750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9791f94c5e6fca7489636a25bae41600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCanvas: {fileID: 1264293849}
+  explanationList:
+  - {fileID: 979404151}
+  - {fileID: 1483225893}
+  - {fileID: 484596224}
+  - {fileID: 1872187960}
+  - {fileID: 2136265548}
+  emphasisIndicatorPrefab: {fileID: 7875105147126823538, guid: 9af454fdf6fc3724f864c73bee8aac7e, type: 3}
+--- !u!4 &1487032752
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487032750}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.1863775, y: 1.0819893, z: 180.65837}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1541666051
 GameObject:
   m_ObjectHideFlags: 0
@@ -9534,6 +9692,7 @@ GameObject:
   - component: {fileID: 1872187956}
   - component: {fileID: 1872187959}
   - component: {fileID: 1872187958}
+  - component: {fileID: 1872187960}
   m_Layer: 5
   m_Name: wordsLeftThisSession
   m_TagString: Untagged
@@ -9581,7 +9740,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 0/0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9cd11156cdaa08143b2bbfa0c1b8a822, type: 2}
   m_sharedMaterial: {fileID: 205387727140876273, guid: 9cd11156cdaa08143b2bbfa0c1b8a822, type: 2}
@@ -9608,14 +9767,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 56.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 4
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -9714,6 +9873,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wordsLeftInSessionCounter: {fileID: 1872187956}
+--- !u!114 &1872187960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872187954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e15b68c9cd2ce4a8b85d92d2a9c73a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsStarterTrigger: 0
+  passthroughGameEvent: {fileID: 0}
+  titleMessage: Words Left
+  descriptionMessage: This text shows you the number of words left to study in this
+    session
+  target: {fileID: 1091094036}
+  button: {fileID: 0}
 --- !u!1 &1884237353
 GameObject:
   m_ObjectHideFlags: 0
@@ -10440,6 +10618,7 @@ GameObject:
   - component: {fileID: 2136265546}
   - component: {fileID: 2136265544}
   - component: {fileID: 2136265547}
+  - component: {fileID: 2136265548}
   m_Layer: 5
   m_Name: ExitBtn
   m_TagString: Untagged
@@ -10549,3 +10728,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2136265548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136265542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e15b68c9cd2ce4a8b85d92d2a9c73a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsStarterTrigger: 0
+  passthroughGameEvent: {fileID: 0}
+  titleMessage: Exit Button
+  descriptionMessage: Takes you back to main page. You will lose some study progress
+  target: {fileID: 2136265543}
+  button: {fileID: 0}

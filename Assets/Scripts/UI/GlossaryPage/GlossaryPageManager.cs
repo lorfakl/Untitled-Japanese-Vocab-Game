@@ -52,8 +52,9 @@ public class GlossaryPageManager : MonoBehaviour
 
     public void OnGlossaryEntrySelected(object e)
     {
-        UserStudyData selectedEntry = (UserStudyData)e;
-        WordDetailsController.Data.Enqueue(selectedEntry);
+        
+        JapaneseWord selectedEntryWord = (JapaneseWord)e;
+        WordDetailsController.Data.Enqueue(selectedEntryWord);
         HelperFunctions.Log("Casted the selected Entry");
 
         DisableAllOtherChildren(wordDetails);
@@ -104,7 +105,10 @@ public class GlossaryPageManager : MonoBehaviour
 
         foreach (var opt in filterDropdown.options)
         {
-            sortedDict.Add(opt.text, new List<JapaneseWord>());
+            if(!sortedDict.ContainsKey(opt.text))
+            {
+                sortedDict.Add(opt.text, new List<JapaneseWord>());
+            }
         }
         
         if(correctSortButton != null) 
@@ -240,6 +244,12 @@ public class GlossaryPageManager : MonoBehaviour
 
     private void DisplayGlossary(List<JapaneseWord> words)
     {
+        if(words.Count == 0)
+        {
+            MessageBoxFactory.CreateMessageBox("No Words in this Category", "There are no words to display in this category", null, true);
+            return;
+        }
+
         int glossaryDisplayCount = glossaryContentPanel.transform.childCount;
         //another option for updating the entries that are already visible
         //is to using the GlossaryEntry update function to check for updates from the Queue
@@ -282,21 +292,21 @@ public class GlossaryPageManager : MonoBehaviour
     private void SortBySeen(SortState s)
     {
         HelperFunctions.Log($"Sorting Seen by {s}");
-        var sortedEntries = SortButton.SortEntries(entries, SortProperty.Seen, s);
+        var sortedEntries = SortButton.SortBySeen(entries, s);
         DisplayGlossary(sortedEntries);
     }
 
     private void SortByCorrect(SortState s)
     {
         HelperFunctions.Log($"Sorting Corrrect by {s}");
-        var sortedEntries = SortButton.SortEntries(entries, SortProperty.Correct, s);
+        var sortedEntries = SortButton.SortByCorrect(entries, s);
         DisplayGlossary(sortedEntries);
     }
 
     private void SortBySpeed(SortState s)
     {
         HelperFunctions.Log($"Sorting Speed by {s}");
-        var sortedEntries = SortButton.SortEntries(entries, SortProperty.Speed, s);
+        var sortedEntries = SortButton.SortBySpeed(entries, s); // SortEntries(entries, SortProperty.Speed, s);
         DisplayGlossary(sortedEntries);
     }
 

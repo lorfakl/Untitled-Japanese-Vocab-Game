@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Utilities;
 using DG.Tweening;
+using Utilities.PlayFabHelper.CurrentUser;
 
 public class SettingsDisplayController : MonoBehaviour
 {
@@ -89,7 +90,7 @@ public class SettingsDisplayController : MonoBehaviour
         if(!_isUIDriven) //this has to be done in Update for some forgotten reason. I believe it was related to Tweening
         {
             _isUIDriven = true;
-            DriveSettingsDisplay(SettingsPageManager.CurrentSettings);
+            DriveSettingsDisplay(CurrentAuthedPlayer.UserSettings);
         }
     }
     private void InitializeUserSettings()
