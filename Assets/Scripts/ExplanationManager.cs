@@ -110,6 +110,7 @@ public class ExplanationManager : MonoBehaviour
         if(!Playfab.WasUserJustCreated)
         {
             isExplanationComplete = true;
+            MenuController.PanelChangeEnabled = true;
         }
         else
         {

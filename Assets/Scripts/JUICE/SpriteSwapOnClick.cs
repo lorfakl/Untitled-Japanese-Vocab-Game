@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class SpriteSwapOnClick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] bool _returnToOriginal;
+    [SerializeField] bool _toggle;
 
     [SerializeField] AudioClip _pressClip, _releaseClip;
 
@@ -35,7 +35,7 @@ public class SpriteSwapOnClick : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(!_returnToOriginal) 
+        if(!_toggle) 
         {
             if(_spriteContainer.sprite == _pressedSprite) 
             {
@@ -54,7 +54,7 @@ public class SpriteSwapOnClick : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if(_returnToOriginal)
+        if(_toggle)
         {
             _spriteContainer.sprite = _releasedSprite;
         }  

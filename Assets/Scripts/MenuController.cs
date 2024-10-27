@@ -8,8 +8,13 @@ using Utilities;
 using Utilities.Events;
 using ProjectSpecificGlobals;
 
+public enum CurrentPanels { Opening, Stats, Glossary, CSS, Settings
+}
 public class MenuController : MonoBehaviour
 {
+    [SerializeField]
+    CurrentPanels startUpPanel = CurrentPanels.Opening;
+
     [SerializeField]
     GameObject statsPanel;
     [SerializeField]
@@ -93,7 +98,7 @@ public class MenuController : MonoBehaviour
     {
         foreach(GameObject p in panels)
         {
-            if(p.transform.localPosition == Vector3.zero)
+            if(p.name.Contains(startUpPanel.ToString().ToLower()))
             {
                 activePanel = p;
             }
