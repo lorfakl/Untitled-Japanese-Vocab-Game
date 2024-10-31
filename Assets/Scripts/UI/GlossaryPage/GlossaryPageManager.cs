@@ -130,9 +130,9 @@ public class GlossaryPageManager : MonoBehaviour
     {
         
     }
+
     private void OnEnable()
     {
-        
         //SwapActiveStateOfChilderen();
     }
 
