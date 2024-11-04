@@ -1,5 +1,7 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ProjectSpecificGlobals
@@ -11,9 +13,10 @@ namespace ProjectSpecificGlobals
     public static class Globals
     {
         private static bool isStudyRecordLoaded = false;
-
+        private static bool areAllWordsLoaded = false;
         public static int MaxStatOverTimeSize { get { return 7; } }
         public static StudyRecord LoadedStudyRecord { get; private set; }
+        public static Dictionary<string, JapaneseWord> GlobalWordDict { get; private set; }
         public static bool UserDataLoaded 
         { 
             get { 
@@ -27,9 +30,9 @@ namespace ProjectSpecificGlobals
                     }
                 } 
         }
-        
-        
-        
+
+
+        public static List<JapaneseWord> AllWords { get { return LoadAllWords().Values.ToList(); } }
 
         public static void UpdateGlobalStudyRecord(StudyRecord record)
         {
@@ -46,6 +49,28 @@ namespace ProjectSpecificGlobals
                 }
                 return;
             }
+        }
+
+        public static Dictionary<string, JapaneseWord> LoadAllWords()
+        {
+            if(!areAllWordsLoaded)
+            {
+                GlobalWordDict = new Dictionary<string, JapaneseWord>();
+                TextAsset wordList = Resources.Load<TextAsset>("japaneseWordList");
+                string wordFile = wordList.text;
+                List<JapaneseWord> wordObjs = JsonConvert.DeserializeObject<List<JapaneseWord>>(wordFile);
+                foreach(JapaneseWord wordObj in wordObjs )
+                {
+                    if(!GlobalWordDict.ContainsKey(wordObj.ID))
+                    {
+                        GlobalWordDict.Add(wordObj.ID, wordObj);
+                    }
+                }
+
+                areAllWordsLoaded = true;
+
+            }
+            return GlobalWordDict;
         }
     }
 
